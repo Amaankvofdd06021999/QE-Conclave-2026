@@ -1,0 +1,2980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QE Conclave 2026 — The Quality Engineering Conference</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow: #F2EB53;
+  --cyan: #19BBE9;
+  --red: #EF3A30;
+  --black: #030303;
+  --dark: #212529;
+  --surface: #0D0F11;
+  --card: #15181C;
+  --border: #2A2D32;
+  --text-primary: #F0F0F0;
+  --text-secondary: #9CA3AF;
+  --text-tertiary: #5A5F66;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Work Sans', sans-serif;
+  --font-ui: 'Manrope', sans-serif;
+  --grid-max: 1200px;
+  --grid-margin: 48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+}
+
+.overline {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 20px;
+}
+
+.section-rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  border: none;
+}
+
+a { color: var(--cyan); text-decoration: none; transition: color 0.2s; }
+a:hover { color: var(--yellow); }
+
+/* ═══ ANIMATIONS ═══ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tickerScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes marqueeLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes marqueeRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
+@keyframes spinCW { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes rotateCW { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══ 01 NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 16px 0;
+  background: transparent;
+  transition: background 0.3s, padding 0.3s, backdrop-filter 0.3s;
+}
+.nav.scrolled {
+  background: rgba(3,3,3,0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+}
+.nav-logo img {
+  height: 32px;
+  width: auto;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.nav-links a:hover { color: var(--text-primary); }
+.nav-links a.btn-register,
+.btn-register {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  background: var(--yellow);
+  color: var(--black);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-register:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+
+.theme-toggle {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.theme-toggle:hover { color: var(--text-primary); border-color: var(--text-tertiary); }
+.theme-toggle svg { width: 16px; height: 16px; display: block; }
+.theme-toggle .icon-sun { display: none; }
+.theme-toggle .icon-moon { display: block; }
+[data-theme="light"] .theme-toggle .icon-sun { display: block; }
+[data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+/* ═══ 02 HERO ═══ */
+.hero {
+  min-height: 85vh;
+  position: relative;
+  overflow: hidden;
+}
+.hero-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+.hero-video-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+}
+.hero-video-bg::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+}
+.hero .container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 85vh;
+}
+.hero-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: fadeUp 0.6s ease both;
+}
+.hero-title {
+  font-family: var(--font-ui);
+  font-size: clamp(56px, 8.2vw, 119px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 8px;
+  position: relative;
+}
+.hero-title .qe-wrap {
+  position: relative;
+  display: inline-block;
+}
+.hero-title .qe-wrap img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  width: 3.5em;
+  height: auto;
+  pointer-events: none;
+  z-index: -1;
+  animation: spinCW 30s linear infinite;
+}
+.hero-title .conclave-wrap {
+  position: relative;
+  text-transform: none;
+}
+.hero-title .year-tag {
+  font-family: var(--font-display);
+  font-size: 0.46em;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  position: absolute;
+  top: -0.25em;
+  right: -0.3em;
+}
+.hero-subtitle {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin-bottom: 28px;
+}
+.hero-actions {
+  display: flex; gap: 16px; align-items: center;
+  animation: fadeUp 0.6s ease 0.2s both;
+}
+.btn-hero {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 32px;
+  background: var(--yellow);
+  color: var(--black);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-hero:hover { background: #E5DE3F; color: var(--black); transform: translateY(-2px); }
+.btn-ghost {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 14px 9px;
+  background: #191919;
+  transition: color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-ghost:hover { color: var(--text-primary); background: #222; }
+.btn-ghost svg { width: 16px; height: 16px; }
+
+.hero-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 24px;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.hero-bottom-text {
+  max-width: 563px;
+}
+.hero-bottom-text p {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+.hero-countdown {
+  display: flex; gap: 0; align-items: center;
+}
+.countdown-block {
+  text-align: center;
+  padding: 0 18px;
+  position: relative;
+}
+.countdown-block:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 86px;
+  background: var(--border);
+}
+.countdown-num {
+  font-family: var(--font-ui);
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  min-width: 48px;
+  padding: 20px 0;
+}
+.countdown-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ═══ 03 STATS ═══ */
+.stats-section {
+  background: var(--black);
+  padding: 80px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 120px;
+  align-items: start;
+}
+.stats-photo-col {
+  position: sticky;
+  top: 100px;
+}
+.stats-photo-col img {
+  width: 460px;
+  height: auto;
+  animation: float 4s ease-in-out infinite;
+}
+.stats-numbers {
+  display: flex;
+  flex-direction: column;
+}
+.stat-item {
+  padding: 48px 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+.stat-item:first-child { padding-top: 0; }
+.stat-val {
+  font-family: var(--font-ui);
+  font-size: clamp(64px, 9vw, 120px);
+  font-weight: 800;
+  color: var(--yellow);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+/* ═══ 05 MANIFESTO ═══ */
+.manifesto { padding: 0; overflow: hidden; border-bottom: 1px solid var(--border); position: relative; min-height: 485px; }
+.manifesto-grid {
+  position: relative;
+}
+.manifesto-content {
+  max-width: 100%;
+  padding: 100px 0 40px;
+  position: relative;
+  z-index: 1;
+}
+.manifesto-headline {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  max-width: 690px;
+}
+.manifesto-headline em {
+  font-style: normal;
+  color: var(--yellow);
+  font-weight: 500;
+}
+.manifesto-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  max-width: 560px;
+  line-height: 1.7;
+}
+.manifesto-img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 630px;
+  height: 485px;
+  z-index: 0;
+  overflow: hidden;
+}
+.manifesto-img img {
+  width: 100%;
+  height: 108%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+}
+.manifesto-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(3,3,3,0) 38%, #030303 98%);
+}
+
+/* ═══ 06 TRACKS ═══ */
+.tracks { padding: 80px 0; border-top: 1px solid var(--border); }
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.track-card {
+  background: var(--card);
+  padding: 28px 24px;
+  border-left: 3px solid;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+.track-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--track-color);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+  z-index: 0;
+}
+.track-card:hover,
+.track-card.is-active { transform: translateY(-2px); }
+.track-card:hover::before,
+.track-card.is-active::before { transform: scaleX(1); }
+.track-card > * { position: relative; z-index: 1; }
+.track-card:hover .track-name,
+.track-card:hover .track-desc,
+.track-card.is-active .track-name,
+.track-card.is-active .track-desc { color: #fff; }
+.track-card:hover .track-tag,
+.track-card.is-active .track-tag { border-color: rgba(255,255,255,0.3); color: rgba(255,255,255,0.8); }
+.track-card[data-dark-text]:hover .track-name,
+.track-card[data-dark-text]:hover .track-desc,
+.track-card[data-dark-text].is-active .track-name,
+.track-card[data-dark-text].is-active .track-desc { color: var(--black); }
+.track-card[data-dark-text]:hover .track-tag,
+.track-card[data-dark-text].is-active .track-tag { border-color: rgba(0,0,0,0.25); color: rgba(0,0,0,0.7); }
+.track-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  transition: color 0.3s;
+}
+.track-desc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+  transition: color 0.3s;
+}
+.track-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.track-tag {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  transition: border-color 0.3s, color 0.3s;
+}
+.section-link {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+  background: var(--yellow);
+  padding: 8px 20px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+}
+.section-link:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+
+/* ═══ 07 SPEAKERS ═══ */
+.speakers { padding: 80px 0; border-top: 1px solid var(--border); }
+.speakers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.speaker-card { cursor: pointer; }
+.speaker-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--dark);
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+.speaker-card:hover .speaker-img { transform: scale(1.02); }
+.speaker-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.6s ease;
+}
+.speaker-card:hover .speaker-img img {
+  filter: grayscale(0);
+}
+.speaker-name {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.speaker-title {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.speaker-company {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+.speaker-talk {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--cyan);
+  margin-top: 8px;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.speaker-card:hover .speaker-talk { opacity: 1; transform: translateY(0); }
+
+/* ═══ 08 PAST SPEAKERS ═══ */
+.past-speakers {
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.past-speakers-subline {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-tertiary);
+  margin-bottom: 32px;
+  margin-top: -12px;
+}
+.alumni-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+}
+.alumni-card { text-align: center; }
+.alumni-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--dark);
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+.alumni-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+  transition: filter 0.6s ease;
+}
+.alumni-card:hover .alumni-img img {
+  filter: grayscale(0);
+}
+.alumni-name {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.alumni-co {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* ═══ 09 AGENDA ═══ */
+.agenda { padding: 100px 0; border-top: 1px solid var(--border); }
+.agenda-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+.agenda-header-left {}
+.agenda-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.agenda-title span { color: var(--yellow); }
+.day-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 1px solid var(--border); }
+.day-tab {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 28px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.day-tab.active { color: var(--text-primary); border-bottom-color: var(--yellow); }
+.day-tab:hover { color: var(--text-secondary); }
+.session-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s, padding-left 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+.session-row:hover {
+  background: rgba(255,255,255,0.03);
+  padding-left: 24px;
+}
+.session-time {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  min-width: 64px;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s;
+}
+.session-row:hover .session-time { color: var(--yellow); }
+.session-accent {
+  width: 3px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  transition: height 0.3s;
+}
+.session-row:hover .session-accent { height: 52px; }
+.session-content { flex: 1; }
+.session-title {
+  font-family: var(--font-ui);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  line-height: 1.4;
+  transition: color 0.3s;
+}
+.session-row:hover .session-title { color: #fff; }
+.session-speaker {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.session-track-tag {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  flex-shrink: 0;
+  transition: border-color 0.3s, color 0.3s;
+}
+.session-row:hover .session-track-tag { border-color: var(--text-tertiary); color: var(--text-secondary); }
+.session-arrow {
+  color: var(--text-tertiary);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.3s, transform 0.3s;
+  flex-shrink: 0;
+}
+.session-row:hover .session-arrow { opacity: 1; transform: translateX(0); }
+
+/* Hover image that follows cursor */
+.session-hover-img {
+  position: fixed;
+  width: 280px;
+  height: 180px;
+  border-radius: 8px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+.session-hover-img.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.session-hover-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ═══ 10 HIGHLIGHTS ═══ */
+.highlights {
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.55fr 0.55fr;
+  grid-template-rows: 290px 150px;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.bento-item {
+  background: var(--dark);
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+.bento-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+}
+.bento-item.large {
+  grid-row: 1 / 3;
+}
+.bento-item.large::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(102,102,102,0) 5%, rgba(0,0,0,0.6) 75%);
+  z-index: 1;
+}
+.bento-caption {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  right: 24px;
+  z-index: 2;
+  font-family: var(--font-ui);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.1;
+}
+.bento-item.has-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+  z-index: 1;
+}
+.bento-text-inner {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 2;
+}
+.bento-text-inner h3 {
+  font-family: var(--font-ui);
+  font-size: 24px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.2;
+}
+.bento-item.bento-lg .bento-text-inner h3 {
+  font-size: 32px;
+}
+
+/* Edition cards row */
+.edition-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.edition-card {
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 114px;
+}
+.edition-card.red { background: #F0463D; }
+.edition-card.cyan { background: var(--cyan); }
+.edition-card.yellow { background: var(--yellow); }
+.edition-year {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.edition-card.yellow .edition-year { color: #323333; }
+.edition-city {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+.edition-card.yellow .edition-city { color: #1d1d1d; }
+.edition-stats {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #fff;
+  margin-top: 2px;
+}
+.edition-card.yellow .edition-stats { color: #323333; }
+
+/* ═══ 11 VIDEO TESTIMONIALS ═══ */
+.testimonials { padding: 80px 0; border-top: 1px solid var(--border); overflow: hidden; }
+.testimonials-marquee {
+  overflow: hidden;
+  position: relative;
+}
+.testimonials-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: marqueeLeft 40s linear infinite;
+}
+.testimonials-track:hover {
+  animation-play-state: paused;
+}
+.video-testimonial {
+  width: 360px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.video-testimonial:hover { transform: translateY(-4px); }
+.video-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--card);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.video-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.video-thumb .play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 56px;
+  height: 56px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s, background 0.3s;
+  backdrop-filter: blur(4px);
+}
+.video-testimonial:hover .play-btn {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: var(--red);
+}
+.play-btn svg {
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  margin-left: 2px;
+}
+.video-testimonial-name {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.video-testimonial-brief {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Video player overlay */
+.video-player-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+.video-player-overlay.active { display: flex; }
+.video-player-wrap {
+  position: relative;
+  width: 90%;
+  max-width: 900px;
+  aspect-ratio: 16/9;
+}
+.video-player-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+.video-player-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: color 0.2s;
+}
+.video-player-close:hover { color: var(--yellow); }
+
+/* ═══ 12 VENUE ═══ */
+.venue {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+.venue-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 48px 0;
+  overflow: hidden;
+  background: #000 url('convention-center-image.jpg') center/cover no-repeat;
+}
+.venue-hero-video {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.venue-hero-video video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.venue-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+.venue-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.venue-card {
+  background: #fff;
+  padding: 32px;
+  max-width: 380px;
+  width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+.venue-card-label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 8px;
+}
+.venue-card-name {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: #0E1012;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 14px;
+}
+.venue-card-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #4B5056;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+.venue-card-address {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: #0E1012;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+.venue-card-address-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  color: #8A8F96;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.btn-venue-maps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 20px;
+  background: var(--red);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-venue-maps:hover { background: #D73229; color: #fff; transform: translateY(-1px); }
+.venue-getting-there {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 20px var(--grid-margin);
+}
+.venue-getting-there-inner {
+  max-width: var(--grid-max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto repeat(3, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+.venue-getting-there-label,
+.venue-getting-there .venue-info { color: #fff; }
+.venue-getting-there .venue-info svg { color: rgba(255,255,255,0.85); }
+.venue-getting-there-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+.venue-info {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  line-height: 1.4;
+}
+.venue-info svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+/* ═══ 12B REGISTER CARD ═══ */
+.register-card {
+  padding: 80px 0;
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+.register-card-inner {
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+.register-card-left {
+  flex: 1;
+}
+.register-breadcrumb {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.register-breadcrumb svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+}
+.register-heading {
+  font-family: var(--font-ui);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.register-heading em {
+  font-style: normal;
+  color: var(--yellow);
+}
+.register-subtitle {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.register-actions {
+  display: flex;
+  gap: 16px;
+}
+.btn-register-primary {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 28px;
+  background: var(--yellow);
+  color: var(--black);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  display: inline-block;
+}
+.btn-register-primary:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+.btn-register-outline {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+  display: inline-block;
+}
+.btn-register-outline:hover { border-color: var(--text-tertiary); color: var(--text-primary); }
+
+.register-card-right {
+  width: 464px;
+  flex-shrink: 0;
+}
+.register-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.register-info-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+.register-info-value {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* ═══ 12C GALLERY ═══ */
+.gallery {
+  background: var(--black);
+  overflow: hidden;
+  padding-bottom: 64px;
+}
+.gallery-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  margin-bottom: 16px;
+}
+.gallery-track img {
+  height: 260px;
+  width: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.gallery-track.move-left {
+  animation: marqueeLeft 60s linear infinite;
+}
+.gallery-track.move-left img {
+  opacity: 0.8;
+}
+.gallery-track.move-right {
+  animation: marqueeRight 60s linear infinite;
+}
+
+/* ═══ 13 SPONSORS ═══ */
+.sponsors { padding: 64px 0; border-top: 1px solid var(--border); }
+.sponsor-tier { margin-bottom: 24px; }
+.sponsor-tier-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.sponsor-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.sponsor-logo {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  padding: 12px 24px;
+  border: 1px solid var(--border);
+  opacity: 0.6;
+  transition: opacity 0.3s, border-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sponsor-logo:hover { opacity: 1; border-color: var(--text-tertiary); }
+.sponsor-logo img {
+  height: 24px;
+  width: auto;
+  filter: grayscale(1) brightness(1.5);
+  transition: filter 0.3s;
+}
+.sponsor-logo:hover img { filter: grayscale(0) brightness(1); }
+.sponsor-logo.platinum { padding: 16px 32px; opacity: 0.8; }
+.sponsor-logo.platinum img { height: 28px; }
+.sponsor-logo.gold { }
+.sponsor-logo.gold img { height: 20px; }
+.sponsor-logo.silver { padding: 8px 16px; }
+.sponsor-logo.silver img { height: 16px; }
+
+/* ═══ 14 CTA BAND ═══ */
+.cta-band {
+  background: var(--yellow);
+  padding: 80px 0 64px;
+  text-align: center;
+}
+.cta-headline {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 12px;
+  letter-spacing: -0.8px;
+  line-height: 1.6;
+}
+.cta-sub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(3,3,3,0.6);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.cta-pricing {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.cta-price-col {
+  text-align: center;
+}
+.cta-price {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1.6;
+}
+.cta-price.early { color: var(--red); }
+.cta-price.crossed {
+  text-decoration: line-through;
+  opacity: 0.4;
+}
+.cta-price-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(3,3,3,0.5);
+  line-height: 1.6;
+}
+.btn-cta-dark {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 40px;
+  background: var(--black);
+  color: var(--yellow);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.6;
+}
+.btn-cta-dark:hover { transform: translateY(-2px); color: var(--yellow); }
+.cta-secondary {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(3,3,3,0.5);
+  margin-top: 20px;
+  display: block;
+  line-height: 1.6;
+}
+.cta-secondary:hover { color: rgba(3,3,3,0.8); }
+
+/* ═══ 14B REGISTRATION FORM ═══ */
+.register-form-section {
+  padding: 80px 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+.register-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.register-form-left h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.register-form-left h2 span { color: var(--yellow); }
+.register-form-left p {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.register-form-perks {
+  list-style: none;
+  padding: 0;
+}
+.register-form-perks li {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  color: var(--text-secondary);
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.register-form-perks li::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--yellow);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.register-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px;
+}
+.register-form h3 {
+  font-family: var(--font-ui);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group.full {
+  grid-column: 1 / -1;
+}
+.form-group label {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.form-group input,
+.form-group select {
+  padding: 10px 14px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  outline: none;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+.form-group input:focus,
+.form-group select:focus { border-color: var(--yellow); }
+.form-group input::placeholder { color: var(--text-tertiary); }
+.form-group select {
+  appearance: none;
+  cursor: pointer;
+}
+.btn-form-submit {
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 0;
+  width: 100%;
+  background: var(--yellow);
+  color: var(--black);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 8px;
+}
+.btn-form-submit:hover { background: #E5DE3F; transform: translateY(-1px); }
+.form-disclaimer {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* ═══ 15 FOOTER ═══ */
+.footer {
+  position: relative;
+  overflow: hidden;
+  background: var(--black);
+  padding: 0;
+}
+.footer-main {
+  position: relative;
+  padding: 64px 0 48px;
+  border-top: 1px solid var(--border);
+}
+/* Decorative starburst shapes */
+.footer-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.footer-decor .burst {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  opacity: 0.06;
+}
+.footer-decor .burst img {
+  width: 100%;
+  height: 100%;
+}
+.footer-decor .burst-1 {
+  top: -120px;
+  right: -80px;
+  width: 600px;
+  height: 600px;
+}
+.footer-decor .burst-1 img {
+  transform-origin: center center;
+  animation: rotateCW 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-decor .burst-1 img { animation: none; }
+}
+
+.footer-main .container {
+  position: relative;
+  z-index: 1;
+}
+
+.footer-top-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+}
+.footer-logo-block {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.footer-logo-block img {
+  height: 48px;
+  width: auto;
+}
+.footer-logo-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+}
+.footer-event-info {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+.footer-event-info span {
+  display: block;
+}
+
+.footer-content-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-bottom: 48px;
+}
+.footer-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 440px;
+}
+.footer-nav-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 40px;
+}
+.footer-nav-grid a {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-nav-grid a:hover { color: var(--yellow); }
+
+.footer-social-tagline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0;
+}
+.footer-social {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.footer-social a {
+  color: var(--text-secondary);
+  transition: color 0.2s;
+  display: flex;
+}
+.footer-social a:hover { color: var(--yellow); }
+.footer-social a svg {
+  width: 20px;
+  height: 20px;
+}
+.footer-tagline {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 420px;
+  line-height: 1.6;
+  text-align: right;
+}
+
+/* Footer bottom bar */
+.footer-bar {
+  border-top: 1px solid var(--border);
+  padding: 20px 0;
+}
+.footer-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.footer-copyright {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+.footer-legal a {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-legal a:hover { color: var(--text-secondary); }
+.footer-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.footer-powered {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-powered img {
+  height: 16px;
+  width: auto;
+}
+.footer-powered-link {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-powered-link:hover { color: var(--yellow); }
+
+/* ═══ TICKER ═══ */
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+  margin-top: 32px;
+}
+.ticker-inner {
+  display: inline-flex;
+  animation: tickerScroll 30s linear infinite;
+}
+.ticker-item {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  padding: 0 32px;
+}
+.ticker-item span { color: var(--yellow); margin: 0 8px; }
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  :root { --grid-margin: 20px; }
+  .nav-links { display: none; }
+  .hero-title { font-size: 48px; letter-spacing: 0.04em; }
+  .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
+  .hero-bottom-text p { font-size: 16px; }
+  .countdown-num { font-size: 24px; }
+  .tracks-grid, .speakers-grid, .numbers-grid { grid-template-columns: 1fr 1fr; }
+  .alumni-grid { grid-template-columns: repeat(3, 1fr); }
+  .video-testimonial { width: 280px; }
+  .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .bento-item.large { grid-row: auto; min-height: 300px; }
+  .edition-row { grid-template-columns: 1fr; }
+  .venue-hero { min-height: 520px; padding: 32px 0; }
+  .venue-hero-inner { justify-content: center; }
+  .venue-card { max-width: 100%; padding: 24px; }
+  .venue-getting-there { position: static; padding: 20px var(--grid-margin); }
+  .venue-getting-there-inner { grid-template-columns: 1fr; gap: 12px; }
+  .register-form-grid { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+  .register-card-inner { flex-direction: column; gap: 40px; }
+  .register-card-right { width: 100%; }
+  .gallery-track img { height: 180px; }
+  .footer-content-row { grid-template-columns: 1fr; gap: 40px; }
+  .footer-nav-grid { grid-template-columns: repeat(3, 1fr); gap: 12px 24px; }
+  .footer-nav-grid a { font-size: 16px; }
+  .footer-social-tagline { flex-direction: column; gap: 24px; }
+  .footer-tagline { text-align: left; }
+  .footer-bar-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-bar-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* ═══ LIGHT THEME ═══ */
+[data-theme="light"] {
+  --black: #FFFFFF;
+  --dark: #F1F3F5;
+  --surface: #F7F8FA;
+  --card: #FFFFFF;
+  --border: #E4E7EB;
+  --text-primary: #0E1012;
+  --text-secondary: #4B5056;
+  --text-tertiary: #8A8F96;
+}
+[data-theme="light"] body { background: #FFFFFF; }
+[data-theme="light"] .nav.scrolled {
+  background: rgba(255,255,255,0.85);
+  border-bottom: 1px solid var(--border);
+}
+[data-theme="light"] .tracks::after {
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 38%, #FFFFFF 98%);
+}
+[data-theme="light"] .session-row { background: rgba(0,0,0,0.02); }
+[data-theme="light"] .session-row:hover .session-title,
+[data-theme="light"] .track-card:hover .track-desc,
+[data-theme="light"] .track-card.is-active .track-desc { color: var(--text-primary); }
+[data-theme="light"] .track-card:hover .track-tag,
+[data-theme="light"] .track-card.is-active .track-tag {
+  border-color: rgba(0,0,0,0.25);
+  color: rgba(0,0,0,0.7);
+}
+[data-theme="light"] .edition-card.red .edition-year,
+[data-theme="light"] .edition-card.cyan .edition-year,
+[data-theme="light"] .edition-card.red .edition-city,
+[data-theme="light"] .edition-card.cyan .edition-city,
+[data-theme="light"] .edition-card.red .edition-stats,
+[data-theme="light"] .edition-card.cyan .edition-stats { color: #fff; }
+/* Keep dark-on-yellow legible when --black flips to white */
+[data-theme="light"] .btn-register,
+[data-theme="light"] .btn-register-primary,
+[data-theme="light"] .btn-hero,
+[data-theme="light"] .btn-form-submit,
+[data-theme="light"] .section-link,
+[data-theme="light"] .cta-headline,
+[data-theme="light"] .cta-price { color: #0E1012; }
+[data-theme="light"] .cta-price.early { color: var(--red); }
+[data-theme="light"] .track-card[data-dark-text]:hover .track-desc,
+[data-theme="light"] .track-card[data-dark-text].is-active .track-desc { color: #0E1012; }
+[data-theme="light"] .btn-cta-dark { background: #0E1012; color: var(--yellow); }
+[data-theme="light"] .btn-register-outline { color: var(--text-secondary); }
+[data-theme="light"] .stats-grid,
+[data-theme="light"] .venue,
+[data-theme="light"] .sponsors,
+[data-theme="light"] .footer { background: var(--surface); }
+</style>
+</head>
+<body>
+
+<!-- 01 NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo"><img src="QE Conclave Logo.png" alt="QE Conclave"></a>
+    <div class="nav-links">
+      <a href="#speakers">Speakers</a>
+      <a href="#agenda">Agenda</a>
+      <a href="#venue">Venue</a>
+      <a href="#sponsors">Sponsors</a>
+      <a href="#highlights">Past Editions</a>
+      <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <a href="#register-form" class="btn-register">Register Now</a>
+    </div>
+  </div>
+</nav>
+
+<!-- 02 HERO -->
+<section class="hero">
+  <div class="hero-video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="QE Conclave 2023 Future of Quality Engineering Navigating 2024 and Beyond Intro - QE Conclave (1080p, h264).mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="container">
+    <div class="hero-center">
+      <h1 class="hero-title"><span class="qe-wrap">QE<img src="behindQE.png" alt=""></span> <span class="conclave-wrap">Conclave <span class="year-tag">2026</span></span></h1>
+      <div class="hero-subtitle">The Quality Engineering Conference</div>
+      <div class="hero-actions">
+        <a href="#" class="btn-hero">Register Now</a>
+        <a href="#video" class="btn-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch 2025 Highlights
+        </a>
+      </div>
+    </div>
+    <div class="hero-bottom">
+      <div class="hero-bottom-text">
+        <p>Where quality engineers shape the future of software delivery. Three days of deep technical talks, hands-on workshops, and the conversations that don't happen on Slack.</p>
+      </div>
+      <div class="hero-countdown">
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-days">188</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-hours">18</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-mins">48</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-secs">00</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <div class="ticker-item">AI-Powered QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 12 Workshops <span>+</span> 500+ Attendees <span>+</span> 4 Tracks <span>+</span></div>
+    <div class="ticker-item">AI-Powered QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 12 Workshops <span>+</span> 500+ Attendees <span>+</span> 4 Tracks <span>+</span></div>
+  </div>
+</div>
+
+<!-- 03 STATS -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stats-photo-col">
+        <img src="imagefornumbers.png" alt="QE Conclave moments">
+      </div>
+      <div class="stats-numbers reveal">
+      <div class="stat-item">
+        <div class="stat-val" data-target="5000" data-suffix="+">0+</div>
+        <div class="stat-label">Expected in 2026</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" data-target="45" data-suffix="+">0+</div>
+        <div class="stat-label">Speakers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" data-target="4" data-suffix="+">0+</div>
+        <div class="stat-label">Tracks</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" data-target="12" data-suffix="+">0+</div>
+        <div class="stat-label">Workshops</div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 MANIFESTO -->
+<section class="manifesto">
+  <div class="container reveal">
+    <div class="manifesto-grid">
+      <div class="manifesto-content">
+        <div class="overline">About the Event</div>
+        <h2 class="manifesto-headline">Quality is now an <em>engineering discipline</em><br>integrated into every commit, deploy,<br>and decision.</h2>
+        <p class="manifesto-body">QE Conclave brings together the engineers, architects, and leaders who are redefining what quality means in modern software delivery. Three days of deep technical talks, hands-on workshops, and the conversations that don't happen on Slack.</p>
+      </div>
+      <div class="manifesto-img">
+        <img src="imagenexttoeventoverview.png" alt="Speaker at QE Conclave">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 TRACKS -->
+<section class="tracks">
+  <div class="container">
+    <div class="overline reveal">Conference Tracks</div>
+    <div class="tracks-grid">
+      <div class="track-card reveal" style="border-color: var(--red); --track-color: var(--red)">
+        <div class="track-name">AI-Powered QE</div>
+        <div class="track-desc">LLM-driven test generation, AI agents for QA workflows, and the reality of autonomous testing in production systems.</div>
+        <div class="track-tags">
+          <span class="track-tag">GenAI Testing</span>
+          <span class="track-tag">AI Agents</span>
+          <span class="track-tag">Self-Healing</span>
+        </div>
+      </div>
+      <div class="track-card reveal" style="border-color: var(--cyan); --track-color: var(--cyan)">
+        <div class="track-name">Test Architecture</div>
+        <div class="track-desc">Designing test frameworks that scale. Contract testing, component testing, and the death of the test pyramid.</div>
+        <div class="track-tags">
+          <span class="track-tag">Framework Design</span>
+          <span class="track-tag">Contract Testing</span>
+          <span class="track-tag">Playwright</span>
+        </div>
+      </div>
+      <div class="track-card reveal" style="border-color: #1B998B; --track-color: #1B998B">
+        <div class="track-name">Performance & Reliability</div>
+        <div class="track-desc">Chaos engineering, observability-driven testing, and SRE practices that make quality a runtime concern.</div>
+        <div class="track-tags">
+          <span class="track-tag">Chaos Engineering</span>
+          <span class="track-tag">Load Testing</span>
+          <span class="track-tag">SRE</span>
+        </div>
+      </div>
+      <div class="track-card reveal" data-dark-text style="border-color: var(--yellow); --track-color: var(--yellow)">
+        <div class="track-name">QE Leadership</div>
+        <div class="track-desc">Building QE teams, measuring quality ROI, and convincing your CTO that quality engineering is a strategic advantage.</div>
+        <div class="track-tags">
+          <span class="track-tag">Team Building</span>
+          <span class="track-tag">QE Metrics</span>
+          <span class="track-tag">Culture</span>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="section-link">View full agenda →</a>
+  </div>
+</section>
+
+<!-- 07 SPEAKERS -->
+<section class="speakers" id="speakers">
+  <div class="container">
+    <div class="agenda-header reveal">
+      <div class="agenda-header-left">
+        <div class="overline">This Year's Speakers</div>
+        <h2 class="agenda-title">Speakers</h2>
+      </div>
+    </div>
+    <div class="speakers-grid">
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakercurrent/Image.jpg" alt="Priya Narayanan"></div>
+        <div class="speaker-name">Priya Narayanan</div>
+        <div class="speaker-title">VP of Engineering</div>
+        <div class="speaker-company">Atlassian</div>
+        <div class="speaker-talk">Building Quality Culture at Scale: Lessons from 10,000 Engineers</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakercurrent/Image-1.jpg" alt="Marcus Chen"></div>
+        <div class="speaker-name">Marcus Chen</div>
+        <div class="speaker-title">Head of Test Infrastructure</div>
+        <div class="speaker-company">Stripe</div>
+        <div class="speaker-talk">Zero-Flake CI: How We Achieved 99.97% Test Reliability</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakercurrent/Image-2.jpg" alt="Dr. Aisha Patel"></div>
+        <div class="speaker-name">Dr. Aisha Patel</div>
+        <div class="speaker-title">Director of AI Testing</div>
+        <div class="speaker-company">Google DeepMind</div>
+        <div class="speaker-talk">Testing AI Systems: When Your Software Writes Its Own Rules</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakercurrent/Image-3.jpg" alt="Jonas Eriksson"></div>
+        <div class="speaker-name">Jonas Eriksson</div>
+        <div class="speaker-title">Staff QE Architect</div>
+        <div class="speaker-company">Spotify</div>
+        <div class="speaker-talk">The Observable Test: Replacing Assertions with Signals</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <a href="#" class="section-link">See all 45+ speakers →</a>
+      <a href="#" class="section-link" style="background:transparent;color:var(--yellow);border:1px solid var(--yellow)">Become a speaker →</a>
+    </div>
+  </div>
+</section>
+
+<!-- 08 PAST SPEAKERS -->
+<section class="past-speakers">
+  <div class="container">
+    <div class="overline reveal">Past Speaker Alumni</div>
+    <div class="past-speakers-subline reveal">Industry leaders who've graced the QE Conclave stage</div>
+    <div class="alumni-grid">
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image.jpg" alt="Anand Bagmar"></div><div class="alumni-name">Anand Bagmar</div><div class="alumni-co">Applitools</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-1.jpg" alt="Lisa Crispin"></div><div class="alumni-name">Lisa Crispin</div><div class="alumni-co">Independent</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-2.jpg" alt="Rahul Verma"></div><div class="alumni-name">Rahul Verma</div><div class="alumni-co">Test Mile</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-3.jpg" alt="Tariq King"></div><div class="alumni-name">Tariq King</div><div class="alumni-co">Epam Systems</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-4.jpg" alt="Smita Mishra"></div><div class="alumni-name">Smita Mishra</div><div class="alumni-co">Rocket Tester</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-5.jpg" alt="Simon Stewart"></div><div class="alumni-name">Simon Stewart</div><div class="alumni-co">Apple</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-6.jpg" alt="Maaret Pyhäjärvi"></div><div class="alumni-name">Maaret Pyhäjärvi</div><div class="alumni-co">Vaisala</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-7.jpg" alt="Alan Richardson"></div><div class="alumni-name">Alan Richardson</div><div class="alumni-co">EvilTester.com</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-8.jpg" alt="Nikolay Advolodkin"></div><div class="alumni-name">Nikolay Advolodkin</div><div class="alumni-co">Sauce Labs</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-9.jpg" alt="Meeta Dash"></div><div class="alumni-name">Meeta Dash</div><div class="alumni-co">Flipkart</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-10.jpg" alt="Andrew Knight"></div><div class="alumni-name">Andrew Knight</div><div class="alumni-co">Applitools</div></div>
+      <div class="alumni-card reveal"><div class="alumni-img"><img src="speakerpast/Image-11.jpg" alt="Santhosh Tuppad"></div><div class="alumni-name">Santhosh Tuppad</div><div class="alumni-co">Moolya Testing</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 AGENDA -->
+<section class="agenda" id="agenda">
+  <div class="container">
+    <div class="agenda-header reveal">
+      <div class="agenda-header-left">
+        <div class="overline">Schedule at a Glance</div>
+        <h2 class="agenda-title">Agenda</h2>
+      </div>
+    </div>
+    <div class="day-tabs">
+      <button class="day-tab active" onclick="switchDay(this, 'day1')">Day 1 — Oct 15</button>
+      <button class="day-tab" onclick="switchDay(this, 'day2')">Day 2 — Oct 16</button>
+      <button class="day-tab" onclick="switchDay(this, 'day3')">Day 3 — Oct 17</button>
+    </div>
+    <div id="day1">
+      <div class="session-row" data-hover-img="DSC03992.png">
+        <div class="session-time">09:00</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Opening Keynote: The State of Quality Engineering in 2026</div>
+          <div class="session-speaker">Priya Narayanan, Atlassian</div>
+        </div>
+        <span class="session-track-tag">Keynote</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04767.png">
+        <div class="session-time">10:30</div>
+        <div class="session-accent" style="background:var(--cyan)"></div>
+        <div class="session-content">
+          <div class="session-title">Contract Testing at Scale with Pact and PactFlow</div>
+          <div class="session-speaker">Marcus Chen, Stripe</div>
+        </div>
+        <span class="session-track-tag">Test Arch</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05147.png">
+        <div class="session-time">11:30</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">LLM-Driven Test Generation: From Prompt to Pipeline</div>
+          <div class="session-speaker">Dr. Aisha Patel, Google DeepMind</div>
+        </div>
+        <span class="session-track-tag">AI-QE</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC03959.png">
+        <div class="session-time">14:00</div>
+        <div class="session-accent" style="background:#1B998B"></div>
+        <div class="session-content">
+          <div class="session-title">Building a Performance Engineering Practice from Scratch</div>
+          <div class="session-speaker">Jonas Eriksson, Spotify</div>
+        </div>
+        <span class="session-track-tag">Perf</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05206.png">
+        <div class="session-time">15:30</div>
+        <div class="session-accent" style="background:#1B998B"></div>
+        <div class="session-content">
+          <div class="session-title">Observability-Driven Testing: Replacing Assertions with Signals</div>
+          <div class="session-speaker">Jonas Eriksson, Spotify</div>
+        </div>
+        <span class="session-track-tag">Perf</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04951.png">
+        <div class="session-time">16:30</div>
+        <div class="session-accent" style="background:var(--yellow)"></div>
+        <div class="session-content">
+          <div class="session-title">Panel: From QA Manager to QE Leader — What Actually Changes</div>
+          <div class="session-speaker">Moderated by Smita Mishra</div>
+        </div>
+        <span class="session-track-tag">Leadership</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div id="day2" style="display:none">
+      <div class="session-row" data-hover-img="DSC05147.png">
+        <div class="session-time">09:00</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Testing AI Systems: When Your Software Writes Its Own Rules</div>
+          <div class="session-speaker">Dr. Aisha Patel, Google DeepMind</div>
+        </div>
+        <span class="session-track-tag">AI-QE</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04803.png">
+        <div class="session-time">10:30</div>
+        <div class="session-accent" style="background:var(--cyan)"></div>
+        <div class="session-content">
+          <div class="session-title">Playwright at Microsoft Scale: 2M Tests, 0 Humans Watching</div>
+          <div class="session-speaker">Fatima Al-Rashidi, Microsoft</div>
+        </div>
+        <span class="session-track-tag">Test Arch</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05540.png">
+        <div class="session-time">11:30</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Self-Healing Test Suites: AI Agents for QA Workflows</div>
+          <div class="session-speaker">Nikolay Advolodkin, Sauce Labs</div>
+        </div>
+        <span class="session-track-tag">AI-QE</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC03959.png">
+        <div class="session-time">14:00</div>
+        <div class="session-accent" style="background:#1B998B"></div>
+        <div class="session-content">
+          <div class="session-title">Chaos Engineering for QE Teams: Breaking Things on Purpose</div>
+          <div class="session-speaker">David Okonkwo, TestSigma</div>
+        </div>
+        <span class="session-track-tag">Perf</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04767.png">
+        <div class="session-time">15:30</div>
+        <div class="session-accent" style="background:var(--yellow)"></div>
+        <div class="session-content">
+          <div class="session-title">Building QE Teams That Ship: Hiring, Culture, and Retention</div>
+          <div class="session-speaker">Lisa Crispin, Independent</div>
+        </div>
+        <span class="session-track-tag">Leadership</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC03992.png">
+        <div class="session-time">16:30</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Workshop: Hands-on with AI Test Generation using LLMs</div>
+          <div class="session-speaker">Lab led by QualiZeal QE Team</div>
+        </div>
+        <span class="session-track-tag">Workshop</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div id="day3" style="display:none">
+      <div class="session-row" data-hover-img="DSC05206.png">
+        <div class="session-time">09:00</div>
+        <div class="session-accent" style="background:var(--yellow)"></div>
+        <div class="session-content">
+          <div class="session-title">Measuring Quality: Metrics That Actually Matter to Your CTO</div>
+          <div class="session-speaker">Tariq King, Epam Systems</div>
+        </div>
+        <span class="session-track-tag">Leadership</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04951.png">
+        <div class="session-time">10:30</div>
+        <div class="session-accent" style="background:#1B998B"></div>
+        <div class="session-content">
+          <div class="session-title">Workshop: Building Your First Observability-Driven Test Suite</div>
+          <div class="session-speaker">Lab led by Spotify QE Team</div>
+        </div>
+        <span class="session-track-tag">Workshop</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04803.png">
+        <div class="session-time">14:00</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">The End of Record-and-Playback: What AI Testing Actually Looks Like</div>
+          <div class="session-speaker">David Okonkwo, TestSigma</div>
+        </div>
+        <span class="session-track-tag">AI-QE</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05540.png">
+        <div class="session-time">15:00</div>
+        <div class="session-accent" style="background:var(--cyan)"></div>
+        <div class="session-content">
+          <div class="session-title">Component Testing in 2026: The Death of the Test Pyramid</div>
+          <div class="session-speaker">Andrew Knight, Applitools</div>
+        </div>
+        <span class="session-track-tag">Test Arch</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05147.png">
+        <div class="session-time">16:00</div>
+        <div class="session-accent" style="background:var(--yellow)"></div>
+        <div class="session-content">
+          <div class="session-title">Closing Keynote: Quality Engineering in 2030 — A Provocation</div>
+          <div class="session-speaker">Priya Narayanan & panel</div>
+        </div>
+        <span class="session-track-tag">Keynote</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div style="margin-top:32px"><a href="#" class="section-link">Explore full agenda →</a></div>
+  </div>
+</section>
+
+<!-- Hover image element -->
+<div class="session-hover-img" id="sessionHoverImg">
+  <img src="" alt="">
+</div>
+
+<!-- 10 HIGHLIGHTS -->
+<section class="highlights" id="highlights">
+  <div class="container">
+    <div class="overline reveal">Highlights from Past Editions</div>
+    <div class="bento-grid reveal">
+      <div class="bento-item large">
+        <img src="DSC05147.png" alt="Keynote stage">
+        <div class="bento-caption">Keynote stage, QE Conclave 2025</div>
+      </div>
+      <div class="bento-item bento-lg has-img">
+        <img src="DSC04803.png" alt="Panel Discussion">
+        <div class="bento-text-inner">
+          <h3>Panel Discussion</h3>
+        </div>
+      </div>
+      <div class="bento-item has-img">
+        <img src="DSC03959.png" alt="Networking break">
+        <div class="bento-text-inner">
+          <h3>Networking break</h3>
+        </div>
+      </div>
+      <div class="bento-item has-img">
+        <img src="DSC05206.png" alt="Hands-on Workshop">
+        <div class="bento-text-inner">
+          <h3>Hands-on Workshop</h3>
+        </div>
+      </div>
+      <div class="bento-item bento-lg has-img">
+        <img src="DSC03992.png" alt="Community dinner">
+        <div class="bento-text-inner">
+          <h3>Community dinner</h3>
+        </div>
+      </div>
+    </div>
+    <div class="edition-row reveal">
+      <div class="edition-card red">
+        <div class="edition-year">2025 Edition</div>
+        <div class="edition-city">Hyderabad</div>
+        <div class="edition-stats">350+ attendees, 32 sessions, 8 workshops</div>
+      </div>
+      <div class="edition-card cyan">
+        <div class="edition-year">2024 Edition</div>
+        <div class="edition-city">Hyderabad</div>
+        <div class="edition-stats">200+ attendees, 24 sessions, 6 workshops</div>
+      </div>
+      <div class="edition-card yellow">
+        <div class="edition-year">Top Rated Talk</div>
+        <div class="edition-city">AI in QE</div>
+        <div class="edition-stats">4.9/5.0 avg rating — Dr. Aisha Patel</div>
+      </div>
+    </div>
+    <div style="margin-top:24px"><a href="#" class="section-link">Explore all past editions →</a></div>
+  </div>
+</section>
+
+<!-- 11 VIDEO TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="overline reveal">What Attendees & Sponsors Say</div>
+  </div>
+  <div class="testimonials-marquee">
+    <div class="testimonials-track">
+      <div class="video-testimonial" data-video="pKwbeladpBE">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/pKwbeladpBE/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">Learning from Leaders at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="9vu2U-hKpQM">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/9vu2U-hKpQM/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">Why QE Conclave Is the QE Community's Most Anticipated Event</div>
+      </div>
+      <div class="video-testimonial" data-video="crtydLrWMww">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/crtydLrWMww/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">First-Time Experience at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="F029dm1APHA">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/F029dm1APHA/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Digital.ai</div>
+        <div class="video-testimonial-brief">Energy, Engagement & Impact at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="HG6R0I-onmI">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/HG6R0I-onmI/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Testsigma</div>
+        <div class="video-testimonial-brief">India's Largest Quality Engineering Gathering</div>
+      </div>
+      <div class="video-testimonial" data-video="hZyWza24aWY">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/hZyWza24aWY/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: LambdaTest</div>
+        <div class="video-testimonial-brief">Collaboration & Learning at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="JRhE2oon2Yk">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/JRhE2oon2Yk/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Tricentis</div>
+        <div class="video-testimonial-brief">Networking & GenAI Innovation at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="KkQWF6x_p4g">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/KkQWF6x_p4g/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Narain Muralidharan</div>
+        <div class="video-testimonial-brief">GenAI Assistant for Enterprise QA: Learnings from Testsigma Copilot</div>
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="video-testimonial" data-video="pKwbeladpBE">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/pKwbeladpBE/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">Learning from Leaders at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="9vu2U-hKpQM">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/9vu2U-hKpQM/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">Why QE Conclave Is the QE Community's Most Anticipated Event</div>
+      </div>
+      <div class="video-testimonial" data-video="crtydLrWMww">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/crtydLrWMww/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Attendee Spotlight</div>
+        <div class="video-testimonial-brief">First-Time Experience at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="F029dm1APHA">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/F029dm1APHA/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Digital.ai</div>
+        <div class="video-testimonial-brief">Energy, Engagement & Impact at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="HG6R0I-onmI">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/HG6R0I-onmI/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Testsigma</div>
+        <div class="video-testimonial-brief">India's Largest Quality Engineering Gathering</div>
+      </div>
+      <div class="video-testimonial" data-video="hZyWza24aWY">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/hZyWza24aWY/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: LambdaTest</div>
+        <div class="video-testimonial-brief">Collaboration & Learning at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="JRhE2oon2Yk">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/JRhE2oon2Yk/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Sponsor Spotlight: Tricentis</div>
+        <div class="video-testimonial-brief">Networking & GenAI Innovation at QE Conclave 2024</div>
+      </div>
+      <div class="video-testimonial" data-video="KkQWF6x_p4g">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/KkQWF6x_p4g/hqdefault.jpg" alt="">
+          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+        </div>
+        <div class="video-testimonial-name">Narain Muralidharan</div>
+        <div class="video-testimonial-brief">GenAI Assistant for Enterprise QA: Learnings from Testsigma Copilot</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Video Player Overlay -->
+<div class="video-player-overlay" id="videoPlayerOverlay">
+  <div class="video-player-wrap">
+    <button class="video-player-close" id="videoPlayerClose">&times;</button>
+    <iframe id="videoPlayerIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- 12 VENUE -->
+<section class="venue" id="venue">
+  <div class="venue-hero reveal">
+    <div class="venue-hero-video">
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="Hyderabad International Convention Centre, India – state-of-the-art pillar less convention centre! - Novotel Hyderabad Convention Centre (1080p, h264).mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="venue-hero-inner">
+      <div class="venue-card">
+        <div class="venue-card-label">The Venue</div>
+        <div class="venue-card-name">Hyderabad International Convention Centre</div>
+        <div class="venue-card-desc">A world-class convention centre in the heart of HITEC City. Sprawling halls, outdoor courtyards, and the energy of a tech conclave — not a corporate conference.</div>
+        <div class="venue-card-address">
+          <div class="venue-card-address-label">Address</div>
+          HITEC City, Hyderabad<br>Telangana 500081
+        </div>
+        <a href="https://maps.google.com/?q=Hyderabad+International+Convention+Centre" target="_blank" rel="noopener" class="btn-venue-maps">
+          Google Maps →
+        </a>
+      </div>
+    </div>
+    <div class="venue-getting-there">
+      <div class="venue-getting-there-inner">
+        <div class="venue-getting-there-label">Getting There</div>
+        <div class="venue-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          30 min from RGIA Airport
+        </div>
+        <div class="venue-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          HITEC City Metro, 5 min walk
+        </div>
+        <div class="venue-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          20+ hotels within 2 km
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12B REGISTER CARD -->
+<section class="register-card">
+  <div class="container">
+    <div class="register-card-inner">
+      <div class="register-card-left">
+        <div class="register-breadcrumb">
+          Events
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          QE Conclave 2026
+        </div>
+        <h2 class="register-heading"><em>Quality engineering</em> redefined</h2>
+        <p class="register-subtitle">The global gathering for those building trust in AI systems. Join industry leaders shaping the future of quality engineering.</p>
+        <div class="register-actions">
+          <a href="#register-form" class="btn-register-primary">Register Now</a>
+          <a href="#agenda" class="btn-register-outline">View Agenda</a>
+        </div>
+      </div>
+      <div class="register-card-right">
+        <div class="register-info-grid">
+          <div>
+            <div class="register-info-label">Dates</div>
+            <div class="register-info-value">March & September 2026</div>
+          </div>
+          <div>
+            <div class="register-info-label">Locations</div>
+            <div class="register-info-value">Hyderabad & Austin</div>
+          </div>
+          <div>
+            <div class="register-info-label">Speakers</div>
+            <div class="register-info-value">45+ Industry Pioneers</div>
+          </div>
+          <div>
+            <div class="register-info-label">Format</div>
+            <div class="register-info-value">In-person</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 12C GALLERY -->
+<section class="gallery">
+  <div class="gallery-track move-left">
+    <img src="DSC04803.png" alt="QE Conclave event">
+    <img src="DSC03992.png" alt="QE Conclave event">
+    <img src="DSC03959.png" alt="QE Conclave event">
+    <img src="DSC04951.png" alt="QE Conclave event">
+    <!-- duplicate for seamless loop -->
+    <img src="DSC04803.png" alt="QE Conclave event">
+    <img src="DSC03992.png" alt="QE Conclave event">
+    <img src="DSC03959.png" alt="QE Conclave event">
+    <img src="DSC04951.png" alt="QE Conclave event">
+  </div>
+  <div class="gallery-track move-right">
+    <img src="DSC05206.png" alt="QE Conclave event">
+    <img src="DSC04767.png" alt="QE Conclave event">
+    <img src="DSC05147.png" alt="QE Conclave event">
+    <img src="DSC05540.png" alt="QE Conclave event">
+    <!-- duplicate for seamless loop -->
+    <img src="DSC05206.png" alt="QE Conclave event">
+    <img src="DSC04767.png" alt="QE Conclave event">
+    <img src="DSC05147.png" alt="QE Conclave event">
+    <img src="DSC05540.png" alt="QE Conclave event">
+  </div>
+</section>
+
+<!-- 13 SPONSORS -->
+<section class="sponsors" id="sponsors">
+  <div class="container">
+    <div class="overline reveal" style="text-align:center">Partners & Sponsors</div>
+    <div class="sponsor-tier">
+      <div class="sponsor-tier-label">Platinum</div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo platinum"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
+        <div class="sponsor-logo platinum"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
+        <div class="sponsor-logo platinum"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
+      </div>
+    </div>
+    <div class="sponsor-tier">
+      <div class="sponsor-tier-label">Gold</div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo gold"><img src="pcloudy-logo-new-1.webp" alt="pCloudy"></div>
+        <div class="sponsor-logo gold"><img src="QApilot_BlueBlack-4.webp" alt="QApilot"></div>
+        <div class="sponsor-logo gold"><img src="60892a20edbd1da3fd641167_Synthesized-logo.png" alt="Synthesized"></div>
+        <div class="sponsor-logo gold"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
+        <div class="sponsor-logo gold"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
+      </div>
+    </div>
+    <div class="sponsor-tier">
+      <div class="sponsor-tier-label">Silver & Community</div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/testsigma.com" alt="TestSigma"></div>
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/katalon.com" alt="Katalon"></div>
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/postman.com" alt="Postman"></div>
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/cypress.io" alt="Cypress"></div>
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/saucelabs.com" alt="Sauce Labs"></div>
+        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/mabl.com" alt="Mabl"></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px"><a href="#" class="section-link">Become a sponsor →</a></div>
+  </div>
+</section>
+
+<!-- 14 CTA BAND -->
+<section class="cta-band">
+  <div class="container">
+    <div class="cta-headline">Join 5000+ QE Leaders in Hyderabad</div>
+    <div class="cta-sub">Early bird pricing ends September 1, 2026</div>
+    <div class="cta-pricing">
+      <div class="cta-price-col">
+        <div class="cta-price early">&#8377;8,999</div>
+        <div class="cta-price-label">Early Bird</div>
+      </div>
+      <div class="cta-price-col">
+        <div class="cta-price crossed">&#8377;14,999</div>
+        <div class="cta-price-label">Standard</div>
+      </div>
+    </div>
+    <a href="#" class="btn-cta-dark">Register Now</a>
+    <a href="#" class="cta-secondary">Need manager approval? Get the justification toolkit &rarr;</a>
+  </div>
+</section>
+
+<!-- 14B REGISTRATION FORM -->
+<section class="register-form-section" id="register-form">
+  <div class="container">
+    <div class="register-form-grid">
+      <div class="register-form-left reveal">
+        <div class="overline">Register Now</div>
+        <h2>Secure your spot at <span>QE Conclave 2026</span></h2>
+        <p>Join 5000+ quality engineering professionals for three days of deep technical talks, hands-on workshops, and the conversations that shape the future of QE.</p>
+        <ul class="register-form-perks">
+          <li>Access to all 4 conference tracks</li>
+          <li>45+ speaker sessions & 12 workshops</li>
+          <li>Networking with industry leaders</li>
+          <li>Certificate of attendance</li>
+          <li>Lunch & refreshments included</li>
+        </ul>
+      </div>
+      <div class="register-form reveal">
+        <h3>Register for QE Conclave</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" placeholder="John">
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" placeholder="Doe">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>Work Email</label>
+            <input type="email" placeholder="john@company.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Company</label>
+            <input type="text" placeholder="Your company">
+          </div>
+          <div class="form-group">
+            <label>Job Title</label>
+            <input type="text" placeholder="Your role">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>Ticket Type</label>
+            <select>
+              <option>Early Bird — ₹8,999</option>
+              <option>Standard — ₹14,999</option>
+              <option>Workshop Add-on — ₹4,999</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-form-submit">Register Now</button>
+        <div class="form-disclaimer">By registering, you agree to our Terms of Service and Privacy Policy. You'll receive event updates via email.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 FOOTER -->
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-decor">
+      <div class="burst burst-1">
+        <img src="Group 1261153576.svg" alt="">
+      </div>
+    </div>
+    <div class="container">
+      <!-- Logo + Event Info -->
+      <div class="footer-top-row">
+        <div class="footer-logo-block">
+          <img src="QE Conclave Logo.svg" alt="QE Conclave">
+          <div class="footer-logo-divider"></div>
+          <div class="footer-event-info">
+            <span>Hyderabad</span>
+            <span>21 Oct, 2026</span>
+            <span>4-8 PM IST</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description + Nav Links -->
+      <div class="footer-content-row">
+        <div class="footer-desc">
+          QE Conclave is not merely an event; it's a catalyst for leadership elevation. This summit is your key to staying ahead, steering the future of Quality Engineering. As the forefront of innovation converges at AVASA, HITEC City, Hyderabad on December 15, immerse yourself in an unparalleled experience.
+        </div>
+        <div class="footer-nav-grid">
+          <a href="#">About</a>
+          <a href="#speakers">Speakers</a>
+          <a href="#">Gallery</a>
+          <a href="#agenda">Schedule</a>
+          <a href="#">Video</a>
+          <a href="#">Past Events</a>
+        </div>
+      </div>
+
+      <!-- Social + Tagline -->
+      <div class="footer-social-tagline">
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn">
+            <img src="linkedin-box-fill.svg" alt="LinkedIn" width="23" height="23">
+          </a>
+          <a href="#" aria-label="YouTube">
+            <img src="Social.svg" alt="YouTube" width="23" height="23">
+          </a>
+        </div>
+        <div class="footer-tagline">Join us on this transformative journey, where excellence meets innovation, and leadership takes center stage.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="footer-bar">
+    <div class="container">
+      <div class="footer-bar-row">
+        <div class="footer-bar-left">
+          <span class="footer-copyright">Copyright &copy; 2024 QE Conclave&reg;</span>
+          <div class="footer-legal">
+            <a href="#">Privacy policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Disclaimer</a>
+          </div>
+        </div>
+        <div class="footer-bar-right">
+          <span class="footer-powered">Powered by <img src="Group.svg" alt="QualiZeal" height="16"></span>
+          <a href="#" class="footer-powered-link">www.qualizeal.com</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Theme toggle (light/dark)
+(function() {
+  const root = document.documentElement;
+  const stored = localStorage.getItem('qec-theme');
+  if (stored === 'light') root.setAttribute('data-theme', 'light');
+  const toggle = document.getElementById('themeToggle');
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        root.removeAttribute('data-theme');
+        localStorage.setItem('qec-theme', 'dark');
+      } else {
+        root.setAttribute('data-theme', 'light');
+        localStorage.setItem('qec-theme', 'light');
+      }
+    });
+  }
+})();
+
+// Nav scroll behavior
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// Tracks auto-cycle (left → right, 8s per card; pauses while hovering)
+(function() {
+  const grid = document.querySelector('.tracks-grid');
+  if (!grid) return;
+  const cards = Array.from(grid.querySelectorAll('.track-card'));
+  if (!cards.length) return;
+  const INTERVAL = 4500;
+  let idx = 0;
+  let timer = null;
+  let hovering = false;
+
+  function setActive(i) {
+    cards.forEach((c, j) => c.classList.toggle('is-active', j === i));
+  }
+  function clearActive() {
+    cards.forEach(c => c.classList.remove('is-active'));
+  }
+  function tick() {
+    if (hovering) return;
+    setActive(idx);
+    idx = (idx + 1) % cards.length;
+  }
+  function start() {
+    if (timer) return;
+    tick();
+    timer = setInterval(tick, INTERVAL);
+  }
+  function stop() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  grid.addEventListener('mouseenter', () => {
+    hovering = true;
+    stop();
+    clearActive();
+  });
+  grid.addEventListener('mouseleave', () => {
+    hovering = false;
+    start();
+  });
+
+  start();
+})();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+
+// Day tabs
+function switchDay(tab, dayId) {
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.querySelectorAll('[id^="day"]').forEach(d => d.style.display = 'none');
+  document.getElementById(dayId).style.display = 'block';
+}
+
+// Countdown (ticks every second)
+function updateCountdown() {
+  const target = new Date('2026-10-15T09:00:00+05:30');
+  const now = new Date();
+  const diff = target - now;
+  if (diff <= 0) return;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+  const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+  document.getElementById('cd-days').textContent = String(days);
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+  document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+  var secs = Math.floor((diff % (1000*60)) / 1000);
+  document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// Count-up animation for stat numbers
+function animateCountUp(el) {
+  const target = parseInt(el.dataset.target);
+  const suffix = el.dataset.suffix || '';
+  const duration = 2000;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current.toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+const statEls = document.querySelectorAll('.stat-val[data-target]');
+const statObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCountUp(entry.target);
+      statObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+statEls.forEach(el => statObserver.observe(el));
+
+// Video testimonial player
+const overlay = document.getElementById('videoPlayerOverlay');
+const iframe = document.getElementById('videoPlayerIframe');
+const closeBtn = document.getElementById('videoPlayerClose');
+
+document.querySelectorAll('.video-testimonial').forEach(card => {
+  card.addEventListener('click', () => {
+    const videoId = card.dataset.video;
+    iframe.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+    overlay.classList.add('active');
+  });
+});
+
+closeBtn.addEventListener('click', () => {
+  overlay.classList.remove('active');
+  iframe.src = '';
+});
+
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) {
+    overlay.classList.remove('active');
+    iframe.src = '';
+  }
+});
+
+// Session hover image follow cursor
+const hoverImg = document.getElementById('sessionHoverImg');
+const hoverImgTag = hoverImg.querySelector('img');
+document.querySelectorAll('.session-row[data-hover-img]').forEach(row => {
+  row.addEventListener('mouseenter', () => {
+    hoverImgTag.src = row.dataset.hoverImg;
+    hoverImg.classList.add('visible');
+  });
+  row.addEventListener('mouseleave', () => {
+    hoverImg.classList.remove('visible');
+  });
+  row.addEventListener('mousemove', (e) => {
+    hoverImg.style.left = (e.clientX + 20) + 'px';
+    hoverImg.style.top = (e.clientY - 90) + 'px';
+  });
+});
+</script>
+</body>
+</html>
