@@ -1887,7 +1887,7 @@ a:hover { color: var(--yellow); }
 <section class="hero">
   <div class="hero-video-bg">
     <video autoplay muted loop playsinline>
-      <source src="QE Conclave 2023 Future of Quality Engineering Navigating 2024 and Beyond Intro - QE Conclave (1080p, h264).mp4" type="video/mp4">
+      <source src="hero-intro.mp4" type="video/mp4">
     </video>
   </div>
   <div class="container">
@@ -2501,9 +2501,7 @@ a:hover { color: var(--yellow); }
 <section class="venue" id="venue">
   <div class="venue-hero reveal">
     <div class="venue-hero-video">
-      <video autoplay muted loop playsinline preload="auto">
-        <source src="Hyderabad International Convention Centre, India – state-of-the-art pillar less convention centre! - Novotel Hyderabad Convention Centre (1080p, h264).mp4" type="video/mp4">
-      </video>
+      <video autoplay muted loop playsinline preload="none" poster="convention-center-image.jpg" data-src="venue-bg.mp4"></video>
     </div>
     <div class="venue-hero-inner">
       <div class="venue-card">
@@ -2823,6 +2821,28 @@ const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 80);
 });
+
+// Lazy-load heavy below-the-fold video (venue hero)
+(function() {
+  const v = document.querySelector('.venue-hero-video video[data-src]');
+  if (!v) return;
+  const load = () => {
+    if (v.src) return;
+    v.src = v.dataset.src;
+    v.load();
+    v.play().catch(() => {});
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { load(); io.disconnect(); }
+      });
+    }, { rootMargin: '300px' });
+    io.observe(v);
+  } else {
+    load();
+  }
+})();
 
 // Tracks auto-cycle (left → right, 8s per card; pauses while hovering)
 (function() {
