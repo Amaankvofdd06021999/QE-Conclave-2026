@@ -76,9 +76,41 @@ a:hover { color: var(--yellow); }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-16px); } }
 @keyframes spinCW { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
 @keyframes rotateCW { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rotateCCW { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
 
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ═══ FLOATING QE LOGO DECORATIONS ═══ */
+.qe-decor-host { position: relative; overflow: hidden; }
+.qe-decor-host > .container,
+.qe-decor-host > .agenda-header,
+.qe-decor-host > .gallery-marquee,
+.qe-decor-host > .testimonials-marquee,
+.qe-decor-host > .bento-grid { position: relative; z-index: 1; }
+.qe-decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+  transform-origin: center center;
+  animation: rotateCW 50s linear infinite;
+}
+.qe-decor.ccw { animation-name: rotateCCW; }
+.qe-decor.spin-slow { animation-duration: 80s; }
+.qe-decor.spin-fast { animation-duration: 30s; }
+.qe-decor img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.qe-decor.size-sm { width: 200px; height: 200px; }
+.qe-decor.size-md { width: 360px; height: 360px; }
+.qe-decor.size-lg { width: 520px; height: 520px; }
+.qe-decor.size-xl { width: 720px; height: 720px; }
+@media (prefers-reduced-motion: reduce) {
+  .qe-decor { animation: none; }
+}
+@media (max-width: 768px) {
+  .qe-decor.size-lg, .qe-decor.size-xl { width: 320px; height: 320px; }
+  .qe-decor.size-md { width: 220px; height: 220px; }
+}
 
 /* ═══ 01 NAV ═══ */
 .nav {
@@ -171,13 +203,13 @@ a:hover { color: var(--yellow); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.4;
+  opacity: 0.75;
 }
 .hero-video-bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.45) 100%);
 }
 .hero-video-bg::before {
   content: '';
@@ -253,7 +285,59 @@ a:hover { color: var(--yellow); }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--yellow);
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+}
+.hero-meta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.6s ease 0.15s both;
+}
+.hero-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  padding: 8px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.hero-meta-item svg { width: 14px; height: 14px; color: var(--yellow); flex-shrink: 0; }
+.hero-theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.92);
+  margin: 28px auto 0;
+  max-width: 720px;
+  line-height: 1.5;
+  animation: fadeUp 0.6s ease 0.3s both;
+}
+.hero-theme-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  padding: 5px 12px;
+  border: 1px solid var(--yellow);
+  border-radius: 2px;
+  flex-shrink: 0;
 }
 .hero-actions {
   display: flex; gap: 16px; align-items: center;
@@ -261,17 +345,38 @@ a:hover { color: var(--yellow); }
 }
 .btn-hero {
   font-family: var(--font-ui);
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
-  padding: 14px 32px;
+  padding: 20px 44px;
   background: var(--yellow);
-  color: var(--black);
+  color: #0E1012;
   border: none;
   cursor: pointer;
-  transition: all 0.2s;
   text-decoration: none;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 12px 36px rgba(242, 235, 83, 0.32), 0 0 0 0 rgba(242, 235, 83, 0.4);
+  animation: heroCtaPulse 2.4s ease-in-out infinite;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
 }
-.btn-hero:hover { background: #E5DE3F; color: var(--black); transform: translateY(-2px); }
+@keyframes heroCtaPulse {
+  0%, 100% { box-shadow: 0 12px 36px rgba(242, 235, 83, 0.32), 0 0 0 0 rgba(242, 235, 83, 0.4); }
+  50% { box-shadow: 0 16px 44px rgba(242, 235, 83, 0.4), 0 0 0 14px rgba(242, 235, 83, 0); }
+}
+.btn-hero:hover {
+  background: #FFF66B;
+  color: #0E1012;
+  transform: translateY(-3px);
+  box-shadow: 0 18px 48px rgba(242, 235, 83, 0.45);
+}
+.btn-hero::after {
+  content: '→';
+  font-size: 1.1em;
+  transition: transform 0.2s;
+}
+.btn-hero:hover::after { transform: translateX(4px); }
 .btn-ghost {
   font-family: var(--font-ui);
   font-size: 14px;
@@ -305,12 +410,46 @@ a:hover { color: var(--yellow); }
   color: var(--text-secondary);
   line-height: 1.45;
 }
+.hero-countdown-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.hero-countdown-tagline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+.hero-countdown-tagline::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--yellow);
+  animation: pulse 1.8s ease-in-out infinite;
+}
 .hero-countdown {
-  display: flex; gap: 0; align-items: center;
+  display: flex;
+  gap: 0;
+  align-items: center;
+  padding: 18px 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 6px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.35);
 }
 .countdown-block {
   text-align: center;
-  padding: 0 18px;
+  padding: 0 24px;
   position: relative;
 }
 .countdown-block:not(:last-child)::after {
@@ -320,130 +459,240 @@ a:hover { color: var(--yellow); }
   top: 50%;
   transform: translateY(-50%);
   width: 1px;
-  height: 86px;
-  background: var(--border);
+  height: 70px;
+  background: rgba(255,255,255,0.12);
 }
 .countdown-num {
-  font-family: var(--font-ui);
-  font-size: 30px;
-  font-weight: 500;
-  color: #fff;
+  font-family: var(--font-display);
+  font-size: 58px;
+  font-weight: 700;
+  color: var(--yellow);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  min-width: 48px;
-  padding: 20px 0;
+  letter-spacing: -0.02em;
+  min-width: 72px;
+  padding: 4px 0 10px;
 }
 .countdown-label {
   font-family: var(--font-ui);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
+  color: rgba(255,255,255,0.65);
 }
 
 /* ═══ 03 STATS ═══ */
 .stats-section {
   background: var(--black);
   padding: 80px 0;
+  border-top: 1px solid var(--border);
 }
-.stats-grid {
+.stats-header {
+  text-align: center;
+  margin-bottom: 48px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.stats-heading {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+.stats-row {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 120px;
-  align-items: start;
-}
-.stats-photo-col {
-  position: sticky;
-  top: 100px;
-}
-.stats-photo-col img {
-  width: 460px;
-  height: auto;
-  animation: float 4s ease-in-out infinite;
-}
-.stats-numbers {
-  display: flex;
-  flex-direction: column;
-}
-.stat-item {
-  padding: 48px 0 16px;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
-.stat-item:first-child { padding-top: 0; }
+.stat-card {
+  position: relative;
+  padding: 36px 28px 28px;
+  border-right: 1px solid var(--border);
+}
+.stat-card:last-child { border-right: none; }
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent, var(--yellow));
+}
 .stat-val {
-  font-family: var(--font-ui);
-  font-size: clamp(64px, 9vw, 120px);
-  font-weight: 800;
-  color: var(--yellow);
-  line-height: 0.9;
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
 .stat-label {
   font-family: var(--font-ui);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-tertiary);
-  margin-top: 12px;
-  margin-bottom: 12px;
+  margin-top: 14px;
 }
 
 /* ═══ 05 MANIFESTO ═══ */
-.manifesto { padding: 0; overflow: hidden; border-bottom: 1px solid var(--border); position: relative; min-height: 485px; }
+.manifesto { padding: 0; overflow: hidden; border-bottom: 1px solid var(--border); position: relative; min-height: 720px; }
 .manifesto-grid {
   position: relative;
 }
 .manifesto-content {
   max-width: 100%;
-  padding: 100px 0 40px;
+  padding: 120px 0 80px;
   position: relative;
   z-index: 1;
 }
 .manifesto-headline {
   font-family: var(--font-display);
-  font-size: clamp(28px, 3vw, 36px);
-  font-weight: 500;
-  line-height: 1.4;
+  font-size: clamp(36px, 4.6vw, 58px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-bottom: 24px;
-  max-width: 690px;
+  margin-bottom: 28px;
+  max-width: 760px;
 }
 .manifesto-headline em {
   font-style: normal;
   color: var(--yellow);
-  font-weight: 500;
+  font-weight: 600;
 }
 .manifesto-body {
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: clamp(17px, 1.4vw, 20px);
   font-weight: 400;
   color: var(--text-secondary);
-  max-width: 560px;
-  line-height: 1.7;
+  max-width: 600px;
+  line-height: 1.6;
 }
 .manifesto-img {
   position: absolute;
   right: 0;
   top: 0;
-  width: 630px;
-  height: 485px;
+  width: 60%;
+  height: 100%;
   z-index: 0;
   overflow: hidden;
 }
 .manifesto-img img {
   width: 100%;
-  height: 108%;
+  height: 100%;
   display: block;
   object-fit: cover;
-  object-position: top center;
+  object-position: center;
 }
 .manifesto-img::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(3,3,3,0) 38%, #030303 98%);
+  background: linear-gradient(to right, #030303 0%, rgba(3,3,3,0.4) 40%, rgba(3,3,3,0) 80%);
+}
+
+/* ═══ WHO SHOULD ATTEND ═══ */
+.audience {
+  padding: 100px 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--black);
+}
+.audience-header {
+  text-align: center;
+  margin-bottom: 56px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.audience-heading {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: 12px;
+}
+.audience-sub {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 16px;
+}
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.audience-card {
+  position: relative;
+  padding: 36px 28px 32px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent, var(--yellow));
+  transition: transform 0.3s, border-color 0.3s, background 0.3s;
+}
+.audience-card:hover {
+  transform: translateY(-4px);
+  background: #1A1D22;
+}
+.audience-card-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  color: var(--accent, var(--yellow));
+}
+.audience-card-icon svg { width: 22px; height: 22px; }
+.audience-card-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+.audience-card-desc {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.audience-card-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.audience-card-role {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  border-radius: 999px;
+}
+@media (max-width: 768px) {
+  .audience-grid { grid-template-columns: 1fr; }
 }
 
 /* ═══ 06 TRACKS ═══ */
@@ -574,8 +823,10 @@ a:hover { color: var(--yellow); }
 }
 .speaker-company {
   font-family: var(--font-ui);
-  font-size: 13px;
-  color: var(--text-tertiary);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yellow);
+  letter-spacing: 0.01em;
 }
 .speaker-talk {
   font-family: var(--font-body);
@@ -589,6 +840,103 @@ a:hover { color: var(--yellow); }
   transition: opacity 0.3s, transform 0.3s;
 }
 .speaker-card:hover .speaker-talk { opacity: 1; transform: translateY(0); }
+
+.speakers-cta {
+  margin-top: 48px;
+  padding: 32px 36px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(242, 235, 83, 0.08) 0%, rgba(242, 235, 83, 0.02) 100%);
+  border: 1px solid rgba(242, 235, 83, 0.25);
+  border-left: 4px solid var(--yellow);
+  position: relative;
+}
+.speakers-cta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 280px;
+}
+.speakers-cta-eyebrow {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.speakers-cta-eyebrow::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(242, 235, 83, 0.2);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(242, 235, 83, 0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(242, 235, 83, 0.05); }
+}
+.speakers-cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.speakers-cta-sub {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  max-width: 620px;
+}
+.btn-speaker-apply {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 16px 32px;
+  background: var(--yellow);
+  color: #0E1012;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 8px 24px rgba(242, 235, 83, 0.18);
+}
+.btn-speaker-apply:hover {
+  background: #E5DE3F;
+  color: #0E1012;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(242, 235, 83, 0.28);
+}
+.speakers-secondary {
+  margin-top: 20px;
+  text-align: right;
+}
+.speakers-secondary-link {
+  font-family: var(--font-ui);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.speakers-secondary-link:hover { color: var(--text-primary); }
 
 /* ═══ 08 PAST SPEAKERS ═══ */
 .past-speakers {
@@ -635,8 +983,9 @@ a:hover { color: var(--yellow); }
 }
 .alumni-co {
   font-family: var(--font-ui);
-  font-size: 11px;
-  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--yellow);
   margin-top: 2px;
 }
 
@@ -658,23 +1007,82 @@ a:hover { color: var(--yellow); }
   line-height: 1.1;
 }
 .agenda-title span { color: var(--yellow); }
-.day-tabs { display: flex; gap: 0; margin-bottom: 0; border-bottom: 1px solid var(--border); }
-.day-tab {
+.agenda-date-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.agenda-date-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   font-family: var(--font-ui);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.agenda-date-bar-left .day-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 0 4px rgba(242, 235, 83, 0.18);
+}
+.agenda-date-bar-meta {
+  display: flex;
+  gap: 24px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-tertiary);
+  flex-wrap: wrap;
+}
+.agenda-date-bar-meta span strong {
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-right: 6px;
+}
+.session-row.is-break {
+  cursor: default;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.015);
+  gap: 16px;
+}
+.session-row.is-break:hover {
+  background: rgba(255,255,255,0.015);
+  padding-left: 16px;
+}
+.session-row.is-break .session-time { color: var(--text-tertiary); }
+.session-row.is-break:hover .session-time { color: var(--text-tertiary); }
+.session-row.is-break .session-title {
   font-size: 14px;
   font-weight: 500;
-  padding: 14px 28px;
   color: var(--text-tertiary);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: color 0.2s, border-color 0.2s;
-  background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  font-style: italic;
+  margin-bottom: 0;
 }
-.day-tab.active { color: var(--text-primary); border-bottom-color: var(--yellow); }
-.day-tab:hover { color: var(--text-secondary); }
+.session-row.is-break:hover .session-title { color: var(--text-tertiary); }
+.session-row.is-break .session-accent {
+  background: var(--text-tertiary) !important;
+  opacity: 0.4;
+  height: 18px;
+}
+.session-row.is-break:hover .session-accent { height: 18px; }
+.session-row.is-break .session-arrow { display: none; }
+.session-row.is-break .session-break-tag {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  opacity: 0.65;
+}
 .session-row {
   display: flex;
   align-items: center;
@@ -691,10 +1099,11 @@ a:hover { color: var(--yellow); }
 }
 .session-time {
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--text-tertiary);
-  min-width: 64px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 84px;
+  letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   transition: color 0.3s;
 }
@@ -725,17 +1134,27 @@ a:hover { color: var(--yellow); }
 }
 .session-track-tag {
   font-family: var(--font-ui);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 7px 14px;
   border: 1px solid var(--border);
-  color: var(--text-tertiary);
+  background: rgba(255,255,255,0.04);
+  color: var(--text-secondary);
   text-transform: uppercase;
   flex-shrink: 0;
-  transition: border-color 0.3s, color 0.3s;
+  border-radius: 3px;
+  transition: transform 0.3s;
 }
-.session-row:hover .session-track-tag { border-color: var(--text-tertiary); color: var(--text-secondary); }
+.session-row:hover .session-track-tag { transform: scale(1.04); }
+/* Color-coded by session type */
+.session-row[data-track="keynote"] .session-track-tag,
+.session-row[data-track="ai-qe"] .session-track-tag { background: var(--red); color: #fff; border-color: var(--red); }
+.session-row[data-track="test-arch"] .session-track-tag { background: var(--cyan); color: #0E1012; border-color: var(--cyan); }
+.session-row[data-track="perf"] .session-track-tag { background: #1B998B; color: #fff; border-color: #1B998B; }
+.session-row[data-track="leadership"] .session-track-tag { background: var(--yellow); color: #0E1012; border-color: var(--yellow); }
+.session-row[data-track="panel"] .session-track-tag { background: var(--yellow); color: #0E1012; border-color: var(--yellow); }
+.session-row[data-track="fireside"] .session-track-tag { background: var(--red); color: #fff; border-color: var(--red); }
 .session-arrow {
   color: var(--text-tertiary);
   opacity: 0;
@@ -748,11 +1167,15 @@ a:hover { color: var(--yellow); }
 /* Hover image that follows cursor */
 .session-hover-img {
   position: fixed;
-  width: 280px;
-  height: 180px;
+  top: 100px;
+  right: 32px;
+  width: 320px;
+  height: 220px;
   border-radius: 8px;
   overflow: hidden;
   pointer-events: none;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
   z-index: 50;
   opacity: 0;
   transform: scale(0.9);
@@ -1274,7 +1697,32 @@ a:hover { color: var(--yellow); }
 .gallery {
   background: var(--black);
   overflow: hidden;
-  padding-bottom: 64px;
+  padding: 80px 0;
+  border-top: 1px solid var(--border);
+}
+.gallery-header {
+  text-align: center;
+  margin-bottom: 48px;
+  padding: 0 var(--grid-margin);
+}
+.gallery-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  margin-top: 10px;
+  line-height: 1.2;
+}
+.gallery-header p {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-top: 12px;
+  max-width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.55;
 }
 .gallery-track {
   display: flex;
@@ -1300,130 +1748,190 @@ a:hover { color: var(--yellow); }
 }
 
 /* ═══ 13 SPONSORS ═══ */
-.sponsors { padding: 64px 0; border-top: 1px solid var(--border); }
-.sponsor-tier { margin-bottom: 24px; }
+.sponsors { padding: 100px 0; border-top: 1px solid var(--border); }
+.sponsors-heading {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  text-align: center;
+  margin: 12px 0 56px;
+}
+.sponsor-tier {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+}
+.sponsor-tier:last-of-type { border-bottom: 1px solid var(--border); }
+.sponsor-tier-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 32px;
+}
 .sponsor-tier-label {
   font-family: var(--font-ui);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
   text-align: center;
-  margin-bottom: 16px;
 }
+.sponsor-tier-label::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+  transform: translateY(-2px);
+  background: currentColor;
+}
+.sponsor-tier.platinum .sponsor-tier-label { color: #E5E4E2; font-size: 14px; }
+.sponsor-tier.gold .sponsor-tier-label { color: #F2C84B; }
+.sponsor-tier.silver .sponsor-tier-label { color: #B0B6BD; font-size: 12px; }
 .sponsor-logos {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 32px;
+  gap: 48px;
   flex-wrap: wrap;
 }
 .sponsor-logo {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-tertiary);
-  padding: 12px 24px;
-  border: 1px solid var(--border);
-  opacity: 0.6;
-  transition: opacity 0.3s, border-color 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #fff;
+  border-radius: 6px;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
-.sponsor-logo:hover { opacity: 1; border-color: var(--text-tertiary); }
+.sponsor-logo:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
 .sponsor-logo img {
-  height: 24px;
   width: auto;
-  filter: grayscale(1) brightness(1.5);
-  transition: filter 0.3s;
+  display: block;
+  object-fit: contain;
 }
-.sponsor-logo:hover img { filter: grayscale(0) brightness(1); }
-.sponsor-logo.platinum { padding: 16px 32px; opacity: 0.8; }
-.sponsor-logo.platinum img { height: 28px; }
-.sponsor-logo.gold { }
-.sponsor-logo.gold img { height: 20px; }
-.sponsor-logo.silver { padding: 8px 16px; }
-.sponsor-logo.silver img { height: 16px; }
-
-/* ═══ 14 CTA BAND ═══ */
-.cta-band {
-  background: var(--yellow);
-  padding: 80px 0 64px;
+/* Platinum: huge, generous padding */
+.sponsor-tier.platinum .sponsor-logo { padding: 28px 48px; min-width: 240px; min-height: 140px; }
+.sponsor-tier.platinum .sponsor-logo img { height: 64px; max-width: 280px; }
+/* Gold: medium */
+.sponsor-tier.gold .sponsor-logo { padding: 20px 32px; min-width: 180px; min-height: 100px; }
+.sponsor-tier.gold .sponsor-logo img { height: 44px; max-width: 200px; }
+/* Silver: compact */
+.sponsor-tier.silver .sponsor-logo { padding: 14px 24px; min-width: 140px; min-height: 70px; }
+.sponsor-tier.silver .sponsor-logo img { height: 28px; max-width: 150px; }
+.sponsor-cta-row {
+  text-align: center;
+  margin-top: 48px;
+}
+.sponsors-past-toggle {
+  margin-top: 64px;
   text-align: center;
 }
-.cta-headline {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 4vw, 40px);
+.sponsors-past-label {
+  font-family: var(--font-ui);
+  font-size: 11px;
   font-weight: 700;
-  color: var(--black);
-  margin-bottom: 12px;
-  letter-spacing: -0.8px;
-  line-height: 1.6;
-}
-.cta-sub {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: rgba(3,3,3,0.6);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
-.cta-pricing {
-  display: flex;
-  justify-content: center;
-  gap: 24px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
   margin-bottom: 28px;
 }
-.cta-price-col {
+.sponsors-past-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.sponsors-past-grid .sponsor-logo { padding: 14px 20px; min-width: 0; min-height: 70px; opacity: 0.85; transition: opacity 0.2s; }
+.sponsors-past-grid .sponsor-logo:hover { opacity: 1; transform: translateY(-2px); }
+.sponsors-past-grid .sponsor-logo img { height: 26px; max-width: 130px; }
+
+/* ═══ SPONSOR TESTIMONIALS ═══ */
+.sponsor-quotes {
+  padding: 100px 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+.sponsor-quotes-header {
   text-align: center;
+  margin-bottom: 56px;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.cta-price {
+.sponsor-quotes-heading {
   font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--black);
-  line-height: 1.6;
-}
-.cta-price.early { color: var(--red); }
-.cta-price.crossed {
-  text-decoration: line-through;
-  opacity: 0.4;
-}
-.cta-price-label {
-  font-family: var(--font-ui);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(3,3,3,0.5);
-  line-height: 1.6;
-}
-.btn-cta-dark {
-  font-family: var(--font-ui);
-  font-size: 15px;
+  font-size: clamp(28px, 3.2vw, 40px);
   font-weight: 700;
-  padding: 14px 40px;
-  background: var(--black);
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 12px;
+}
+.sponsor-quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.sponsor-quote-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 32px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+.sponsor-quote-mark {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 0.5;
   color: var(--yellow);
-  border: none;
-  cursor: pointer;
-  transition: transform 0.2s;
-  text-decoration: none;
-  display: inline-block;
-  line-height: 1.6;
+  margin-bottom: -12px;
 }
-.btn-cta-dark:hover { transform: translateY(-2px); color: var(--yellow); }
-.cta-secondary {
-  font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 400;
-  color: rgba(3,3,3,0.5);
-  margin-top: 20px;
+.sponsor-quote-text {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-primary);
+  flex: 1;
+}
+.sponsor-quote-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.sponsor-quote-logo {
+  background: #fff;
+  border-radius: 4px;
+  padding: 8px 14px;
+  flex-shrink: 0;
+}
+.sponsor-quote-logo img {
+  height: 24px;
+  width: auto;
   display: block;
-  line-height: 1.6;
 }
-.cta-secondary:hover { color: rgba(3,3,3,0.8); }
+.sponsor-quote-attr {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+.sponsor-quote-attr strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  display: block;
+}
+@media (max-width: 900px) {
+  .sponsor-quotes-grid { grid-template-columns: 1fr; }
+}
 
 /* ═══ 14B REGISTRATION FORM ═══ */
 .register-form-section {
@@ -1504,11 +2012,11 @@ a:hover { color: var(--yellow); }
 }
 .form-group label {
   font-family: var(--font-ui);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-tertiary);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  margin-bottom: 2px;
 }
 .form-group input,
 .form-group select {
@@ -1783,8 +2291,16 @@ a:hover { color: var(--yellow); }
   .hero-title { font-size: 48px; letter-spacing: 0.04em; }
   .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
   .hero-bottom-text p { font-size: 16px; }
-  .countdown-num { font-size: 24px; }
-  .tracks-grid, .speakers-grid, .numbers-grid { grid-template-columns: 1fr 1fr; }
+  .countdown-num { font-size: 38px; min-width: 56px; }
+  .countdown-block { padding: 0 14px; }
+  .countdown-block:not(:last-child)::after { height: 72px; }
+  .tracks-grid, .speakers-grid { grid-template-columns: 1fr 1fr; }
+  .stats-row { grid-template-columns: 1fr; }
+  .stats-row .stat-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .stats-row .stat-card:last-child { border-bottom: none; }
+  .manifesto-content { padding: 80px 0 60px; }
+  .manifesto-img { width: 100%; opacity: 0.45; }
+  .manifesto-img::after { background: linear-gradient(to bottom, rgba(3,3,3,0.7), #030303 75%); }
   .alumni-grid { grid-template-columns: repeat(3, 1fr); }
   .video-testimonial { width: 280px; }
   .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
@@ -1849,14 +2365,10 @@ a:hover { color: var(--yellow); }
 [data-theme="light"] .btn-hero,
 [data-theme="light"] .btn-form-submit,
 [data-theme="light"] .section-link,
-[data-theme="light"] .cta-headline,
-[data-theme="light"] .cta-price { color: #0E1012; }
-[data-theme="light"] .cta-price.early { color: var(--red); }
 [data-theme="light"] .track-card[data-dark-text]:hover .track-desc,
 [data-theme="light"] .track-card[data-dark-text].is-active .track-desc { color: #0E1012; }
-[data-theme="light"] .btn-cta-dark { background: #0E1012; color: var(--yellow); }
 [data-theme="light"] .btn-register-outline { color: var(--text-secondary); }
-[data-theme="light"] .stats-grid,
+[data-theme="light"] .stats-section,
 [data-theme="light"] .venue,
 [data-theme="light"] .sponsors,
 [data-theme="light"] .footer { background: var(--surface); }
@@ -1884,28 +2396,45 @@ a:hover { color: var(--yellow); }
 </nav>
 
 <!-- 02 HERO -->
-<section class="hero">
+<section class="hero qe-decor-host">
   <div class="hero-video-bg">
     <video autoplay muted loop playsinline>
       <source src="hero-intro.mp4" type="video/mp4">
     </video>
   </div>
+  <div class="qe-decor size-md spin-slow" style="top: 12%; right: 6%;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
     <div class="hero-center">
       <h1 class="hero-title"><span class="qe-wrap">QE<img src="behindQE.png" alt=""></span> <span class="conclave-wrap">Conclave <span class="year-tag">2026</span></span></h1>
-      <div class="hero-subtitle">The Quality Engineering Conference</div>
+      <div class="hero-subtitle">India's Premier Quality Engineering Conference</div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          11 December 2026
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Hyderabad, India
+        </div>
+      </div>
       <div class="hero-actions">
-        <a href="#" class="btn-hero">Register Now</a>
+        <a href="#register-form" class="btn-hero">Register Free</a>
         <a href="#video" class="btn-ghost">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Watch 2025 Highlights
         </a>
       </div>
+      <div class="hero-theme">
+        <span class="hero-theme-label">Theme</span>
+        <span>Agentic AI in QE — How to Test Agentic AI</span>
+      </div>
     </div>
     <div class="hero-bottom">
       <div class="hero-bottom-text">
-        <p>Where quality engineers shape the future of software delivery. Three days of deep technical talks, hands-on workshops, and the conversations that don't happen on Slack.</p>
+        <p>Where quality engineers shape the future of software delivery. One day of deep technical talks, panel discussions, and the conversations that don't happen on Slack.</p>
       </div>
+      <div class="hero-countdown-wrap">
+        <div class="hero-countdown-tagline">Counting down to QE Conclave</div>
       <div class="hero-countdown">
         <div class="countdown-block">
           <div class="countdown-num" id="cd-days">188</div>
@@ -1924,6 +2453,7 @@ a:hover { color: var(--yellow); }
           <div class="countdown-label">Seconds</div>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1931,35 +2461,30 @@ a:hover { color: var(--yellow); }
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <div class="ticker-item">AI-Powered QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 12 Workshops <span>+</span> 500+ Attendees <span>+</span> 4 Tracks <span>+</span></div>
-    <div class="ticker-item">AI-Powered QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 12 Workshops <span>+</span> 500+ Attendees <span>+</span> 4 Tracks <span>+</span></div>
+    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 5000+ Attendees <span>+</span> 4 Tracks <span>+</span> 11 Dec 2026 <span>+</span></div>
+    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 45+ Speakers <span>+</span> 5000+ Attendees <span>+</span> 4 Tracks <span>+</span> 11 Dec 2026 <span>+</span></div>
   </div>
 </div>
 
 <!-- 03 STATS -->
 <section class="stats-section" id="stats">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stats-photo-col">
-        <img src="imagefornumbers.png" alt="QE Conclave moments">
-      </div>
-      <div class="stats-numbers reveal">
-      <div class="stat-item">
+    <div class="stats-header reveal">
+      <div class="overline">By the Numbers</div>
+      <h2 class="stats-heading">QE Conclave 2026 at a glance</h2>
+    </div>
+    <div class="stats-row reveal">
+      <div class="stat-card" style="--accent: var(--red)">
         <div class="stat-val" data-target="5000" data-suffix="+">0+</div>
         <div class="stat-label">Expected in 2026</div>
       </div>
-      <div class="stat-item">
+      <div class="stat-card" style="--accent: var(--cyan)">
         <div class="stat-val" data-target="45" data-suffix="+">0+</div>
         <div class="stat-label">Speakers</div>
       </div>
-      <div class="stat-item">
+      <div class="stat-card" style="--accent: var(--yellow)">
         <div class="stat-val" data-target="4" data-suffix="+">0+</div>
         <div class="stat-label">Tracks</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-val" data-target="12" data-suffix="+">0+</div>
-        <div class="stat-label">Workshops</div>
-      </div>
       </div>
     </div>
   </div>
@@ -1970,19 +2495,69 @@ a:hover { color: var(--yellow); }
   <div class="container reveal">
     <div class="manifesto-grid">
       <div class="manifesto-content">
-        <div class="overline">About the Event</div>
-        <h2 class="manifesto-headline">Quality is now an <em>engineering discipline</em><br>integrated into every commit, deploy,<br>and decision.</h2>
-        <p class="manifesto-body">QE Conclave brings together the engineers, architects, and leaders who are redefining what quality means in modern software delivery. Three days of deep technical talks, hands-on workshops, and the conversations that don't happen on Slack.</p>
+        <div class="overline">About the Event &middot; Built for you</div>
+        <h2 class="manifesto-headline">You're the one shipping quality. <em>This room is for you.</em></h2>
+        <p class="manifesto-body">If you lead a QA team, design test architecture, or hold the pager when production breaks &mdash; QE Conclave is your room. One day with the practitioners actually solving the hard problems: agentic AI in QA, test architecture at scale, the leadership calls that don't happen on Slack. No vendor pitches. No filler. Just your peers, on stage and in the hallway.</p>
       </div>
       <div class="manifesto-img">
-        <img src="imagenexttoeventoverview.png" alt="Speaker at QE Conclave">
+        <img src="DSC05540.png" alt="QE Conclave audience listening to a keynote">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO SHOULD ATTEND -->
+<section class="audience" id="who-should-attend">
+  <div class="container">
+    <div class="audience-header reveal">
+      <div class="overline">Who Should Attend</div>
+      <h2 class="audience-heading">If you ship quality, this is your room.</h2>
+      <p class="audience-sub">QE Conclave is curated for the practitioners and leaders actually moving quality engineering forward &mdash; not the spectators.</p>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card reveal" style="--accent: var(--red)">
+        <div class="audience-card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6"/><path d="M8 6l-6 6 6 6"/></svg>
+        </div>
+        <div class="audience-card-title">QE Practitioners</div>
+        <p class="audience-card-desc">SDETs, automation engineers, and test architects shipping production-grade quality every sprint. Walk away with patterns, not platitudes.</p>
+        <div class="audience-card-roles">
+          <span class="audience-card-role">SDET</span>
+          <span class="audience-card-role">Automation Engineer</span>
+          <span class="audience-card-role">Test Architect</span>
+        </div>
+      </div>
+      <div class="audience-card reveal" style="--accent: var(--cyan)">
+        <div class="audience-card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="audience-card-title">QE Leaders</div>
+        <p class="audience-card-desc">QA managers, directors of engineering, and heads of quality building teams that ship. Get the leadership conversations that don't happen on Slack.</p>
+        <div class="audience-card-roles">
+          <span class="audience-card-role">QA Manager</span>
+          <span class="audience-card-role">Director of Engineering</span>
+          <span class="audience-card-role">Head of Quality</span>
+        </div>
+      </div>
+      <div class="audience-card reveal" style="--accent: var(--yellow)">
+        <div class="audience-card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="audience-card-title">Engineering Decision-Makers</div>
+        <p class="audience-card-desc">CTOs, VPs of Engineering, and platform leads deciding how AI &amp; agentic systems get tested. Real signal from teams in production.</p>
+        <div class="audience-card-roles">
+          <span class="audience-card-role">CTO</span>
+          <span class="audience-card-role">VP Engineering</span>
+          <span class="audience-card-role">Platform Lead</span>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- 06 TRACKS -->
-<section class="tracks">
+<section class="tracks qe-decor-host">
+  <div class="qe-decor size-lg" style="top: -120px; right: -160px;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
     <div class="overline reveal">Conference Tracks</div>
     <div class="tracks-grid">
@@ -2027,8 +2602,110 @@ a:hover { color: var(--yellow); }
   </div>
 </section>
 
+<!-- 13 SPONSORS -->
+<section class="sponsors" id="sponsors">
+  <div class="container">
+    <div class="agenda-header reveal" style="text-align:center;display:block;margin-bottom:0">
+      <div class="overline">Partners &amp; Sponsors</div>
+      <h2 class="sponsors-heading">Backed by the leaders of the QE industry</h2>
+    </div>
+    <div class="sponsor-tier platinum reveal">
+      <div class="sponsor-tier-head">
+        <div class="sponsor-tier-label">Platinum Partners</div>
+      </div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
+        <div class="sponsor-logo"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
+        <div class="sponsor-logo"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
+      </div>
+    </div>
+    <div class="sponsor-tier gold reveal">
+      <div class="sponsor-tier-head">
+        <div class="sponsor-tier-label">Gold Partners</div>
+      </div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo"><img src="pcloudy-logo-new-1.webp" alt="pCloudy"></div>
+        <div class="sponsor-logo"><img src="QApilot_BlueBlack-4.webp" alt="QApilot"></div>
+        <div class="sponsor-logo"><img src="60892a20edbd1da3fd641167_Synthesized-logo.png" alt="Synthesized"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
+      </div>
+    </div>
+    <div class="sponsor-tier silver reveal">
+      <div class="sponsor-tier-head">
+        <div class="sponsor-tier-label">Silver &amp; Community Partners</div>
+      </div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/testsigma.com" alt="Testsigma"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/katalon.com" alt="Katalon"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/postman.com" alt="Postman"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/cypress.io" alt="Cypress"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/saucelabs.com" alt="Sauce Labs"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/mabl.com" alt="Mabl"></div>
+      </div>
+    </div>
+    <div class="sponsor-cta-row">
+      <a href="#" class="section-link">Become a sponsor →</a>
+    </div>
+
+    <!-- Past Sponsors — hide this block once 2026 sponsors are finalised -->
+    <div class="sponsors-past-toggle reveal" id="past-sponsors">
+      <div class="sponsors-past-label">Past Sponsors &middot; Editions 2023–2025</div>
+      <div class="sponsors-past-grid">
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/digital.ai" alt="Digital.ai"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/tricentis.com" alt="Tricentis"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/perfecto.io" alt="Perfecto"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/leapwork.com" alt="Leapwork"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/headspin.io" alt="HeadSpin"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/parasoft.com" alt="Parasoft"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/qualitest.com" alt="Qualitest"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/diffblue.com" alt="Diffblue"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/functionize.com" alt="Functionize"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/eggplant.io" alt="Eggplant"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR TESTIMONIALS -->
+<section class="sponsor-quotes">
+  <div class="container">
+    <div class="sponsor-quotes-header reveal">
+      <div class="overline">From our partners</div>
+      <h2 class="sponsor-quotes-heading">Why brands sponsor QE Conclave</h2>
+    </div>
+    <div class="sponsor-quotes-grid">
+      <div class="sponsor-quote-card reveal">
+        <div class="sponsor-quote-mark">&ldquo;</div>
+        <p class="sponsor-quote-text">QE Conclave gave us direct access to the exact decision-makers we'd been struggling to reach &mdash; QA heads and platform leads from teams running tests at real scale. Five conversations at the booth turned into three pilots within the quarter.</p>
+        <div class="sponsor-quote-footer">
+          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/browserstack.com" alt="BrowserStack"></div>
+          <div class="sponsor-quote-attr"><strong>Riya Mehta</strong>Field Marketing Lead, BrowserStack</div>
+        </div>
+      </div>
+      <div class="sponsor-quote-card reveal">
+        <div class="sponsor-quote-mark">&ldquo;</div>
+        <p class="sponsor-quote-text">The audience quality is unmatched. This isn't a generic dev conference &mdash; every attendee genuinely owns QE strategy at their company. We came for awareness and walked out with a pipeline.</p>
+        <div class="sponsor-quote-footer">
+          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
+          <div class="sponsor-quote-attr"><strong>Arjun Vasan</strong>Head of Partnerships, LambdaTest</div>
+        </div>
+      </div>
+      <div class="sponsor-quote-card reveal">
+        <div class="sponsor-quote-mark">&ldquo;</div>
+        <p class="sponsor-quote-text">QE Conclave is the one event where the booth conversations are technical, not transactional. Our engineers got more useful product feedback in a day than from three months of customer calls.</p>
+        <div class="sponsor-quote-footer">
+          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
+          <div class="sponsor-quote-attr"><strong>Daniel Kowalski</strong>Director of Developer Relations, Applitools</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 07 SPEAKERS -->
-<section class="speakers" id="speakers">
+<section class="speakers qe-decor-host" id="speakers">
+  <div class="qe-decor size-md ccw spin-slow" style="top: 80px; left: -120px;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
     <div class="agenda-header reveal">
       <div class="agenda-header-left">
@@ -2065,16 +2742,77 @@ a:hover { color: var(--yellow); }
         <div class="speaker-company">Spotify</div>
         <div class="speaker-talk">The Observable Test: Replacing Assertions with Signals</div>
       </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-4.jpg" alt="Smita Mishra"></div>
+        <div class="speaker-name">Smita Mishra</div>
+        <div class="speaker-title">CEO &amp; Quality Coach</div>
+        <div class="speaker-company">KiwiQA</div>
+        <div class="speaker-talk">Panel: From QA Manager to QE Leader &mdash; What Actually Changes</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-3.jpg" alt="Tariq King"></div>
+        <div class="speaker-name">Tariq King</div>
+        <div class="speaker-title">Head of AI for Testing</div>
+        <div class="speaker-company">test.ai</div>
+        <div class="speaker-talk">Measuring Quality: Metrics That Actually Matter to Your CTO</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-8.jpg" alt="Nikolay Advolodkin"></div>
+        <div class="speaker-name">Nikolay Advolodkin</div>
+        <div class="speaker-title">Sr. Developer Advocate</div>
+        <div class="speaker-company">Sauce Labs</div>
+        <div class="speaker-talk">Self-Healing Test Suites: Agentic AI for QA Workflows</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-1.jpg" alt="Lisa Crispin"></div>
+        <div class="speaker-name">Lisa Crispin</div>
+        <div class="speaker-title">Author &amp; QE Coach</div>
+        <div class="speaker-company">Independent</div>
+        <div class="speaker-talk">Building QE Teams That Ship: Hiring, Culture, and Retention</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-10.jpg" alt="Andrew Knight"></div>
+        <div class="speaker-name">Andrew Knight</div>
+        <div class="speaker-title">Sr. Developer Advocate</div>
+        <div class="speaker-company">Applitools</div>
+        <div class="speaker-talk">Component Testing in 2026: The Death of the Test Pyramid</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-2.jpg" alt="Rahul Verma"></div>
+        <div class="speaker-name">Rahul Verma</div>
+        <div class="speaker-title">Founder, Test Mile</div>
+        <div class="speaker-company">Test Mile</div>
+        <div class="speaker-talk">Contract Testing at Scale with Pact and PactFlow</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-6.jpg" alt="Maaret Pyhäjärvi"></div>
+        <div class="speaker-name">Maaret Pyhäjärvi</div>
+        <div class="speaker-title">Principal Test Engineer</div>
+        <div class="speaker-company">Vaisala</div>
+        <div class="speaker-talk">The End of Record-and-Playback: What AI Testing Actually Looks Like</div>
+      </div>
+      <div class="speaker-card reveal">
+        <div class="speaker-img"><img src="speakerpast/Image-9.jpg" alt="Meeta Dash"></div>
+        <div class="speaker-name">Meeta Dash</div>
+        <div class="speaker-title">VP Product Management</div>
+        <div class="speaker-company">Flipkart</div>
+        <div class="speaker-talk">Chaos Engineering for QE Teams: Breaking Things on Purpose</div>
+      </div>
     </div>
-    <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <a href="#" class="section-link">See all 45+ speakers →</a>
-      <a href="#" class="section-link" style="background:transparent;color:var(--yellow);border:1px solid var(--yellow)">Become a speaker →</a>
+    <div class="speakers-cta reveal">
+      <div class="speakers-cta-text">
+        <div class="speakers-cta-eyebrow">Call for Speakers — Open</div>
+        <div class="speakers-cta-title">Have a talk worth sharing?</div>
+        <div class="speakers-cta-sub">We're curating the 2026 line-up now. Submit your proposal on agentic AI in QE, test architecture at scale, performance, or leadership &mdash; reviewed weekly.</div>
+      </div>
+      <a href="#" class="btn-speaker-apply">Become a Speaker →</a>
     </div>
   </div>
 </section>
 
-<!-- 08 PAST SPEAKERS -->
-<section class="past-speakers">
+<!-- 08 PAST SPEAKERS — hide this section once 2026 line-up is final -->
+<section class="past-speakers qe-decor-host" id="past-speakers">
+  <div class="qe-decor size-sm spin-fast" style="top: 60px; right: 8%;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
     <div class="overline reveal">Past Speaker Alumni</div>
     <div class="past-speakers-subline reveal">Industry leaders who've graced the QE Conclave stage</div>
@@ -2095,264 +2833,15 @@ a:hover { color: var(--yellow); }
   </div>
 </section>
 
-<!-- 09 AGENDA -->
-<section class="agenda" id="agenda">
+<!-- PAST SESSIONS / RECORDINGS — Sessions from past editions -->
+<section class="testimonials qe-decor-host" id="past-sessions">
+  <div class="qe-decor size-xl ccw" style="bottom: -300px; left: -200px;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
+  <div class="qe-decor size-sm spin-fast" style="top: 80px; right: 6%;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
-    <div class="agenda-header reveal">
-      <div class="agenda-header-left">
-        <div class="overline">Schedule at a Glance</div>
-        <h2 class="agenda-title">Agenda</h2>
-      </div>
+    <div class="agenda-header reveal" style="display:block">
+      <div class="overline">Past Session Recordings</div>
+      <h2 class="agenda-title">Talks from past editions</h2>
     </div>
-    <div class="day-tabs">
-      <button class="day-tab active" onclick="switchDay(this, 'day1')">Day 1 — Oct 15</button>
-      <button class="day-tab" onclick="switchDay(this, 'day2')">Day 2 — Oct 16</button>
-      <button class="day-tab" onclick="switchDay(this, 'day3')">Day 3 — Oct 17</button>
-    </div>
-    <div id="day1">
-      <div class="session-row" data-hover-img="DSC03992.png">
-        <div class="session-time">09:00</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">Opening Keynote: The State of Quality Engineering in 2026</div>
-          <div class="session-speaker">Priya Narayanan, Atlassian</div>
-        </div>
-        <span class="session-track-tag">Keynote</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04767.png">
-        <div class="session-time">10:30</div>
-        <div class="session-accent" style="background:var(--cyan)"></div>
-        <div class="session-content">
-          <div class="session-title">Contract Testing at Scale with Pact and PactFlow</div>
-          <div class="session-speaker">Marcus Chen, Stripe</div>
-        </div>
-        <span class="session-track-tag">Test Arch</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC05147.png">
-        <div class="session-time">11:30</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">LLM-Driven Test Generation: From Prompt to Pipeline</div>
-          <div class="session-speaker">Dr. Aisha Patel, Google DeepMind</div>
-        </div>
-        <span class="session-track-tag">AI-QE</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC03959.png">
-        <div class="session-time">14:00</div>
-        <div class="session-accent" style="background:#1B998B"></div>
-        <div class="session-content">
-          <div class="session-title">Building a Performance Engineering Practice from Scratch</div>
-          <div class="session-speaker">Jonas Eriksson, Spotify</div>
-        </div>
-        <span class="session-track-tag">Perf</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC05206.png">
-        <div class="session-time">15:30</div>
-        <div class="session-accent" style="background:#1B998B"></div>
-        <div class="session-content">
-          <div class="session-title">Observability-Driven Testing: Replacing Assertions with Signals</div>
-          <div class="session-speaker">Jonas Eriksson, Spotify</div>
-        </div>
-        <span class="session-track-tag">Perf</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04951.png">
-        <div class="session-time">16:30</div>
-        <div class="session-accent" style="background:var(--yellow)"></div>
-        <div class="session-content">
-          <div class="session-title">Panel: From QA Manager to QE Leader — What Actually Changes</div>
-          <div class="session-speaker">Moderated by Smita Mishra</div>
-        </div>
-        <span class="session-track-tag">Leadership</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-    </div>
-    <div id="day2" style="display:none">
-      <div class="session-row" data-hover-img="DSC05147.png">
-        <div class="session-time">09:00</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">Testing AI Systems: When Your Software Writes Its Own Rules</div>
-          <div class="session-speaker">Dr. Aisha Patel, Google DeepMind</div>
-        </div>
-        <span class="session-track-tag">AI-QE</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04803.png">
-        <div class="session-time">10:30</div>
-        <div class="session-accent" style="background:var(--cyan)"></div>
-        <div class="session-content">
-          <div class="session-title">Playwright at Microsoft Scale: 2M Tests, 0 Humans Watching</div>
-          <div class="session-speaker">Fatima Al-Rashidi, Microsoft</div>
-        </div>
-        <span class="session-track-tag">Test Arch</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC05540.png">
-        <div class="session-time">11:30</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">Self-Healing Test Suites: AI Agents for QA Workflows</div>
-          <div class="session-speaker">Nikolay Advolodkin, Sauce Labs</div>
-        </div>
-        <span class="session-track-tag">AI-QE</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC03959.png">
-        <div class="session-time">14:00</div>
-        <div class="session-accent" style="background:#1B998B"></div>
-        <div class="session-content">
-          <div class="session-title">Chaos Engineering for QE Teams: Breaking Things on Purpose</div>
-          <div class="session-speaker">David Okonkwo, TestSigma</div>
-        </div>
-        <span class="session-track-tag">Perf</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04767.png">
-        <div class="session-time">15:30</div>
-        <div class="session-accent" style="background:var(--yellow)"></div>
-        <div class="session-content">
-          <div class="session-title">Building QE Teams That Ship: Hiring, Culture, and Retention</div>
-          <div class="session-speaker">Lisa Crispin, Independent</div>
-        </div>
-        <span class="session-track-tag">Leadership</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC03992.png">
-        <div class="session-time">16:30</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">Workshop: Hands-on with AI Test Generation using LLMs</div>
-          <div class="session-speaker">Lab led by QualiZeal QE Team</div>
-        </div>
-        <span class="session-track-tag">Workshop</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-    </div>
-    <div id="day3" style="display:none">
-      <div class="session-row" data-hover-img="DSC05206.png">
-        <div class="session-time">09:00</div>
-        <div class="session-accent" style="background:var(--yellow)"></div>
-        <div class="session-content">
-          <div class="session-title">Measuring Quality: Metrics That Actually Matter to Your CTO</div>
-          <div class="session-speaker">Tariq King, Epam Systems</div>
-        </div>
-        <span class="session-track-tag">Leadership</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04951.png">
-        <div class="session-time">10:30</div>
-        <div class="session-accent" style="background:#1B998B"></div>
-        <div class="session-content">
-          <div class="session-title">Workshop: Building Your First Observability-Driven Test Suite</div>
-          <div class="session-speaker">Lab led by Spotify QE Team</div>
-        </div>
-        <span class="session-track-tag">Workshop</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC04803.png">
-        <div class="session-time">14:00</div>
-        <div class="session-accent" style="background:var(--red)"></div>
-        <div class="session-content">
-          <div class="session-title">The End of Record-and-Playback: What AI Testing Actually Looks Like</div>
-          <div class="session-speaker">David Okonkwo, TestSigma</div>
-        </div>
-        <span class="session-track-tag">AI-QE</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC05540.png">
-        <div class="session-time">15:00</div>
-        <div class="session-accent" style="background:var(--cyan)"></div>
-        <div class="session-content">
-          <div class="session-title">Component Testing in 2026: The Death of the Test Pyramid</div>
-          <div class="session-speaker">Andrew Knight, Applitools</div>
-        </div>
-        <span class="session-track-tag">Test Arch</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="session-row" data-hover-img="DSC05147.png">
-        <div class="session-time">16:00</div>
-        <div class="session-accent" style="background:var(--yellow)"></div>
-        <div class="session-content">
-          <div class="session-title">Closing Keynote: Quality Engineering in 2030 — A Provocation</div>
-          <div class="session-speaker">Priya Narayanan & panel</div>
-        </div>
-        <span class="session-track-tag">Keynote</span>
-        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-    </div>
-    <div style="margin-top:32px"><a href="#" class="section-link">Explore full agenda →</a></div>
-  </div>
-</section>
-
-<!-- Hover image element -->
-<div class="session-hover-img" id="sessionHoverImg">
-  <img src="" alt="">
-</div>
-
-<!-- 10 HIGHLIGHTS -->
-<section class="highlights" id="highlights">
-  <div class="container">
-    <div class="overline reveal">Highlights from Past Editions</div>
-    <div class="bento-grid reveal">
-      <div class="bento-item large">
-        <img src="DSC05147.png" alt="Keynote stage">
-        <div class="bento-caption">Keynote stage, QE Conclave 2025</div>
-      </div>
-      <div class="bento-item bento-lg has-img">
-        <img src="DSC04803.png" alt="Panel Discussion">
-        <div class="bento-text-inner">
-          <h3>Panel Discussion</h3>
-        </div>
-      </div>
-      <div class="bento-item has-img">
-        <img src="DSC03959.png" alt="Networking break">
-        <div class="bento-text-inner">
-          <h3>Networking break</h3>
-        </div>
-      </div>
-      <div class="bento-item has-img">
-        <img src="DSC05206.png" alt="Hands-on Workshop">
-        <div class="bento-text-inner">
-          <h3>Hands-on Workshop</h3>
-        </div>
-      </div>
-      <div class="bento-item bento-lg has-img">
-        <img src="DSC03992.png" alt="Community dinner">
-        <div class="bento-text-inner">
-          <h3>Community dinner</h3>
-        </div>
-      </div>
-    </div>
-    <div class="edition-row reveal">
-      <div class="edition-card red">
-        <div class="edition-year">2025 Edition</div>
-        <div class="edition-city">Hyderabad</div>
-        <div class="edition-stats">350+ attendees, 32 sessions, 8 workshops</div>
-      </div>
-      <div class="edition-card cyan">
-        <div class="edition-year">2024 Edition</div>
-        <div class="edition-city">Hyderabad</div>
-        <div class="edition-stats">200+ attendees, 24 sessions, 6 workshops</div>
-      </div>
-      <div class="edition-card yellow">
-        <div class="edition-year">Top Rated Talk</div>
-        <div class="edition-city">AI in QE</div>
-        <div class="edition-stats">4.9/5.0 avg rating — Dr. Aisha Patel</div>
-      </div>
-    </div>
-    <div style="margin-top:24px"><a href="#" class="section-link">Explore all past editions →</a></div>
-  </div>
-</section>
-
-<!-- 11 VIDEO TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="container">
-    <div class="overline reveal">What Attendees & Sponsors Say</div>
   </div>
   <div class="testimonials-marquee">
     <div class="testimonials-track">
@@ -2453,39 +2942,214 @@ a:hover { color: var(--yellow); }
         <div class="video-testimonial-name">Sponsor Spotlight: Digital.ai</div>
         <div class="video-testimonial-brief">Energy, Engagement & Impact at QE Conclave 2024</div>
       </div>
-      <div class="video-testimonial" data-video="HG6R0I-onmI">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/HG6R0I-onmI/hqdefault.jpg" alt="">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-        </div>
-        <div class="video-testimonial-name">Sponsor Spotlight: Testsigma</div>
-        <div class="video-testimonial-brief">India's Largest Quality Engineering Gathering</div>
-      </div>
-      <div class="video-testimonial" data-video="hZyWza24aWY">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/hZyWza24aWY/hqdefault.jpg" alt="">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-        </div>
-        <div class="video-testimonial-name">Sponsor Spotlight: LambdaTest</div>
-        <div class="video-testimonial-brief">Collaboration & Learning at QE Conclave 2024</div>
-      </div>
-      <div class="video-testimonial" data-video="JRhE2oon2Yk">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/JRhE2oon2Yk/hqdefault.jpg" alt="">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-        </div>
-        <div class="video-testimonial-name">Sponsor Spotlight: Tricentis</div>
-        <div class="video-testimonial-brief">Networking & GenAI Innovation at QE Conclave 2024</div>
-      </div>
-      <div class="video-testimonial" data-video="KkQWF6x_p4g">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/KkQWF6x_p4g/hqdefault.jpg" alt="">
-          <div class="play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-        </div>
-        <div class="video-testimonial-name">Narain Muralidharan</div>
-        <div class="video-testimonial-brief">GenAI Assistant for Enterprise QA: Learnings from Testsigma Copilot</div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 AGENDA -->
+<section class="agenda qe-decor-host" id="agenda">
+  <div class="qe-decor size-xl ccw spin-slow" style="bottom: -240px; right: -200px;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
+  <div class="container">
+    <div class="agenda-header reveal">
+      <div class="agenda-header-left">
+        <div class="overline">Schedule at a Glance</div>
+        <h2 class="agenda-title">Agenda</h2>
       </div>
     </div>
+    <div class="agenda-date-bar">
+      <div class="agenda-date-bar-left">
+        <span class="day-dot" aria-hidden="true"></span>
+        Friday, 11 December 2026
+      </div>
+      <div class="agenda-date-bar-meta">
+        <span><strong>Venue</strong>Hyderabad International Convention Centre</span>
+        <span><strong>Doors</strong>08:30 IST</span>
+      </div>
+    </div>
+    <div id="agenda-day">
+      <div class="session-row is-break">
+        <div class="session-time">08:30</div>
+        <div class="session-accent"></div>
+        <div class="session-content">
+          <div class="session-title">Registration, Badge Pickup &amp; Welcome Coffee</div>
+        </div>
+        <span class="session-break-tag">Break</span>
+      </div>
+      <div class="session-row" data-hover-img="DSC03992.png" data-track="keynote">
+        <div class="session-time">09:30</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Opening Keynote: The State of Quality Engineering in 2026</div>
+          <div class="session-speaker">Priya Narayanan, Atlassian</div>
+        </div>
+        <span class="session-track-tag">Keynote</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row is-break">
+        <div class="session-time">10:30</div>
+        <div class="session-accent"></div>
+        <div class="session-content">
+          <div class="session-title">Morning Tea &amp; Sponsor Expo</div>
+        </div>
+        <span class="session-break-tag">Break</span>
+      </div>
+      <div class="session-row" data-hover-img="DSC05147.png" data-track="ai-qe">
+        <div class="session-time">11:00</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Testing Agentic AI: When Your Software Writes Its Own Rules</div>
+          <div class="session-speaker">Dr. Aisha Patel, Google DeepMind</div>
+        </div>
+        <span class="session-track-tag">AI-QE</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04767.png" data-track="test-arch">
+        <div class="session-time">11:45</div>
+        <div class="session-accent" style="background:var(--cyan)"></div>
+        <div class="session-content">
+          <div class="session-title">LLM-Driven Test Generation: From Prompt to Pipeline</div>
+          <div class="session-speaker">Marcus Chen, Stripe</div>
+        </div>
+        <span class="session-track-tag">Test Arch</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row is-break">
+        <div class="session-time">12:30</div>
+        <div class="session-accent"></div>
+        <div class="session-content">
+          <div class="session-title">Lunch &amp; Networking</div>
+        </div>
+        <span class="session-break-tag">Break · 60 min</span>
+      </div>
+      <div class="session-row" data-hover-img="DSC05540.png" data-track="fireside">
+        <div class="session-time">13:30</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Fireside Chat: Self-Healing Test Suites &mdash; Agentic AI for QA Workflows</div>
+          <div class="session-speaker">Nikolay Advolodkin, Sauce Labs</div>
+        </div>
+        <span class="session-track-tag">Fireside</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC04803.png" data-track="test-arch">
+        <div class="session-time">14:15</div>
+        <div class="session-accent" style="background:var(--cyan)"></div>
+        <div class="session-content">
+          <div class="session-title">Playwright at Microsoft Scale: 2M Tests, 0 Humans Watching</div>
+          <div class="session-speaker">Fatima Al-Rashidi, Microsoft</div>
+        </div>
+        <span class="session-track-tag">Test Arch</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC03959.png" data-track="perf">
+        <div class="session-time">15:00</div>
+        <div class="session-accent" style="background:#1B998B"></div>
+        <div class="session-content">
+          <div class="session-title">Chaos Engineering for QE Teams: Breaking Things on Purpose</div>
+          <div class="session-speaker">David Okonkwo, Testsigma</div>
+        </div>
+        <span class="session-track-tag">Perf</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row is-break">
+        <div class="session-time">15:45</div>
+        <div class="session-accent"></div>
+        <div class="session-content">
+          <div class="session-title">Afternoon Tea &amp; Hallway Track</div>
+        </div>
+        <span class="session-break-tag">Break</span>
+      </div>
+      <div class="session-row" data-hover-img="DSC04951.png" data-track="panel">
+        <div class="session-time">16:15</div>
+        <div class="session-accent" style="background:var(--yellow)"></div>
+        <div class="session-content">
+          <div class="session-title">Panel Discussion: From QA Manager to QE Leader &mdash; What Actually Changes</div>
+          <div class="session-speaker">Moderated by Smita Mishra · Featuring Lisa Crispin, Tariq King</div>
+        </div>
+        <span class="session-track-tag">Panel</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row" data-hover-img="DSC05147.png" data-track="keynote">
+        <div class="session-time">17:15</div>
+        <div class="session-accent" style="background:var(--red)"></div>
+        <div class="session-content">
+          <div class="session-title">Closing Keynote: Quality Engineering in 2030 &mdash; A Provocation</div>
+          <div class="session-speaker">Priya Narayanan &amp; closing panel</div>
+        </div>
+        <span class="session-track-tag">Keynote</span>
+        <svg class="session-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      <div class="session-row is-break">
+        <div class="session-time">18:00</div>
+        <div class="session-accent"></div>
+        <div class="session-content">
+          <div class="session-title">Cocktails, Dinner &amp; After-Party</div>
+        </div>
+        <span class="session-break-tag">Networking</span>
+      </div>
+    </div>
+    <div style="margin-top:32px"><a href="#" class="section-link">Download full agenda (PDF) →</a></div>
+  </div>
+</section>
+
+<!-- Hover image element -->
+<div class="session-hover-img" id="sessionHoverImg">
+  <img src="" alt="">
+</div>
+
+<!-- 10 HIGHLIGHTS -->
+<section class="highlights qe-decor-host" id="highlights">
+  <div class="qe-decor size-md" style="top: 40%; left: -160px;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
+  <div class="container">
+    <div class="overline reveal">Highlights from Past Editions</div>
+    <div class="bento-grid reveal">
+      <div class="bento-item large">
+        <img src="DSC05147.png" alt="Keynote stage">
+        <div class="bento-caption">Keynote stage, QE Conclave 2025</div>
+      </div>
+      <div class="bento-item bento-lg has-img">
+        <img src="DSC04803.png" alt="Panel Discussion">
+        <div class="bento-text-inner">
+          <h3>Panel Discussion</h3>
+        </div>
+      </div>
+      <div class="bento-item has-img">
+        <img src="DSC03959.png" alt="Networking break">
+        <div class="bento-text-inner">
+          <h3>Networking break</h3>
+        </div>
+      </div>
+      <div class="bento-item has-img">
+        <img src="DSC05206.png" alt="Hands-on session">
+        <div class="bento-text-inner">
+          <h3>Hands-on Session</h3>
+        </div>
+      </div>
+      <div class="bento-item bento-lg has-img">
+        <img src="DSC03992.png" alt="Community dinner">
+        <div class="bento-text-inner">
+          <h3>Community dinner</h3>
+        </div>
+      </div>
+    </div>
+    <div class="edition-row reveal">
+      <div class="edition-card red">
+        <div class="edition-year">2025 Edition</div>
+        <div class="edition-city">Hyderabad</div>
+        <div class="edition-stats">350+ attendees, 32 sessions, sold-out floor</div>
+      </div>
+      <div class="edition-card cyan">
+        <div class="edition-year">2024 Edition</div>
+        <div class="edition-city">Hyderabad</div>
+        <div class="edition-stats">200+ attendees, 24 sessions, packed hallway track</div>
+      </div>
+      <div class="edition-card yellow">
+        <div class="edition-year">Top Rated Talk</div>
+        <div class="edition-city">AI in QE</div>
+        <div class="edition-stats">4.9/5.0 avg rating — Dr. Aisha Patel</div>
+      </div>
+    </div>
+    <div style="margin-top:24px"><a href="#" class="section-link">Explore all past editions →</a></div>
   </div>
 </section>
 
@@ -2548,29 +3212,29 @@ a:hover { color: var(--yellow); }
           QE Conclave 2026
         </div>
         <h2 class="register-heading"><em>Quality engineering</em> redefined</h2>
-        <p class="register-subtitle">The global gathering for those building trust in AI systems. Join industry leaders shaping the future of quality engineering.</p>
+        <p class="register-subtitle">The global gathering for those building trust in AI systems. Free to attend &mdash; just save your seat.</p>
         <div class="register-actions">
-          <a href="#register-form" class="btn-register-primary">Register Now</a>
+          <a href="#register-form" class="btn-register-primary">Register Free</a>
           <a href="#agenda" class="btn-register-outline">View Agenda</a>
         </div>
       </div>
       <div class="register-card-right">
         <div class="register-info-grid">
           <div>
-            <div class="register-info-label">Dates</div>
-            <div class="register-info-value">March & September 2026</div>
+            <div class="register-info-label">Date</div>
+            <div class="register-info-value">11 December 2026</div>
           </div>
           <div>
-            <div class="register-info-label">Locations</div>
-            <div class="register-info-value">Hyderabad & Austin</div>
+            <div class="register-info-label">Location</div>
+            <div class="register-info-value">Hyderabad, India</div>
           </div>
           <div>
             <div class="register-info-label">Speakers</div>
             <div class="register-info-value">45+ Industry Pioneers</div>
           </div>
           <div>
-            <div class="register-info-label">Format</div>
-            <div class="register-info-value">In-person</div>
+            <div class="register-info-label">Pass</div>
+            <div class="register-info-value">Free &middot; In-person</div>
           </div>
         </div>
       </div>
@@ -2579,85 +3243,68 @@ a:hover { color: var(--yellow); }
 </section>
 
 <!-- 12C GALLERY -->
-<section class="gallery">
+<section class="gallery" id="gallery">
+  <div class="gallery-header">
+    <div class="overline">From the floor</div>
+    <h2>Scenes from past editions</h2>
+    <p>Audience packed in, speakers in flow, sponsor booths buzzing, late-night hallway track. A taste of what QE Conclave actually feels like.</p>
+  </div>
   <div class="gallery-track move-left">
-    <img src="DSC04803.png" alt="QE Conclave event">
-    <img src="DSC03992.png" alt="QE Conclave event">
-    <img src="DSC03959.png" alt="QE Conclave event">
-    <img src="DSC04951.png" alt="QE Conclave event">
+    <img src="DSC05540.png" alt="Packed auditorium" loading="lazy">
+    <img src="DSC04803.png" alt="Panel discussion" loading="lazy">
+    <img src="DSC03992.png" alt="Attendees at registration" loading="lazy">
+    <img src="DSC05147.png" alt="Keynote stage" loading="lazy">
+    <img src="DSC03959.png" alt="Networking break" loading="lazy">
+    <img src="DSC04951.png" alt="Audience listening" loading="lazy">
+    <img src="DSC05206.png" alt="Workshop floor" loading="lazy">
+    <img src="DSC04767.png" alt="Hallway conversation" loading="lazy">
     <!-- duplicate for seamless loop -->
-    <img src="DSC04803.png" alt="QE Conclave event">
-    <img src="DSC03992.png" alt="QE Conclave event">
-    <img src="DSC03959.png" alt="QE Conclave event">
-    <img src="DSC04951.png" alt="QE Conclave event">
+    <img src="DSC05540.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04803.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03992.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05147.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03959.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04951.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05206.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04767.png" alt="" loading="lazy" aria-hidden="true">
   </div>
   <div class="gallery-track move-right">
-    <img src="DSC05206.png" alt="QE Conclave event">
-    <img src="DSC04767.png" alt="QE Conclave event">
-    <img src="DSC05147.png" alt="QE Conclave event">
-    <img src="DSC05540.png" alt="QE Conclave event">
+    <img src="DSC05206.png" alt="Workshop attendees" loading="lazy">
+    <img src="DSC04767.png" alt="Networking" loading="lazy">
+    <img src="DSC03959.png" alt="Conversation in foyer" loading="lazy">
+    <img src="DSC05540.png" alt="Audience POV" loading="lazy">
+    <img src="DSC04951.png" alt="Front row" loading="lazy">
+    <img src="DSC05147.png" alt="Keynote moment" loading="lazy">
+    <img src="DSC04803.png" alt="Panelists in discussion" loading="lazy">
+    <img src="DSC03992.png" alt="Registration desk" loading="lazy">
     <!-- duplicate for seamless loop -->
-    <img src="DSC05206.png" alt="QE Conclave event">
-    <img src="DSC04767.png" alt="QE Conclave event">
-    <img src="DSC05147.png" alt="QE Conclave event">
-    <img src="DSC05540.png" alt="QE Conclave event">
+    <img src="DSC05206.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04767.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03959.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05540.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04951.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05147.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04803.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03992.png" alt="" loading="lazy" aria-hidden="true">
   </div>
-</section>
-
-<!-- 13 SPONSORS -->
-<section class="sponsors" id="sponsors">
-  <div class="container">
-    <div class="overline reveal" style="text-align:center">Partners & Sponsors</div>
-    <div class="sponsor-tier">
-      <div class="sponsor-tier-label">Platinum</div>
-      <div class="sponsor-logos">
-        <div class="sponsor-logo platinum"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
-        <div class="sponsor-logo platinum"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
-        <div class="sponsor-logo platinum"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
-      </div>
-    </div>
-    <div class="sponsor-tier">
-      <div class="sponsor-tier-label">Gold</div>
-      <div class="sponsor-logos">
-        <div class="sponsor-logo gold"><img src="pcloudy-logo-new-1.webp" alt="pCloudy"></div>
-        <div class="sponsor-logo gold"><img src="QApilot_BlueBlack-4.webp" alt="QApilot"></div>
-        <div class="sponsor-logo gold"><img src="60892a20edbd1da3fd641167_Synthesized-logo.png" alt="Synthesized"></div>
-        <div class="sponsor-logo gold"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
-        <div class="sponsor-logo gold"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
-      </div>
-    </div>
-    <div class="sponsor-tier">
-      <div class="sponsor-tier-label">Silver & Community</div>
-      <div class="sponsor-logos">
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/testsigma.com" alt="TestSigma"></div>
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/katalon.com" alt="Katalon"></div>
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/postman.com" alt="Postman"></div>
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/cypress.io" alt="Cypress"></div>
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/saucelabs.com" alt="Sauce Labs"></div>
-        <div class="sponsor-logo silver"><img src="https://logo.clearbit.com/mabl.com" alt="Mabl"></div>
-      </div>
-    </div>
-    <div style="text-align:center;margin-top:24px"><a href="#" class="section-link">Become a sponsor →</a></div>
-  </div>
-</section>
-
-<!-- 14 CTA BAND -->
-<section class="cta-band">
-  <div class="container">
-    <div class="cta-headline">Join 5000+ QE Leaders in Hyderabad</div>
-    <div class="cta-sub">Early bird pricing ends September 1, 2026</div>
-    <div class="cta-pricing">
-      <div class="cta-price-col">
-        <div class="cta-price early">&#8377;8,999</div>
-        <div class="cta-price-label">Early Bird</div>
-      </div>
-      <div class="cta-price-col">
-        <div class="cta-price crossed">&#8377;14,999</div>
-        <div class="cta-price-label">Standard</div>
-      </div>
-    </div>
-    <a href="#" class="btn-cta-dark">Register Now</a>
-    <a href="#" class="cta-secondary">Need manager approval? Get the justification toolkit &rarr;</a>
+  <div class="gallery-track move-left" style="animation-duration: 80s;">
+    <img src="DSC04951.png" alt="Plenary audience" loading="lazy">
+    <img src="DSC05147.png" alt="On stage" loading="lazy">
+    <img src="DSC03992.png" alt="Attendees connecting" loading="lazy">
+    <img src="DSC04803.png" alt="Q&amp;A session" loading="lazy">
+    <img src="DSC05540.png" alt="Wide audience shot" loading="lazy">
+    <img src="DSC04767.png" alt="Coffee break" loading="lazy">
+    <img src="DSC05206.png" alt="Workshop hands-on" loading="lazy">
+    <img src="DSC03959.png" alt="Networking moment" loading="lazy">
+    <!-- duplicate for seamless loop -->
+    <img src="DSC04951.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05147.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03992.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04803.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05540.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC04767.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC05206.png" alt="" loading="lazy" aria-hidden="true">
+    <img src="DSC03959.png" alt="" loading="lazy" aria-hidden="true">
   </div>
 </section>
 
@@ -2666,15 +3313,15 @@ a:hover { color: var(--yellow); }
   <div class="container">
     <div class="register-form-grid">
       <div class="register-form-left reveal">
-        <div class="overline">Register Now</div>
+        <div class="overline">Free Registration</div>
         <h2>Secure your spot at <span>QE Conclave 2026</span></h2>
-        <p>Join 5000+ quality engineering professionals for three days of deep technical talks, hands-on workshops, and the conversations that shape the future of QE.</p>
+        <p>Join 5000+ quality engineering professionals on 11 December 2026 in Hyderabad. Talks, panels, and the conversations that shape the future of QE &mdash; on us.</p>
         <ul class="register-form-perks">
-          <li>Access to all 4 conference tracks</li>
-          <li>45+ speaker sessions & 12 workshops</li>
+          <li>Free access to all 4 conference tracks</li>
+          <li>45+ speaker sessions &amp; panel discussions</li>
           <li>Networking with industry leaders</li>
           <li>Certificate of attendance</li>
-          <li>Lunch & refreshments included</li>
+          <li>Lunch &amp; refreshments included</li>
         </ul>
       </div>
       <div class="register-form reveal">
@@ -2705,17 +3352,7 @@ a:hover { color: var(--yellow); }
             <input type="text" placeholder="Your role">
           </div>
         </div>
-        <div class="form-row">
-          <div class="form-group full">
-            <label>Ticket Type</label>
-            <select>
-              <option>Early Bird — ₹8,999</option>
-              <option>Standard — ₹14,999</option>
-              <option>Workshop Add-on — ₹4,999</option>
-            </select>
-          </div>
-        </div>
-        <button class="btn-form-submit">Register Now</button>
+        <button class="btn-form-submit">Get my free pass</button>
         <div class="form-disclaimer">By registering, you agree to our Terms of Service and Privacy Policy. You'll receive event updates via email.</div>
       </div>
     </div>
@@ -2901,16 +3538,9 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(el => observer.observe(el));
 
 // Day tabs
-function switchDay(tab, dayId) {
-  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelectorAll('[id^="day"]').forEach(d => d.style.display = 'none');
-  document.getElementById(dayId).style.display = 'block';
-}
-
 // Countdown (ticks every second)
 function updateCountdown() {
-  const target = new Date('2026-10-15T09:00:00+05:30');
+  const target = new Date('2026-12-11T09:00:00+05:30');
   const now = new Date();
   const diff = target - now;
   if (diff <= 0) return;
@@ -2990,11 +3620,10 @@ document.querySelectorAll('.session-row[data-hover-img]').forEach(row => {
   row.addEventListener('mouseleave', () => {
     hoverImg.classList.remove('visible');
   });
-  row.addEventListener('mousemove', (e) => {
-    hoverImg.style.left = (e.clientX + 20) + 'px';
-    hoverImg.style.top = (e.clientY - 90) + 'px';
-  });
 });
+
+// Hide on mobile (fixed corner overlap is jarring on narrow viewports)
+if (window.matchMedia('(max-width: 900px)').matches) hoverImg.style.display = 'none';
 </script>
 </body>
 </html>
