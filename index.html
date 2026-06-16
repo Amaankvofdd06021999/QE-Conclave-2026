@@ -92,7 +92,7 @@ a:hover { color: var(--yellow); }
   position: absolute;
   pointer-events: none;
   z-index: 0;
-  opacity: 1;
+  opacity: 0.14;
   transform-origin: center center;
   animation: rotateCW 50s linear infinite;
 }
@@ -248,6 +248,9 @@ a:hover { color: var(--yellow); }
   margin-bottom: 8px;
   position: relative;
 }
+@media (min-width: 769px) {
+  .hero-title { margin-top: 80px; }
+}
 .hero-title .qe-wrap {
   position: relative;
   display: inline-block;
@@ -285,14 +288,14 @@ a:hover { color: var(--yellow); }
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--yellow);
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 .hero-meta {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 12px;
-  margin: 0 0 20px;
+  margin: 0;
   flex-wrap: wrap;
   animation: fadeUp 0.6s ease 0.15s both;
 }
@@ -322,7 +325,7 @@ a:hover { color: var(--yellow); }
   font-size: 15px;
   font-weight: 500;
   color: rgba(255,255,255,0.92);
-  margin: 28px auto 0;
+  margin: 0 0 16px;
   max-width: 720px;
   line-height: 1.5;
   animation: fadeUp 0.6s ease 0.3s both;
@@ -735,7 +738,7 @@ a:hover { color: var(--yellow); }
 .track-card[data-dark-text]:hover .track-name,
 .track-card[data-dark-text]:hover .track-desc,
 .track-card[data-dark-text].is-active .track-name,
-.track-card[data-dark-text].is-active .track-desc { color: var(--black); }
+.track-card[data-dark-text].is-active .track-desc { color: #0E1012; }
 .track-card[data-dark-text]:hover .track-tag,
 .track-card[data-dark-text].is-active .track-tag { border-color: rgba(0,0,0,0.25); color: rgba(0,0,0,0.7); }
 .track-name {
@@ -832,12 +835,23 @@ a:hover { color: var(--yellow); }
   font-family: var(--font-body);
   font-size: 13px;
   font-style: italic;
-  color: var(--cyan);
-  margin-top: 8px;
+  color: #fff;
   line-height: 1.4;
   opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.3s, transform 0.3s;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+/* When relocated inside the image, render as a bottom overlay on hover */
+.speaker-img .speaker-talk {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 48px 16px 16px;
+  background: linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.78) 40%, rgba(0,0,0,0) 100%);
+  z-index: 2;
+  pointer-events: none;
 }
 .speaker-card:hover .speaker-talk { opacity: 1; transform: translateY(0); }
 
@@ -1849,6 +1863,17 @@ a:hover { color: var(--yellow); }
 .sponsors-past-grid .sponsor-logo { padding: 14px 20px; min-width: 0; min-height: 70px; opacity: 0.85; transition: opacity 0.2s; }
 .sponsors-past-grid .sponsor-logo:hover { opacity: 1; transform: translateY(-2px); }
 .sponsors-past-grid .sponsor-logo img { height: 26px; max-width: 130px; }
+.sponsor-name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 18px;
+  color: #1a1a1a;
+  letter-spacing: -0.01em;
+  text-align: center;
+  line-height: 1.2;
+}
+.sponsor-tier.silver .sponsor-name { font-size: 15px; }
+.sponsors-past-grid .sponsor-name { font-size: 15px; color: #333; }
 
 /* ═══ SPONSOR TESTIMONIALS ═══ */
 .sponsor-quotes {
@@ -2261,6 +2286,29 @@ a:hover { color: var(--yellow); }
   transition: color 0.2s;
 }
 .footer-powered-link:hover { color: var(--yellow); }
+.footer-to-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.footer-to-top:hover {
+  color: #0E1012;
+  background: var(--yellow);
+  border-color: var(--yellow);
+}
+.footer-to-top svg { width: 14px; height: 14px; }
 
 /* ═══ TICKER ═══ */
 .ticker {
@@ -2291,6 +2339,8 @@ a:hover { color: var(--yellow); }
   .hero-title { font-size: 48px; letter-spacing: 0.04em; }
   .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
   .hero-bottom-text p { font-size: 16px; }
+  .hero-countdown-wrap { align-items: flex-start; }
+  .hero-meta { justify-content: flex-start; }
   .countdown-num { font-size: 38px; min-width: 56px; }
   .countdown-block { padding: 0 14px; }
   .countdown-block:not(:last-child)::after { height: 72px; }
@@ -2345,14 +2395,7 @@ a:hover { color: var(--yellow); }
   background: linear-gradient(to bottom, rgba(255,255,255,0) 38%, #FFFFFF 98%);
 }
 [data-theme="light"] .session-row { background: rgba(0,0,0,0.02); }
-[data-theme="light"] .session-row:hover .session-title,
-[data-theme="light"] .track-card:hover .track-desc,
-[data-theme="light"] .track-card.is-active .track-desc { color: var(--text-primary); }
-[data-theme="light"] .track-card:hover .track-tag,
-[data-theme="light"] .track-card.is-active .track-tag {
-  border-color: rgba(0,0,0,0.25);
-  color: rgba(0,0,0,0.7);
-}
+[data-theme="light"] .session-row:hover .session-title { color: var(--text-primary); }
 [data-theme="light"] .edition-card.red .edition-year,
 [data-theme="light"] .edition-card.cyan .edition-year,
 [data-theme="light"] .edition-card.red .edition-city,
@@ -2364,14 +2407,61 @@ a:hover { color: var(--yellow); }
 [data-theme="light"] .btn-register-primary,
 [data-theme="light"] .btn-hero,
 [data-theme="light"] .btn-form-submit,
-[data-theme="light"] .section-link,
-[data-theme="light"] .track-card[data-dark-text]:hover .track-desc,
-[data-theme="light"] .track-card[data-dark-text].is-active .track-desc { color: #0E1012; }
+[data-theme="light"] .section-link { color: #0E1012; }
 [data-theme="light"] .btn-register-outline { color: var(--text-secondary); }
 [data-theme="light"] .stats-section,
 [data-theme="light"] .venue,
 [data-theme="light"] .sponsors,
 [data-theme="light"] .footer { background: var(--surface); }
+
+/* ═══ EVENT STATEMENT (scroll word-highlight) ═══ */
+.event-statement {
+  background: var(--black);
+  padding: clamp(100px, 16vh, 200px) 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.event-statement .container { max-width: 1280px; }
+.statement-overline {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.statement-overline::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--yellow);
+}
+.statement-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(23px, 2.9vw, 34px);
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0;
+}
+.statement-text .word {
+  display: inline-block;
+  white-space: pre;
+  color: var(--text-primary);
+  opacity: 0.18;
+  will-change: opacity;
+}
+.statement-text .word.accent { color: var(--yellow); }
+/* Yellow is unreadable on a white background — use the primary ink in light mode */
+[data-theme="light"] .statement-text .word.accent { color: var(--text-primary); }
+@media (max-width: 768px) {
+  .statement-text { font-size: clamp(22px, 6.4vw, 32px); line-height: 1.4; }
+}
 </style>
 </head>
 <body>
@@ -2398,25 +2488,14 @@ a:hover { color: var(--yellow); }
 <!-- 02 HERO -->
 <section class="hero qe-decor-host">
   <div class="hero-video-bg">
-    <video autoplay muted loop playsinline>
-      <source src="hero-intro.mp4" type="video/mp4">
+    <video autoplay muted loop playsinline preload="auto" poster="herointronewvideo-poster.jpg">
+      <source src="herointronewvideo.mp4" type="video/mp4">
     </video>
   </div>
   <div class="qe-decor size-md spin-slow" style="top: 12%; right: 6%;" aria-hidden="true"><img src="QELogo.png" alt=""></div>
   <div class="container">
     <div class="hero-center">
       <h1 class="hero-title"><span class="qe-wrap">QE<img src="behindQE.png" alt=""></span> <span class="conclave-wrap">Conclave <span class="year-tag">2026</span></span></h1>
-      <div class="hero-subtitle">India's Premier Quality Engineering Conference</div>
-      <div class="hero-meta">
-        <div class="hero-meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          11 December 2026
-        </div>
-        <div class="hero-meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Hyderabad, India
-        </div>
-      </div>
       <div class="hero-actions">
         <a href="#register-form" class="btn-hero">Register Free</a>
         <a href="#video" class="btn-ghost">
@@ -2424,17 +2503,27 @@ a:hover { color: var(--yellow); }
           Watch 2025 Highlights
         </a>
       </div>
-      <div class="hero-theme">
-        <span class="hero-theme-label">Theme</span>
-        <span>Agentic AI in QE — How to Test Agentic AI</span>
-      </div>
     </div>
     <div class="hero-bottom">
       <div class="hero-bottom-text">
+        <div class="hero-theme">
+          <span class="hero-theme-label">Theme</span>
+          <span>Agentic AI in QE — How to Test Agentic AI</span>
+        </div>
+        <div class="hero-subtitle">India's Largest Quality Engineering Conference</div>
         <p>Where quality engineers shape the future of software delivery. One day of deep technical talks, panel discussions, and the conversations that don't happen on Slack.</p>
       </div>
       <div class="hero-countdown-wrap">
-        <div class="hero-countdown-tagline">Counting down to QE Conclave</div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            11 December 2026
+          </div>
+          <div class="hero-meta-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hyderabad, India
+          </div>
+        </div>
       <div class="hero-countdown">
         <div class="countdown-block">
           <div class="countdown-num" id="cd-days">188</div>
@@ -2490,19 +2579,11 @@ a:hover { color: var(--yellow); }
   </div>
 </section>
 
-<!-- 05 MANIFESTO -->
-<section class="manifesto">
-  <div class="container reveal">
-    <div class="manifesto-grid">
-      <div class="manifesto-content">
-        <div class="overline">About the Event &middot; Built for you</div>
-        <h2 class="manifesto-headline">You're the one shipping quality. <em>This room is for you.</em></h2>
-        <p class="manifesto-body">If you lead a QA team, design test architecture, or hold the pager when production breaks &mdash; QE Conclave is your room. One day with the practitioners actually solving the hard problems: agentic AI in QA, test architecture at scale, the leadership calls that don't happen on Slack. No vendor pitches. No filler. Just your peers, on stage and in the hallway.</p>
-      </div>
-      <div class="manifesto-img">
-        <img src="DSC05540.png" alt="QE Conclave audience listening to a keynote">
-      </div>
-    </div>
+<!-- 04B EVENT STATEMENT -->
+<section class="event-statement" id="event-statement">
+  <div class="container">
+    <div class="statement-overline">About us</div>
+    <p class="statement-text" data-accent="agentic,ai,quality,engineering,forward,one,room">One day, the people who actually own quality in one room &mdash; trading hard-won playbooks on agentic AI, test architecture at scale, and reliability under fire. No vendor pitches, no filler, no spectators. Just the conversations that move quality engineering forward.</p>
   </div>
 </section>
 
@@ -2662,42 +2743,6 @@ a:hover { color: var(--yellow); }
         <div class="sponsor-logo"><img src="https://logo.clearbit.com/diffblue.com" alt="Diffblue"></div>
         <div class="sponsor-logo"><img src="https://logo.clearbit.com/functionize.com" alt="Functionize"></div>
         <div class="sponsor-logo"><img src="https://logo.clearbit.com/eggplant.io" alt="Eggplant"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SPONSOR TESTIMONIALS -->
-<section class="sponsor-quotes">
-  <div class="container">
-    <div class="sponsor-quotes-header reveal">
-      <div class="overline">From our partners</div>
-      <h2 class="sponsor-quotes-heading">Why brands sponsor QE Conclave</h2>
-    </div>
-    <div class="sponsor-quotes-grid">
-      <div class="sponsor-quote-card reveal">
-        <div class="sponsor-quote-mark">&ldquo;</div>
-        <p class="sponsor-quote-text">QE Conclave gave us direct access to the exact decision-makers we'd been struggling to reach &mdash; QA heads and platform leads from teams running tests at real scale. Five conversations at the booth turned into three pilots within the quarter.</p>
-        <div class="sponsor-quote-footer">
-          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/browserstack.com" alt="BrowserStack"></div>
-          <div class="sponsor-quote-attr"><strong>Riya Mehta</strong>Field Marketing Lead, BrowserStack</div>
-        </div>
-      </div>
-      <div class="sponsor-quote-card reveal">
-        <div class="sponsor-quote-mark">&ldquo;</div>
-        <p class="sponsor-quote-text">The audience quality is unmatched. This isn't a generic dev conference &mdash; every attendee genuinely owns QE strategy at their company. We came for awareness and walked out with a pipeline.</p>
-        <div class="sponsor-quote-footer">
-          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
-          <div class="sponsor-quote-attr"><strong>Arjun Vasan</strong>Head of Partnerships, LambdaTest</div>
-        </div>
-      </div>
-      <div class="sponsor-quote-card reveal">
-        <div class="sponsor-quote-mark">&ldquo;</div>
-        <p class="sponsor-quote-text">QE Conclave is the one event where the booth conversations are technical, not transactional. Our engineers got more useful product feedback in a day than from three months of customer calls.</p>
-        <div class="sponsor-quote-footer">
-          <div class="sponsor-quote-logo"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
-          <div class="sponsor-quote-attr"><strong>Daniel Kowalski</strong>Director of Developer Relations, Applitools</div>
-        </div>
       </div>
     </div>
   </div>
@@ -3132,23 +3177,6 @@ a:hover { color: var(--yellow); }
         </div>
       </div>
     </div>
-    <div class="edition-row reveal">
-      <div class="edition-card red">
-        <div class="edition-year">2025 Edition</div>
-        <div class="edition-city">Hyderabad</div>
-        <div class="edition-stats">350+ attendees, 32 sessions, sold-out floor</div>
-      </div>
-      <div class="edition-card cyan">
-        <div class="edition-year">2024 Edition</div>
-        <div class="edition-city">Hyderabad</div>
-        <div class="edition-stats">200+ attendees, 24 sessions, packed hallway track</div>
-      </div>
-      <div class="edition-card yellow">
-        <div class="edition-year">Top Rated Talk</div>
-        <div class="edition-city">AI in QE</div>
-        <div class="edition-stats">4.9/5.0 avg rating — Dr. Aisha Patel</div>
-      </div>
-    </div>
     <div style="margin-top:24px"><a href="#" class="section-link">Explore all past editions →</a></div>
   </div>
 </section>
@@ -3375,7 +3403,7 @@ a:hover { color: var(--yellow); }
           <div class="footer-logo-divider"></div>
           <div class="footer-event-info">
             <span>Hyderabad</span>
-            <span>21 Oct, 2026</span>
+            <span>11 December, 2026</span>
             <span>4-8 PM IST</span>
           </div>
         </div>
@@ -3416,7 +3444,7 @@ a:hover { color: var(--yellow); }
     <div class="container">
       <div class="footer-bar-row">
         <div class="footer-bar-left">
-          <span class="footer-copyright">Copyright &copy; 2024 QE Conclave&reg;</span>
+          <span class="footer-copyright">Copyright &copy; 2026 QE Conclave&reg;</span>
           <div class="footer-legal">
             <a href="#">Privacy policy</a>
             <a href="#">Terms & Conditions</a>
@@ -3424,8 +3452,10 @@ a:hover { color: var(--yellow); }
           </div>
         </div>
         <div class="footer-bar-right">
-          <span class="footer-powered">Powered by <img src="Group.svg" alt="QualiZeal" height="16"></span>
-          <a href="#" class="footer-powered-link">www.qualizeal.com</a>
+          <button type="button" class="footer-to-top" id="footerToTop" aria-label="Back to top">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+            Back to top
+          </button>
         </div>
       </div>
     </div>
@@ -3624,6 +3654,91 @@ document.querySelectorAll('.session-row[data-hover-img]').forEach(row => {
 
 // Hide on mobile (fixed corner overlap is jarring on narrow viewports)
 if (window.matchMedia('(max-width: 900px)').matches) hoverImg.style.display = 'none';
+
+// Footer "Back to top"
+var footerToTop = document.getElementById('footerToTop');
+if (footerToTop) {
+  footerToTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// Speaker talk: move the talk line into the image so it overlays the bottom on hover
+document.querySelectorAll('.speaker-card').forEach(function (card) {
+  var img = card.querySelector('.speaker-img');
+  var talk = card.querySelector('.speaker-talk');
+  if (img && talk) img.appendChild(talk);
+});
+
+// Sponsor logo fallback: swap broken/unavailable logo images for a clean text wordmark
+document.querySelectorAll('.sponsor-logo img').forEach(function (img) {
+  function toText() {
+    if (!img.parentNode) return;
+    var span = document.createElement('span');
+    span.className = 'sponsor-name';
+    span.textContent = img.getAttribute('alt') || '';
+    img.replaceWith(span);
+  }
+  img.addEventListener('error', toText);
+  if (img.complete && img.naturalWidth === 0) toText();
+});
+</script>
+
+<!-- GSAP scroll animation for the event statement -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasLibs = window.gsap && window.ScrollTrigger;
+
+  // --- Build per-word spans for the event statement ---
+  var statement = document.querySelector('.statement-text');
+  if (statement) {
+    var accent = (statement.getAttribute('data-accent') || '')
+      .split(',').map(function (s) { return s.trim().toLowerCase(); }).filter(Boolean);
+    var words = statement.textContent.trim().split(/\s+/);
+    statement.innerHTML = '';
+    words.forEach(function (w, i) {
+      var span = document.createElement('span');
+      span.className = 'word';
+      var clean = w.toLowerCase().replace(/[^a-z]/g, '');
+      if (accent.indexOf(clean) !== -1) span.classList.add('accent');
+      span.textContent = w;
+      statement.appendChild(span);
+      if (i < words.length - 1) statement.appendChild(document.createTextNode(' '));
+    });
+  }
+
+  if (reduceMotion || !hasLibs) {
+    // No animation: leave statement fully readable (word colors come from CSS vars)
+    document.querySelectorAll('.statement-text .word').forEach(function (el) {
+      el.style.opacity = '1';
+    });
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- Word-by-word reveal as the section scrolls through view ---
+  // Animate opacity only; the ink color comes from CSS vars so it adapts to light/dark.
+  var wordEls = document.querySelectorAll('.statement-text .word');
+  if (wordEls.length) {
+    gsap.to(wordEls, {
+      ease: 'none',
+      opacity: 1,
+      stagger: { each: 0.25 },
+      scrollTrigger: {
+        trigger: '.event-statement',
+        start: 'top 82%',
+        end: 'bottom 12%',
+        scrub: 1
+      }
+    });
+  }
+
+  window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
 </script>
 </body>
 </html>
