@@ -116,7 +116,7 @@ a:hover { color: var(--yellow); }
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 16px 0;
-  background: transparent;
+  background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
   transition: background 0.3s, padding 0.3s, backdrop-filter 0.3s;
 }
 .nav.scrolled {
@@ -159,14 +159,14 @@ a:hover { color: var(--yellow); }
   font-weight: 600;
   padding: 8px 20px;
   background: var(--yellow);
-  color: var(--black);
+  color: #0E1012;
   border: none;
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
   text-decoration: none;
   display: inline-block;
 }
-.btn-register:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+.btn-register:hover { background: #E5DE3F; color: #0E1012; transform: translateY(-1px); }
 
 .theme-toggle {
   width: 36px;
@@ -198,6 +198,7 @@ a:hover { color: var(--yellow); }
   position: absolute;
   inset: 0;
   z-index: 0;
+  background: #030303;
 }
 .hero-video-bg video {
   width: 100%;
@@ -384,7 +385,7 @@ a:hover { color: var(--yellow); }
   font-family: var(--font-ui);
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.72);
   text-decoration: none;
   padding: 14px 9px;
   background: #191919;
@@ -393,7 +394,7 @@ a:hover { color: var(--yellow); }
   align-items: center;
   gap: 8px;
 }
-.btn-ghost:hover { color: var(--text-primary); background: #222; }
+.btn-ghost:hover { color: #fff; background: #222; }
 .btn-ghost svg { width: 16px; height: 16px; }
 
 .hero-bottom {
@@ -650,6 +651,11 @@ a:hover { color: var(--yellow); }
   transform: translateY(-4px);
   background: #1A1D22;
 }
+/* Hover bg is always dark, so force light text in both themes */
+.audience-card:hover .audience-card-title { color: #fff; }
+.audience-card:hover .audience-card-desc { color: rgba(255,255,255,0.78); }
+.audience-card:hover .audience-card-role { color: rgba(255,255,255,0.75); border-color: rgba(255,255,255,0.22); }
+.audience-card:hover .audience-card-icon { background: rgba(255,255,255,0.08); }
 .audience-card-icon {
   width: 44px;
   height: 44px;
@@ -772,14 +778,14 @@ a:hover { color: var(--yellow); }
   font-family: var(--font-ui);
   font-size: 13px;
   font-weight: 600;
-  color: var(--black);
+  color: #0E1012;
   background: var(--yellow);
   padding: 8px 20px;
   text-decoration: none;
   transition: background 0.2s, transform 0.1s;
   display: inline-block;
 }
-.section-link:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+.section-link:hover { background: #E5DE3F; color: #0E1012; transform: translateY(-1px); }
 
 /* ═══ 07 SPEAKERS ═══ */
 .speakers { padding: 80px 0; border-top: 1px solid var(--border); }
@@ -1658,14 +1664,14 @@ a:hover { color: var(--yellow); }
   font-weight: 600;
   padding: 12px 28px;
   background: var(--yellow);
-  color: var(--black);
+  color: #0E1012;
   border: none;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s, transform 0.1s;
   display: inline-block;
 }
-.btn-register-primary:hover { background: #E5DE3F; color: var(--black); transform: translateY(-1px); }
+.btn-register-primary:hover { background: #E5DE3F; color: #0E1012; transform: translateY(-1px); }
 .btn-register-outline {
   font-family: var(--font-ui);
   font-size: 13px;
@@ -2069,7 +2075,7 @@ a:hover { color: var(--yellow); }
   padding: 14px 0;
   width: 100%;
   background: var(--yellow);
-  color: var(--black);
+  color: #0E1012;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -2414,6 +2420,15 @@ a:hover { color: var(--yellow); }
 [data-theme="light"] .sponsors,
 [data-theme="light"] .footer { background: var(--surface); }
 
+/* Nav sits over the (always-dark) hero — keep its text light until scrolled past */
+[data-theme="light"] .nav:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.82); }
+[data-theme="light"] .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
+
+/* Partner tier labels: the metallic tints vanish on the light grey background */
+[data-theme="light"] .sponsor-tier.platinum .sponsor-tier-label { color: #3F4246; }
+[data-theme="light"] .sponsor-tier.gold .sponsor-tier-label { color: #9A7B0F; }
+[data-theme="light"] .sponsor-tier.silver .sponsor-tier-label { color: #5E636B; }
+
 /* ═══ EVENT STATEMENT (scroll word-highlight) ═══ */
 .event-statement {
   background: var(--black);
@@ -2462,9 +2477,43 @@ a:hover { color: var(--yellow); }
 @media (max-width: 768px) {
   .statement-text { font-size: clamp(22px, 6.4vw, 32px); line-height: 1.4; }
 }
+
+/* ═══ 3D CURSOR COMPANION ═══ */
+#cursor3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 110px;
+  height: 110px;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+#cursor3d.is-ready { opacity: 1; }
+#cursor3d canvas { display: block; width: 100%; height: 100%; }
+/* When the 3D companion is the cursor, hide the native pointer */
+body.cursor3d-active,
+body.cursor3d-active * { cursor: none !important; }
+@media (hover: none), (max-width: 768px) {
+  #cursor3d { display: none; }
+}
+{INJ}
 </style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.178.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
+
+<!-- 3D cursor companion (desktop only) -->
+<div id="cursor3d" aria-hidden="true"><canvas id="cursor3dCanvas"></canvas></div>
 
 <!-- 01 NAV -->
 <nav class="nav" id="nav">
@@ -3738,6 +3787,146 @@ document.querySelectorAll('.sponsor-logo img').forEach(function (img) {
   }
 
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+})();
+</script>
+
+<!-- 3D model as a cursor companion: trails the pointer, gently spins,
+     and on any click bounces + spins twice (three.js, desktop only) -->
+<script type="module">
+(function () {
+  var wrap = document.getElementById('cursor3d');
+  var canvas = document.getElementById('cursor3dCanvas');
+  if (!wrap || !canvas) return;
+
+  // Skip on touch / small screens (no real cursor to follow)
+  if (window.matchMedia('(hover: none)').matches || window.innerWidth <= 768) return;
+
+  var started = false;
+
+  async function init() {
+    if (started) return;
+    started = true;
+
+    var THREE, GLTFLoader;
+    try {
+      THREE = await import('three');
+      ({ GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js'));
+    } catch (e) { return; }
+
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+    } catch (e) { wrap.style.display = 'none'; return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    var SIZE = wrap.clientWidth || 110;
+    renderer.setSize(SIZE, SIZE, false);
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(45, 1, 0.01, 5000);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+    var key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(2, 4, 5); scene.add(key);
+    var rim = new THREE.DirectionalLight(0xfff2a8, 0.6); rim.position.set(-3, -2, -4); scene.add(rim);
+
+    // pivot = click spin + bounce (animated by GSAP); spinner = continuous idle rotation
+    var pivot = new THREE.Group();
+    var spinner = new THREE.Group();
+    pivot.add(spinner);
+    scene.add(pivot);
+
+    new GLTFLoader().load('Hitem3d-1781644560399.glb', function (gltf) {
+      var obj = gltf.scene;
+      var box = new THREE.Box3().setFromObject(obj);
+      var ctr = box.getCenter(new THREE.Vector3());
+      var sz = box.getSize(new THREE.Vector3());
+      obj.position.sub(ctr);
+      spinner.add(obj);
+
+      var maxd = Math.max(sz.x, sz.y, sz.z) || 1;
+      var dist = (maxd / (2 * Math.tan((Math.PI * 45) / 360))) * 1.45;
+      camera.position.set(0, 0, dist);
+      camera.near = dist / 100; camera.far = dist * 100; camera.updateProjectionMatrix();
+      camera.lookAt(0, 0, 0);
+
+      loaded = true;
+      wrap.classList.add('is-ready');
+      document.body.classList.add('cursor3d-active'); // the model replaces the native cursor
+      start();
+    }, undefined, function () { wrap.style.display = 'none'; });
+
+    // --- pointer follow (smooth trailing) ---
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    var px = mx, py = my;
+    var half = SIZE / 2, offset = 0; // centered on the pointer — it *is* the cursor
+    var loaded = false;
+    window.addEventListener('mousemove', function (e) { mx = e.clientX; my = e.clientY; }, { passive: true });
+    // Pointer left the window: show the model/cursor only inside the page
+    window.addEventListener('mouseout', function (e) {
+      if (!e.relatedTarget && !e.toElement) {
+        wrap.classList.remove('is-ready');
+        document.body.classList.remove('cursor3d-active');
+      }
+    });
+    window.addEventListener('mouseover', function () {
+      if (started && loaded) {
+        wrap.classList.add('is-ready');
+        document.body.classList.add('cursor3d-active');
+      }
+    });
+
+    // --- click: bounce + two fast spins ---
+    var gsap = window.gsap;
+    document.addEventListener('click', function () {
+      if (reduce) return;
+      if (gsap) {
+        gsap.to(pivot.rotation, { y: pivot.rotation.y + Math.PI * 4, duration: 0.65, ease: 'power2.out', overwrite: true });
+        gsap.to(pivot.scale, { x: 1.35, y: 1.35, z: 1.35, duration: 0.16, ease: 'power2.out', yoyo: true, repeat: 1, overwrite: true });
+      } else {
+        spinTo = pivot.rotation.y + Math.PI * 4; // fallback handled in loop
+      }
+    });
+    var spinTo = null;
+
+    var raf = null, last = 0;
+    function loop(t) {
+      raf = requestAnimationFrame(loop);
+      var dt = last ? Math.min((t - last) / 1000, 0.05) : 0.016; last = t;
+
+      // follow the pointer (slight smoothing so it feels alive, but tight enough to act as the cursor)
+      px += (mx - px) * 0.3; py += (my - py) * 0.3;
+      wrap.style.transform = 'translate(' + (px - half + offset) + 'px,' + (py - half + offset) + 'px)';
+
+      // idle spin
+      if (!reduce) spinner.rotation.y += dt * 0.6;
+
+      // gsap-less click fallback
+      if (spinTo !== null) {
+        pivot.rotation.y += (spinTo - pivot.rotation.y) * 0.2;
+        if (Math.abs(spinTo - pivot.rotation.y) < 0.01) { pivot.rotation.y = spinTo; spinTo = null; }
+      }
+
+      renderer.render(scene, camera);
+    }
+    function start() { if (!raf) { last = 0; raf = requestAnimationFrame(loop); } }
+
+    // pause render when tab hidden
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+      else start();
+    });
+  }
+
+  // Defer the heavy (61MB) load until the page is idle and the user moves the pointer
+  function kick() {
+    window.removeEventListener('mousemove', kick);
+    init();
+  }
+  window.addEventListener('load', function () {
+    var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 1200); };
+    idle(function () { window.addEventListener('mousemove', kick, { passive: true, once: true }); });
+  });
 })();
 </script>
 </body>
