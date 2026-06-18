@@ -146,7 +146,7 @@ a:hover { color: var(--ink-accent); }
 /* Inline SVG logo — wordmark is currentColor so it can flip per theme */
 .qe-logo-svg { display: block; width: auto; color: #fff; }
 .nav-logo .qe-logo-svg { height: 32px; }
-.qe-logo-footer { height: 48px; }
+.qe-logo-footer { height: 76px; }
 /* On light backgrounds the white wordmark must become dark */
 [data-theme="light"] .nav.scrolled .nav-logo .qe-logo-svg,
 [data-theme="light"] .footer-logo-block .qe-logo-svg { color: #0E1012; }
@@ -1429,11 +1429,13 @@ a:hover { color: var(--ink-accent); }
   max-width: 900px;
   aspect-ratio: 16/9;
 }
-.video-player-wrap iframe {
+.video-player-wrap iframe,
+.video-player-wrap video {
   width: 100%;
   height: 100%;
   border: none;
   border-radius: 8px;
+  background: #000;
 }
 .video-player-close {
   position: absolute;
@@ -1850,9 +1852,48 @@ a:hover { color: var(--ink-accent); }
 /* Silver: compact */
 .sponsor-tier.silver .sponsor-logo { padding: 14px 24px; min-width: 140px; min-height: 70px; }
 .sponsor-tier.silver .sponsor-logo img { height: 28px; max-width: 150px; }
+/* Placeholder logo slots — shown until real 2026 partners are confirmed */
+.sponsor-logo.placeholder {
+  background: transparent;
+  border: 1.5px dashed var(--border);
+  color: var(--text-tertiary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.3;
+}
+.sponsor-logo.placeholder:hover { transform: none; box-shadow: none; }
+.sponsor-tier.platinum .sponsor-logo.placeholder { font-size: 14px; }
+.sponsor-tier.silver .sponsor-logo.placeholder { font-size: 11px; }
 .sponsor-cta-row {
   text-align: center;
-  margin-top: 48px;
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.sponsor-cta-lead {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+.section-link.sponsor-cta-btn {
+  font-size: 17px;
+  font-weight: 700;
+  padding: 16px 40px;
+  border-radius: 8px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 28px rgba(242, 235, 83, 0.35);
+}
+.section-link.sponsor-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px rgba(242, 235, 83, 0.5);
 }
 .sponsors-past-toggle {
   margin-top: 64px;
@@ -2122,8 +2163,10 @@ a:hover { color: var(--ink-accent); }
   position: absolute;
   width: 400px;
   height: 400px;
-  opacity: 0.06;
+  opacity: 0.08;
 }
+/* The colorful QE pinwheel needs more presence on a white footer */
+[data-theme="light"] .footer-decor .burst { opacity: 0.16; }
 .footer-decor .burst img {
   width: 100%;
   height: 100%;
@@ -2165,7 +2208,7 @@ a:hover { color: var(--ink-accent); }
 }
 .footer-logo-divider {
   width: 1px;
-  height: 40px;
+  height: 60px;
   background: var(--border);
 }
 .footer-event-info {
@@ -2460,6 +2503,9 @@ a:hover { color: var(--ink-accent); }
 /* Nav sits over the (always-dark) hero — keep its text light until scrolled past */
 [data-theme="light"] .nav:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.82); }
 [data-theme="light"] .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
+/* Register button stays dark-on-yellow even over the hero in light mode */
+[data-theme="light"] .nav:not(.scrolled) .nav-links a.btn-register,
+[data-theme="light"] .nav:not(.scrolled) .nav-links a.btn-register:hover { color: #0E1012; }
 
 /* Partner tier labels: the metallic tints vanish on the light grey background */
 [data-theme="light"] .sponsor-tier.platinum .sponsor-tier-label { color: #3F4246; }
@@ -2518,8 +2564,8 @@ a:hover { color: var(--ink-accent); }
   position: fixed;
   top: 0;
   left: 0;
-  width: 110px;
-  height: 110px;
+  width: 55px;
+  height: 55px;
   z-index: 9998;
   pointer-events: none;
   opacity: 0;
@@ -2601,7 +2647,7 @@ body.cursor3d-active * { cursor: none !important; }
       <h1 class="hero-title"><span class="qe-wrap">QE<img src="behindQE.png" alt=""></span> <span class="conclave-wrap">Conclave <span class="year-tag">2026</span></span></h1>
       <div class="hero-actions">
         <a href="#register-form" class="btn-hero">Register Free</a>
-        <a href="#video" class="btn-ghost">
+        <a href="#" class="btn-ghost" id="watchHighlightsBtn" data-video="pKwbeladpBE">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           Watch 2025 Highlights
         </a>
@@ -2614,7 +2660,7 @@ body.cursor3d-active * { cursor: none !important; }
           <span>Agentic AI in QE — How to Test Agentic AI</span>
         </div>
         <div class="hero-subtitle">India's Largest Quality Engineering Conference</div>
-        <p>Where quality engineers shape the future of software delivery. One day of deep technical talks, panel discussions, and the conversations that don't happen on Slack.</p>
+        <p>Where quality engineers shape the future of software delivery. One day of deep technical talks, panel discussions, and the conversations that matter.</p>
       </div>
       <div class="hero-countdown-wrap">
         <div class="hero-meta">
@@ -2653,8 +2699,8 @@ body.cursor3d-active * { cursor: none !important; }
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 20+ Speakers <span>+</span> 4000+ Attendees <span>+</span> 4 Tracks <span>+</span> 11 Dec 2026 <span>+</span></div>
-    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 20+ Speakers <span>+</span> 4000+ Attendees <span>+</span> 4 Tracks <span>+</span> 11 Dec 2026 <span>+</span></div>
+    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 20+ Speakers <span>+</span> 1500+ Attendees <span>+</span> 11 Dec 2026 <span>+</span></div>
+    <div class="ticker-item">Agentic AI in QE <span>+</span> Test Architecture <span>+</span> Performance & Reliability <span>+</span> QE Leadership <span>+</span> 20+ Speakers <span>+</span> 1500+ Attendees <span>+</span> 11 Dec 2026 <span>+</span></div>
   </div>
 </div>
 
@@ -2667,7 +2713,7 @@ body.cursor3d-active * { cursor: none !important; }
     </div>
     <div class="stats-row reveal">
       <div class="stat-card" style="--accent: var(--red)">
-        <div class="stat-val" data-target="4000" data-suffix="+">0+</div>
+        <div class="stat-val" data-target="1500" data-suffix="+">0+</div>
         <div class="stat-label">Expected in 2026</div>
       </div>
       <div class="stat-card" style="--accent: var(--cyan)">
@@ -2782,7 +2828,7 @@ body.cursor3d-active * { cursor: none !important; }
         </div>
       </div>
     </div>
-    <a href="#" class="section-link">View full agenda →</a>
+    <a href="#agenda" class="section-link">View full agenda →</a>
   </div>
 </section>
 
@@ -2798,9 +2844,9 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="sponsor-tier-label">Platinum Partners</div>
       </div>
       <div class="sponsor-logos">
-        <div class="sponsor-logo"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
-        <div class="sponsor-logo"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
-        <div class="sponsor-logo"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
       </div>
     </div>
     <div class="sponsor-tier gold reveal">
@@ -2808,11 +2854,11 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="sponsor-tier-label">Gold Partners</div>
       </div>
       <div class="sponsor-logos">
-        <div class="sponsor-logo"><img src="pcloudy-logo-new-1.webp" alt="pCloudy"></div>
-        <div class="sponsor-logo"><img src="QApilot_BlueBlack-4.webp" alt="QApilot"></div>
-        <div class="sponsor-logo"><img src="60892a20edbd1da3fd641167_Synthesized-logo.png" alt="Synthesized"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
       </div>
     </div>
     <div class="sponsor-tier silver reveal">
@@ -2820,32 +2866,35 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="sponsor-tier-label">Silver &amp; Community Partners</div>
       </div>
       <div class="sponsor-logos">
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/testsigma.com" alt="Testsigma"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/katalon.com" alt="Katalon"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/postman.com" alt="Postman"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/cypress.io" alt="Cypress"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/saucelabs.com" alt="Sauce Labs"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/mabl.com" alt="Mabl"></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
+        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
       </div>
     </div>
     <div class="sponsor-cta-row">
-      <a href="#" class="section-link">Become a sponsor →</a>
+      <div class="sponsor-cta-lead">Put your brand in front of 1500+ QE leaders</div>
+      <a href="#register-form" class="section-link sponsor-cta-btn">Become a Sponsor →</a>
     </div>
 
     <!-- Past Sponsors — hide this block once 2026 sponsors are finalised -->
     <div class="sponsors-past-toggle reveal" id="past-sponsors">
       <div class="sponsors-past-label">Past Sponsors &middot; Editions 2023–2025</div>
       <div class="sponsors-past-grid">
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/digital.ai" alt="Digital.ai"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/tricentis.com" alt="Tricentis"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/perfecto.io" alt="Perfecto"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/leapwork.com" alt="Leapwork"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/headspin.io" alt="HeadSpin"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/parasoft.com" alt="Parasoft"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/qualitest.com" alt="Qualitest"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/diffblue.com" alt="Diffblue"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/functionize.com" alt="Functionize"></div>
-        <div class="sponsor-logo"><img src="https://logo.clearbit.com/eggplant.io" alt="Eggplant"></div>
+        <div class="sponsor-logo"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
+        <div class="sponsor-logo"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
+        <div class="sponsor-logo"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
+        <div class="sponsor-logo"><img src="pcloudy-logo-new-1.webp" alt="pCloudy"></div>
+        <div class="sponsor-logo"><img src="QApilot_BlueBlack-4.webp" alt="QApilot"></div>
+        <div class="sponsor-logo"><img src="60892a20edbd1da3fd641167_Synthesized-logo.png" alt="Synthesized"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/lambdatest.com" alt="LambdaTest"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/applitools.com" alt="Applitools"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/testsigma.com" alt="Testsigma"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/katalon.com" alt="Katalon"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/postman.com" alt="Postman"></div>
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/cypress.io" alt="Cypress"></div>
       </div>
     </div>
   </div>
@@ -3289,6 +3338,7 @@ body.cursor3d-active * { cursor: none !important; }
   <div class="video-player-wrap">
     <button class="video-player-close" id="videoPlayerClose">&times;</button>
     <iframe id="videoPlayerIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <video id="videoPlayerVideo" controls playsinline preload="none" style="display:none"></video>
   </div>
 </div>
 
@@ -3326,47 +3376,6 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="venue-info">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           20+ hotels within 2 km
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 12B REGISTER CARD -->
-<section class="register-card">
-  <div class="container">
-    <div class="register-card-inner">
-      <div class="register-card-left">
-        <div class="register-breadcrumb">
-          Events
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          QE Conclave 2026
-        </div>
-        <h2 class="register-heading"><em>Quality engineering</em> redefined</h2>
-        <p class="register-subtitle">The global gathering for those building trust in AI systems. Free to attend &mdash; just save your seat.</p>
-        <div class="register-actions">
-          <a href="#register-form" class="btn-register-primary">Register Free</a>
-          <a href="#agenda" class="btn-register-outline">View Agenda</a>
-        </div>
-      </div>
-      <div class="register-card-right">
-        <div class="register-info-grid">
-          <div>
-            <div class="register-info-label">Date</div>
-            <div class="register-info-value">11 December 2026</div>
-          </div>
-          <div>
-            <div class="register-info-label">Location</div>
-            <div class="register-info-value">Hyderabad, India</div>
-          </div>
-          <div>
-            <div class="register-info-label">Speakers</div>
-            <div class="register-info-value">45+ Industry Pioneers</div>
-          </div>
-          <div>
-            <div class="register-info-label">Pass</div>
-            <div class="register-info-value">Free &middot; In-person</div>
-          </div>
         </div>
       </div>
     </div>
@@ -3446,7 +3455,7 @@ body.cursor3d-active * { cursor: none !important; }
       <div class="register-form-left reveal">
         <div class="overline">Free Registration</div>
         <h2>Secure your spot at <span>QE Conclave 2026</span></h2>
-        <p>Join 4000+ quality engineering professionals on 11 December 2026 in Hyderabad. Talks, panels, and the conversations that shape the future of QE &mdash; on us.</p>
+        <p>Join 1500+ quality engineering professionals on 11 December 2026 in Hyderabad. Talks, panels, and the conversations that shape the future of QE &mdash; on us.</p>
         <ul class="register-form-perks">
           <li>Free access to all 4 conference tracks</li>
           <li>45+ speaker sessions &amp; panel discussions</li>
@@ -3495,7 +3504,7 @@ body.cursor3d-active * { cursor: none !important; }
   <div class="footer-main">
     <div class="footer-decor">
       <div class="burst burst-1">
-        <img src="Group 1261153576.svg" alt="">
+        <img src="QELogo.png" alt="">
       </div>
     </div>
     <div class="container">
@@ -3512,17 +3521,14 @@ body.cursor3d-active * { cursor: none !important; }
         </div>
       </div>
 
-      <!-- Description + Nav Links -->
+      <!-- Nav Links -->
       <div class="footer-content-row">
-        <div class="footer-desc">
-          QE Conclave is not merely an event; it's a catalyst for leadership elevation. This summit is your key to staying ahead, steering the future of Quality Engineering. As the forefront of innovation converges at AVASA, HITEC City, Hyderabad on December 15, immerse yourself in an unparalleled experience.
-        </div>
         <div class="footer-nav-grid">
           <a href="#">About</a>
           <a href="#speakers">Speakers</a>
-          <a href="#">Gallery</a>
+          <a href="#gallery">Gallery</a>
           <a href="#agenda">Schedule</a>
-          <a href="#">Video</a>
+          <a href="#sponsors">Sponsors</a>
           <a href="#">Past Events</a>
         </div>
       </div>
@@ -3730,16 +3736,38 @@ document.querySelectorAll('.video-testimonial').forEach(card => {
   });
 });
 
-closeBtn.addEventListener('click', () => {
+// Hero "Watch Highlights" button opens the same overlay, playing the local hero reel
+const watchHighlightsBtn = document.getElementById('watchHighlightsBtn');
+const localVideo = document.getElementById('videoPlayerVideo');
+if (watchHighlightsBtn) {
+  watchHighlightsBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    iframe.style.display = 'none';
+    localVideo.style.display = 'block';
+    localVideo.src = 'herointronewvideo.mp4';
+    overlay.classList.add('active');
+    localVideo.play().catch(() => {});
+  });
+}
+
+function closeVideoOverlay() {
   overlay.classList.remove('active');
   iframe.src = '';
-});
+  localVideo.pause();
+  localVideo.removeAttribute('src');
+  localVideo.load();
+  localVideo.style.display = 'none';
+  iframe.style.display = 'block';
+}
+
+closeBtn.addEventListener('click', closeVideoOverlay);
 
 overlay.addEventListener('click', (e) => {
-  if (e.target === overlay) {
-    overlay.classList.remove('active');
-    iframe.src = '';
-  }
+  if (e.target === overlay) closeVideoOverlay();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay.classList.contains('active')) closeVideoOverlay();
 });
 
 // Session hover image follow cursor
@@ -3833,9 +3861,12 @@ document.querySelectorAll('.sponsor-logo img').forEach(function (img) {
       stagger: { each: 0.25 },
       scrollTrigger: {
         trigger: '.event-statement',
-        start: 'top 82%',
-        end: 'bottom 12%',
-        scrub: 1
+        start: 'top top',
+        end: '+=120%',
+        scrub: 1,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1
       }
     });
   }
@@ -3874,7 +3905,7 @@ document.querySelectorAll('.sponsor-logo img').forEach(function (img) {
       renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
     } catch (e) { wrap.style.display = 'none'; return; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
-    var SIZE = wrap.clientWidth || 110;
+    var SIZE = wrap.clientWidth || 55;
     renderer.setSize(SIZE, SIZE, false);
 
     var scene = new THREE.Scene();
