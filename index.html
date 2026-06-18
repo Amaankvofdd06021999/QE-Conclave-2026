@@ -146,7 +146,6 @@ a:hover { color: var(--ink-accent); }
 /* Inline SVG logo — wordmark is currentColor so it can flip per theme */
 .qe-logo-svg { display: block; width: auto; color: #fff; }
 .nav-logo .qe-logo-svg { height: 32px; }
-.qe-logo-footer { height: 76px; }
 /* On light backgrounds the white wordmark must become dark */
 [data-theme="light"] .nav.scrolled .nav-logo .qe-logo-svg,
 [data-theme="light"] .footer-logo-block .qe-logo-svg { color: #0E1012; }
@@ -520,29 +519,17 @@ a:hover { color: var(--ink-accent); }
 .stats-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
 }
 .stat-card {
   position: relative;
   padding: 36px 28px 28px;
-  border-right: 1px solid var(--border);
-}
-.stat-card:last-child { border-right: none; }
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--accent, var(--yellow));
+  border-left: 1px solid var(--border);
 }
 .stat-val {
   font-family: var(--font-display);
-  font-size: clamp(36px, 4vw, 52px);
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: clamp(56px, 6.2vw, 84px);
+  font-weight: 800;
+  color: var(--accent, var(--yellow));
   line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -616,10 +603,18 @@ a:hover { color: var(--ink-accent); }
 
 /* ═══ WHO SHOULD ATTEND ═══ */
 .audience {
+  position: relative;
   padding: 100px 0;
   border-bottom: 1px solid var(--border);
-  background: var(--black);
+  background-color: var(--black);
+  background-image:
+    linear-gradient(rgba(8, 9, 11, 0.82), rgba(8, 9, 11, 0.9)),
+    url("bg-who-should-attend.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+.audience > .container { position: relative; z-index: 1; }
 .audience-header {
   text-align: center;
   margin-bottom: 56px;
@@ -631,7 +626,7 @@ a:hover { color: var(--ink-accent); }
   font-family: var(--font-display);
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 700;
-  color: var(--text-primary);
+  color: #fff;
   letter-spacing: -0.02em;
   line-height: 1.15;
   margin-top: 12px;
@@ -639,7 +634,7 @@ a:hover { color: var(--ink-accent); }
 .audience-sub {
   font-family: var(--font-body);
   font-size: clamp(15px, 1.4vw, 18px);
-  color: var(--text-secondary);
+  color: rgba(255,255,255,0.78);
   line-height: 1.6;
   margin-top: 16px;
 }
@@ -1820,6 +1815,7 @@ a:hover { color: var(--ink-accent); }
   transform: translateY(-2px);
   background: currentColor;
 }
+.sponsor-tier.title .sponsor-tier-label { color: var(--yellow); font-size: 15px; letter-spacing: 0.2em; }
 .sponsor-tier.platinum .sponsor-tier-label { color: #E5E4E2; font-size: 14px; }
 .sponsor-tier.gold .sponsor-tier-label { color: #F2C84B; }
 .sponsor-tier.silver .sponsor-tier-label { color: #B0B6BD; font-size: 12px; }
@@ -1834,24 +1830,35 @@ a:hover { color: var(--ink-accent); }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
-  border-radius: 6px;
-  transition: transform 0.25s, box-shadow 0.25s;
+  background: transparent;
+  transition: transform 0.25s;
 }
-.sponsor-logo:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,0,0,0.18); }
+.sponsor-logo:hover { transform: translateY(-3px); }
 .sponsor-logo img {
   width: auto;
   display: block;
   object-fit: contain;
+  /* No white card — render logos as clean white marks on the dark section */
+  filter: brightness(0) invert(1);
+  opacity: 0.82;
+  transition: opacity 0.25s;
 }
+.sponsor-logo:hover img { opacity: 1; }
+[data-theme="light"] .sponsor-logo img { filter: none; opacity: 0.85; }
+[data-theme="light"] .sponsor-logo:hover img { opacity: 1; }
+/* Title: the single biggest logo */
+.sponsor-tier.title .sponsor-logo { padding: 36px 64px; min-width: 320px; min-height: 180px; }
+.sponsor-tier.title .sponsor-logo img { height: 84px; max-width: 360px; }
 /* Platinum: huge, generous padding */
 .sponsor-tier.platinum .sponsor-logo { padding: 28px 48px; min-width: 240px; min-height: 140px; }
 .sponsor-tier.platinum .sponsor-logo img { height: 64px; max-width: 280px; }
-/* Gold: medium */
-.sponsor-tier.gold .sponsor-logo { padding: 20px 32px; min-width: 180px; min-height: 100px; }
+/* Gold: medium — single line */
+.sponsor-tier.gold .sponsor-logos { flex-wrap: nowrap; gap: 32px; }
+.sponsor-tier.gold .sponsor-logo { padding: 20px 32px; min-width: 0; flex: 1 1 0; min-height: 100px; }
 .sponsor-tier.gold .sponsor-logo img { height: 44px; max-width: 200px; }
-/* Silver: compact */
-.sponsor-tier.silver .sponsor-logo { padding: 14px 24px; min-width: 140px; min-height: 70px; }
+/* Silver: compact — single line */
+.sponsor-tier.silver .sponsor-logos { flex-wrap: nowrap; gap: 24px; }
+.sponsor-tier.silver .sponsor-logo { padding: 14px 24px; min-width: 0; flex: 1 1 0; min-height: 70px; }
 .sponsor-tier.silver .sponsor-logo img { height: 28px; max-width: 150px; }
 /* Placeholder logo slots — shown until real 2026 partners are confirmed */
 .sponsor-logo.placeholder {
@@ -2150,7 +2157,7 @@ a:hover { color: var(--ink-accent); }
 }
 .footer-main {
   position: relative;
-  padding: 64px 0 48px;
+  padding: 96px 0 28px;
   border-top: 1px solid var(--border);
 }
 /* Decorative starburst shapes */
@@ -2194,56 +2201,27 @@ a:hover { color: var(--ink-accent); }
 .footer-top-row {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 48px;
+  justify-content: space-between;
+  gap: 48px;
+  margin-bottom: 8px;
 }
 .footer-logo-block {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 48px;
   flex-shrink: 0;
 }
-.footer-logo-block img {
-  height: 48px;
-  width: auto;
-}
-.footer-logo-divider {
-  width: 1px;
-  height: 60px;
-  background: var(--border);
-}
-.footer-event-info {
-  font-family: var(--font-ui);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-.footer-event-info span {
-  display: block;
-}
+.qe-logo-footer { height: clamp(104px, 12vw, 160px); }
 
-.footer-content-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  margin-bottom: 48px;
-}
-.footer-desc {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  max-width: 440px;
-}
 .footer-nav-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px 40px;
+  grid-template-columns: repeat(3, auto);
+  gap: 28px 64px;
 }
 .footer-nav-grid a {
   font-family: var(--font-display);
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 400;
   color: var(--text-primary);
   text-decoration: none;
@@ -2251,35 +2229,34 @@ a:hover { color: var(--ink-accent); }
 }
 .footer-nav-grid a:hover { color: var(--ink-accent); }
 
-.footer-social-tagline {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0;
+.footer-social-label {
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
 }
 .footer-social {
   display: flex;
   gap: 16px;
   align-items: center;
 }
-.footer-social a {
-  color: var(--text-secondary);
-  transition: color 0.2s;
+.footer-social-link {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--text-tertiary);
+  color: var(--text-primary);
+  background: transparent;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, border-color 0.2s, color 0.2s;
 }
-.footer-social a:hover { color: var(--ink-accent); }
-.footer-social a svg {
-  width: 20px;
-  height: 20px;
-}
-.footer-tagline {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--text-secondary);
-  max-width: 420px;
-  line-height: 1.6;
-  text-align: right;
-}
+.footer-social-link:hover { transform: translateY(-2px); }
+.footer-social-link.is-linkedin:hover { border-color: #0A66C2; color: #0A66C2; }
+.footer-social-link.is-youtube:hover { border-color: #FF0000; color: #FF0000; }
+.footer-social-link.is-instagram:hover { border-color: #D6249F; color: #D6249F; }
+.footer-social-link svg { width: 17px; height: 17px; display: block; }
 
 /* Footer bottom bar */
 .footer-bar {
@@ -2404,8 +2381,6 @@ a:hover { color: var(--ink-accent); }
   .countdown-block:not(:last-child)::after { height: 72px; }
   .tracks-grid, .speakers-grid { grid-template-columns: 1fr 1fr; }
   .stats-row { grid-template-columns: 1fr; }
-  .stats-row .stat-card { border-right: none; border-bottom: 1px solid var(--border); }
-  .stats-row .stat-card:last-child { border-bottom: none; }
   .manifesto-content { padding: 80px 0 60px; }
   .manifesto-img { width: 100%; opacity: 0.45; }
   .manifesto-img::after { background: linear-gradient(to bottom, rgba(3,3,3,0.7), #030303 75%); }
@@ -2424,11 +2399,9 @@ a:hover { color: var(--ink-accent); }
   .register-card-inner { flex-direction: column; gap: 40px; }
   .register-card-right { width: 100%; }
   .gallery-track img { height: 180px; }
-  .footer-content-row { grid-template-columns: 1fr; gap: 40px; }
-  .footer-nav-grid { grid-template-columns: repeat(3, 1fr); gap: 12px 24px; }
-  .footer-nav-grid a { font-size: 16px; }
-  .footer-social-tagline { flex-direction: column; gap: 24px; }
-  .footer-tagline { text-align: left; }
+  .footer-top-row { flex-direction: column; align-items: flex-start; gap: 40px; }
+  .footer-nav-grid { grid-template-columns: repeat(3, 1fr); gap: 18px 24px; width: 100%; }
+  .footer-nav-grid a { font-size: 17px; }
   .footer-bar-row { flex-direction: column; align-items: flex-start; gap: 12px; }
   .footer-bar-left { flex-direction: column; align-items: flex-start; gap: 8px; }
 
@@ -2458,6 +2431,10 @@ a:hover { color: var(--ink-accent); }
   .sponsor-tier-head { justify-content: flex-start; text-align: left; }
   .sponsor-tier-label { text-align: left; }
   .sponsor-logos { justify-content: flex-start; gap: 16px; }
+  .sponsor-tier.gold .sponsor-logos,
+  .sponsor-tier.silver .sponsor-logos { flex-wrap: wrap; gap: 16px; }
+  .sponsor-tier.gold .sponsor-logo,
+  .sponsor-tier.silver .sponsor-logo { flex: 0 1 auto; }
   .sponsor-cta-row { justify-content: flex-start; text-align: left; }
 }
 
@@ -2715,11 +2692,11 @@ body.cursor3d-active * { cursor: none !important; }
     <div class="stats-row reveal">
       <div class="stat-card" style="--accent: var(--red)">
         <div class="stat-val" data-target="1500" data-suffix="+">0+</div>
-        <div class="stat-label">Expected in 2026</div>
+        <div class="stat-label">Quality engineers gathering</div>
       </div>
       <div class="stat-card" style="--accent: var(--cyan)">
         <div class="stat-val" data-target="20" data-suffix="+">0+</div>
-        <div class="stat-label">Speakers</div>
+        <div class="stat-label">Speakers from the field</div>
       </div>
       <div class="stat-card" style="--accent: var(--yellow)">
         <div class="stat-val" data-target="4" data-suffix="th">0th</div>
@@ -2840,6 +2817,14 @@ body.cursor3d-active * { cursor: none !important; }
       <div class="overline">Partners &amp; Sponsors</div>
       <h2 class="sponsors-heading">Backed by the leaders of the QE industry</h2>
     </div>
+    <div class="sponsor-tier title reveal">
+      <div class="sponsor-tier-head">
+        <div class="sponsor-tier-label">Title Sponsor</div>
+      </div>
+      <div class="sponsor-logos">
+        <div class="sponsor-logo"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
+      </div>
+    </div>
     <div class="sponsor-tier platinum reveal">
       <div class="sponsor-tier-head">
         <div class="sponsor-tier-label">Platinum Partners</div>
@@ -2852,7 +2837,7 @@ body.cursor3d-active * { cursor: none !important; }
     </div>
     <div class="sponsor-tier gold reveal">
       <div class="sponsor-tier-head">
-        <div class="sponsor-tier-label">Gold Partners</div>
+        <div class="sponsor-tier-label">Gold Sponsors</div>
       </div>
       <div class="sponsor-logos">
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
@@ -2864,7 +2849,7 @@ body.cursor3d-active * { cursor: none !important; }
     </div>
     <div class="sponsor-tier silver reveal">
       <div class="sponsor-tier-head">
-        <div class="sponsor-tier-label">Silver &amp; Community Partners</div>
+        <div class="sponsor-tier-label">Silver Sponsors</div>
       </div>
       <div class="sponsor-logos">
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
@@ -3509,21 +3494,27 @@ body.cursor3d-active * { cursor: none !important; }
       </div>
     </div>
     <div class="container">
-      <!-- Logo + Event Info -->
       <div class="footer-top-row">
+        <!-- Logo + Social -->
         <div class="footer-logo-block">
           <svg class="qe-logo-svg qe-logo-footer" viewBox="0 0 127 54" role="img" aria-label="QE Conclave"><use href="#qeLogo"/></svg>
-          <div class="footer-logo-divider"></div>
-          <div class="footer-event-info">
-            <span>Hyderabad</span>
-            <span>11 December, 2026</span>
-            <span>4-8 PM IST</span>
+          <div class="footer-social-wrap">
+            <div class="footer-social-label">Follow Us:</div>
+            <div class="footer-social">
+              <a href="https://www.linkedin.com/company/qe-conclave/" target="_blank" rel="noopener" class="footer-social-link is-linkedin" aria-label="LinkedIn">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.94 5a2 2 0 1 1-4-.002 2 2 0 0 1 4 .002zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z"/></svg>
+              </a>
+              <a href="https://www.youtube.com/channel/UC7HgCxzvHx_PPGeUcD7URRw" target="_blank" rel="noopener" class="footer-social-link is-youtube" aria-label="YouTube">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.7 12 3.7 12 3.7s-7.5 0-9.4.4A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.4 9.4.4 9.4.4s7.5 0 9.4-.4a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+              </a>
+              <a href="https://www.instagram.com/qeconclave/" target="_blank" rel="noopener" class="footer-social-link is-instagram" aria-label="Instagram">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+              </a>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Nav Links -->
-      <div class="footer-content-row">
+        <!-- Nav Links -->
         <div class="footer-nav-grid">
           <a href="#">About</a>
           <a href="#speakers">Speakers</a>
@@ -3532,19 +3523,6 @@ body.cursor3d-active * { cursor: none !important; }
           <a href="#sponsors">Sponsors</a>
           <a href="#">Past Events</a>
         </div>
-      </div>
-
-      <!-- Social + Tagline -->
-      <div class="footer-social-tagline">
-        <div class="footer-social">
-          <a href="#" aria-label="LinkedIn">
-            <img src="linkedin-box-fill.svg" alt="LinkedIn" width="23" height="23">
-          </a>
-          <a href="#" aria-label="YouTube">
-            <img src="Social.svg" alt="YouTube" width="23" height="23">
-          </a>
-        </div>
-        <div class="footer-tagline">Join us on this transformative journey, where excellence meets innovation, and leadership takes center stage.</div>
       </div>
     </div>
   </div>
