@@ -180,6 +180,69 @@ a:hover { color: var(--ink-accent); }
   text-decoration: none;
 }
 .nav-links a:hover { color: var(--text-primary); }
+/* Past Editions dropdown */
+.nav-dropdown { position: relative; display: inline-flex; align-items: center; }
+.nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+.nav-dropdown-trigger:hover,
+.nav-dropdown:hover .nav-dropdown-trigger,
+.nav-dropdown:focus-within .nav-dropdown-trigger { color: var(--text-primary); }
+.nav-dropdown-trigger svg { width: 12px; height: 12px; transition: transform 0.2s; }
+.nav-dropdown:hover .nav-dropdown-trigger svg,
+.nav-dropdown:focus-within .nav-dropdown-trigger svg { transform: rotate(180deg); }
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  min-width: 210px;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background: rgba(10,11,14,0.96);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  z-index: 120;
+}
+.nav-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -16px; left: 0; right: 0; height: 16px;
+}
+.nav-dropdown:hover .nav-dropdown-menu,
+.nav-dropdown:focus-within .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.nav-dropdown-menu a {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.82);
+  padding: 10px 14px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-dropdown-menu a:hover { color: #fff; background: rgba(255,255,255,0.06); }
 .nav-links a.btn-register,
 .btn-register {
   font-family: var(--font-ui);
@@ -1923,32 +1986,30 @@ a:hover { color: var(--ink-accent); }
   max-width: var(--grid-max);
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 24px;
-  padding: clamp(30px, 4vw, 56px);
+  border-radius: 30px;
+  padding: clamp(36px, 4.5vw, 70px);
   background:
-    radial-gradient(60% 110% at 100% 0%, rgba(242,235,83,0.14), transparent 55%),
+    radial-gradient(60% 110% at 100% 0%, rgba(242,235,83,0.16), transparent 55%),
     linear-gradient(150deg, #0c0d10 0%, #14151b 55%, #0a0b0e 100%);
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.55);
 }
-/* faint audience photo bleeding in from the right */
 .cta-banner::after {
   content: '';
   position: absolute;
-  inset: 0 0 0 48%;
-  background: url('DSC04951.png') center/cover no-repeat;
-  opacity: 0.14;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 65%);
-  mask-image: linear-gradient(90deg, transparent, #000 65%);
+  inset: 0 0 0 46%;
+  background: url('DSC04951.png') center right / cover no-repeat;
+  opacity: 0.16;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 70%);
+  mask-image: linear-gradient(90deg, transparent, #000 70%);
   pointer-events: none;
 }
-/* top-right spotlight glow */
 .cta-glow {
   position: absolute;
   top: -130px; right: -70px;
-  width: 360px; height: 360px;
+  width: 380px; height: 380px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(242,235,83,0.45), rgba(242,235,83,0) 65%);
+  background: radial-gradient(circle, rgba(242,235,83,0.42), rgba(242,235,83,0) 65%);
   filter: blur(16px);
   pointer-events: none;
   z-index: 0;
@@ -1957,174 +2018,179 @@ a:hover { color: var(--ink-accent); }
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 1px 1fr;
-  gap: 0 clamp(36px, 5vw, 80px);
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(40px, 5vw, 70px);
   align-items: center;
-  padding-bottom: clamp(28px, 4vw, 44px);
 }
-.cta-col { display: flex; flex-direction: column; }
+.cta-col { display: flex; flex-direction: column; min-width: 0; }
+.cta-col.left {
+  border-right: 1px solid rgba(255,255,255,0.16);
+  padding-right: clamp(30px, 4vw, 70px);
+}
 .cta-col.right { align-items: flex-start; }
-/* Left column */
-.cta-eyebrow-row { display: flex; align-items: center; gap: 18px; margin-bottom: clamp(18px, 3vw, 30px); }
-.cta-icon-badge {
-  width: 56px; height: 56px;
+/* Left panel */
+.cta-icon-circle {
+  width: 78px; height: 78px;
   border-radius: 50%;
   border: 1px solid rgba(242,235,83,0.4);
+  background: rgba(255,255,255,0.04);
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
   display: inline-flex; align-items: center; justify-content: center;
   color: var(--yellow);
-  flex-shrink: 0;
+  margin-bottom: 30px;
 }
-.cta-icon-badge svg { width: 26px; height: 26px; }
-.cta-eyebrow {
+.cta-icon-circle svg { width: 34px; height: 34px; }
+.cta-label {
   font-family: var(--font-ui);
-  font-size: clamp(17px, 1.6vw, 22px);
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-size: clamp(42px, 4vw, 62px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #fff;
-  line-height: 1.1;
+  margin: 0;
 }
-.cta-rule { width: 70px; height: 3px; background: var(--yellow); margin-top: 12px; border-radius: 2px; }
-.cta-big {
+.cta-label::after {
+  content: '';
+  display: block;
+  width: 84px; height: 5px;
+  border-radius: 10px;
+  background: var(--yellow);
+  margin-top: 22px;
+}
+.cta-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 38px;
+}
+.cta-free {
   font-family: var(--font-display);
-  font-size: clamp(72px, 11vw, 150px);
-  font-weight: 800;
+  font-size: clamp(28px, 2.4vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 0.92;
-  background: linear-gradient(180deg, #FBF6A0 0%, #F2EB53 42%, #C9A227 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--yellow);
 }
 .cta-note {
   font-family: var(--font-ui);
+  font-size: clamp(22px, 2vw, 32px);
   font-weight: 500;
-  color: var(--text-secondary);
-  margin-top: 14px;
-  font-size: clamp(18px, 1.8vw, 24px);
+  line-height: 1.2;
+  color: rgba(255,255,255,0.72);
 }
-/* Divider + star badge */
-.cta-divider {
-  position: relative;
-  align-self: stretch;
-  width: 1px;
-  background: rgba(255,255,255,0.12);
-  justify-self: center;
+/* Right panel */
+.cta-miss {
+  font-family: var(--font-ui);
+  font-size: clamp(24px, 2.2vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 16px;
 }
-.cta-divider-badge {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 52px; height: 52px;
-  border-radius: 50%;
-  background: var(--black);
-  border: 1px solid rgba(242,235,83,0.5);
-  display: inline-flex; align-items: center; justify-content: center;
-  color: var(--yellow);
-  box-shadow: 0 0 24px rgba(242,235,83,0.3);
-}
-.cta-divider-badge svg { width: 22px; height: 22px; }
-/* Right column */
 .cta-headline {
   font-family: var(--font-display);
-  font-size: clamp(30px, 4vw, 56px);
+  font-size: clamp(42px, 4vw, 62px);
   font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
   color: #fff;
-  margin: 14px 0 28px;
+  margin: 0 0 32px;
 }
 .cta-register-btn {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
+  min-height: 78px;
   background: var(--yellow);
   color: #0E1012;
   font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: clamp(17px, 1.7vw, 21px);
-  padding: 12px 20px;
+  font-weight: 800;
+  font-size: clamp(19px, 1.9vw, 26px);
+  padding: 0 24px;
   border-radius: 0;
   text-decoration: none;
-  box-shadow: 0 16px 44px rgba(242,235,83,0.30);
+  box-shadow: 0 22px 56px rgba(242,235,83,0.30);
   transition: transform 0.2s, box-shadow 0.2s;
 }
-.cta-register-btn:hover { transform: translateY(-2px); box-shadow: 0 22px 54px rgba(242,235,83,0.45); }
+.cta-register-btn:hover { transform: translateY(-2px); box-shadow: 0 26px 64px rgba(242,235,83,0.45); }
 .cta-register-circle {
-  width: 40px; height: 40px;
+  width: 48px; height: 48px;
   border-radius: 50%;
   background: #0E1012;
   color: var(--yellow);
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.cta-register-circle svg { width: 18px; height: 18px; }
+.cta-register-circle svg { width: 22px; height: 22px; }
 .cta-register-label { flex: 1; text-align: center; }
-.cta-register-arrow { width: 22px; height: 22px; flex-shrink: 0; }
+.cta-register-arrow { width: 26px; height: 26px; flex-shrink: 0; }
 .cta-seats {
-  display: flex; align-items: center; gap: 10px;
+  display: flex; align-items: center; gap: 12px;
   font-family: var(--font-ui);
   font-weight: 500;
-  color: var(--text-secondary);
-  margin-top: 22px;
-  font-size: clamp(15px, 1.5vw, 18px);
+  color: rgba(255,255,255,0.74);
+  margin-top: 26px;
+  font-size: clamp(17px, 1.6vw, 22px);
 }
-.cta-seats svg { width: 20px; height: 20px; color: var(--yellow); flex-shrink: 0; }
+.cta-seats svg { width: 24px; height: 24px; color: var(--yellow); flex-shrink: 0; }
 .cta-seats strong { color: var(--yellow); font-weight: 700; }
-/* Date / venue bar */
+/* Date / venue pill */
 .cta-datebar {
   position: relative;
   z-index: 1;
+  margin-top: clamp(40px, 5vw, 60px);
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(20px, 4vw, 48px);
-  padding: clamp(16px, 2vw, 22px) clamp(20px, 3vw, 36px);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 999px;
+  background: rgba(6,12,22,0.72);
+  border: 1px solid rgba(255,255,255,0.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  overflow: hidden;
 }
-.cta-datebar-item { display: flex; align-items: center; gap: 16px; }
-.cta-datebar-item + .cta-datebar-item {
-  border-left: 1px solid rgba(255,255,255,0.08);
-  padding-left: clamp(20px, 3vw, 44px);
+.cta-datebar-item {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: clamp(20px, 2.4vw, 30px) clamp(28px, 4vw, 54px);
 }
+.cta-datebar-item + .cta-datebar-item { border-left: 1px solid rgba(255,255,255,0.16); }
 .cta-datebar-icon {
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  background: rgba(242,235,83,0.08);
-  border: 1px solid rgba(242,235,83,0.22);
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
   color: var(--yellow);
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.cta-datebar-icon svg { width: 22px; height: 22px; }
+.cta-datebar-icon svg { width: 28px; height: 28px; }
 .cta-datebar-label {
   font-family: var(--font-ui);
-  font-size: 12px; font-weight: 700;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 4px;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.58);
+  margin-bottom: 6px;
 }
 .cta-datebar-value {
   font-family: var(--font-display);
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 600;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 700;
   color: #fff;
 }
-@media (max-width: 768px) {
-  .cta-banner-section { padding: 24px 0 56px; }
-  .cta-banner { border-radius: 18px; padding: 28px 22px; }
-  .cta-banner::after { inset: 55% 0 0 0; -webkit-mask-image: linear-gradient(0deg, transparent, #000 70%); mask-image: linear-gradient(0deg, transparent, #000 70%); }
-  .cta-banner-grid { grid-template-columns: 1fr; gap: 32px; padding-bottom: 28px; }
-  .cta-divider { width: auto; height: 1px; }
-  .cta-divider-badge { display: none; }
-  .cta-big { font-size: clamp(64px, 22vw, 110px); }
+@media (max-width: 860px) {
+  .cta-banner { border-radius: 22px; padding: 32px 24px; }
+  .cta-banner::after { inset: 56% 0 0 0; -webkit-mask-image: linear-gradient(0deg, transparent, #000 72%); mask-image: linear-gradient(0deg, transparent, #000 72%); }
+  .cta-banner-grid { grid-template-columns: 1fr; gap: 38px; }
+  .cta-col.left { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.16); padding-right: 0; padding-bottom: 36px; }
   .cta-register-btn { max-width: none; }
-  .cta-datebar { grid-template-columns: 1fr; gap: 16px; }
-  .cta-datebar-item + .cta-datebar-item { border-left: 0; padding-left: 0; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); }
+  .cta-datebar { grid-template-columns: 1fr; border-radius: 26px; }
+  .cta-datebar-item + .cta-datebar-item { border-left: 0; border-top: 1px solid rgba(255,255,255,0.16); }
 }
 
 /* ═══ 13 SPONSORS ═══ */
@@ -2845,8 +2911,10 @@ a:hover { color: var(--ink-accent); }
 [data-theme="light"] .footer { background: var(--surface); }
 
 /* Nav sits over the (always-dark) hero — keep its text light until scrolled past */
-[data-theme="light"] .nav:not(.scrolled) .nav-links a { color: rgba(255,255,255,0.82); }
-[data-theme="light"] .nav:not(.scrolled) .nav-links a:hover { color: #fff; }
+[data-theme="light"] .nav:not(.scrolled) .nav-links a,
+[data-theme="light"] .nav:not(.scrolled) .nav-dropdown-trigger { color: rgba(255,255,255,0.82); }
+[data-theme="light"] .nav:not(.scrolled) .nav-links a:hover,
+[data-theme="light"] .nav:not(.scrolled) .nav-dropdown-trigger:hover { color: #fff; }
 /* Register button stays dark-on-yellow even over the hero in light mode */
 [data-theme="light"] .nav:not(.scrolled) .nav-links a.btn-register,
 [data-theme="light"] .nav:not(.scrolled) .nav-links a.btn-register:hover { color: #0E1012; }
@@ -2957,6 +3025,17 @@ body.cursor3d-active * { cursor: none !important; }
       <a href="#agenda">Agenda</a>
       <a href="#venue">Venue</a>
       <a href="#sponsors">Sponsors</a>
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger" aria-haspopup="true" aria-expanded="false">
+          Past Editions
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-menu" role="menu">
+          <a href="https://qeconclave.com/" target="_blank" rel="noopener" role="menuitem">QE Conclave 2025</a>
+          <a href="https://qeconclave.com/qe-conclave-2024/" target="_blank" rel="noopener" role="menuitem">QE Conclave 2024</a>
+          <a href="https://qeconclave.com/qe-conclave-2023/" target="_blank" rel="noopener" role="menuitem">QE Conclave 2023</a>
+        </div>
+      </div>
       <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle light/dark mode">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -3049,7 +3128,7 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="stat-label">Speakers</div>
       </div>
       <div class="stat-card" style="--accent: var(--yellow)">
-        <div class="stat-val" data-target="200" data-suffix="+">0+</div>
+        <div class="stat-val" data-target="700" data-suffix="+">0+</div>
         <div class="stat-label">Companies Represented</div>
       </div>
       <div class="stat-card" style="--accent: var(--red)">
@@ -3169,21 +3248,15 @@ body.cursor3d-active * { cursor: none !important; }
     <div class="cta-glow" aria-hidden="true"></div>
     <div class="cta-banner-grid">
       <div class="cta-col left">
-        <div class="cta-eyebrow-row">
-          <span class="cta-icon-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
-          <div>
-            <div class="cta-eyebrow">In Person</div>
-            <div class="cta-rule" aria-hidden="true"></div>
-          </div>
+        <span class="cta-icon-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+        <h2 class="cta-label">In Person</h2>
+        <div class="cta-price-row">
+          <span class="cta-free">Free</span>
+          <span class="cta-note">Registration Required</span>
         </div>
-        <div class="cta-big">Free</div>
-        <div class="cta-note">Registration Required</div>
-      </div>
-      <div class="cta-divider" aria-hidden="true">
-        <span class="cta-divider-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
       </div>
       <div class="cta-col right">
-        <div class="cta-eyebrow">Don't Miss Out</div>
+        <p class="cta-miss">Don't Miss Out</p>
         <h3 class="cta-headline">Your Seat is Waiting!</h3>
         <a href="#register-form" class="cta-register-btn">
           <span class="cta-register-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
