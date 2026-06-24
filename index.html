@@ -635,6 +635,12 @@ a:hover { color: var(--ink-accent); }
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
 }
+.stat-suffix {
+  font-size: 0.42em;
+  font-weight: 700;
+  vertical-align: super;
+  margin-left: 2px;
+}
 .stat-label {
   font-family: var(--font-ui);
   font-size: 12px;
@@ -3132,7 +3138,7 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="stat-label">Companies Represented</div>
       </div>
       <div class="stat-card" style="--accent: var(--red)">
-        <div class="stat-val" data-target="4" data-suffix="th">0th</div>
+        <div class="stat-val" data-target="4" data-suffix="th">0<sup class="stat-suffix">th</sup></div>
         <div class="stat-label">Edition</div>
       </div>
     </div>
@@ -4325,6 +4331,8 @@ setInterval(updateCountdown, 1000);
 function animateCountUp(el) {
   const target = parseInt(el.dataset.target);
   const suffix = el.dataset.suffix || '';
+  // Ordinal suffixes (th/st/nd/rd) render as a superscript; symbols like "+" stay inline
+  const suffixHtml = /^[a-z]+$/i.test(suffix) ? '<sup class="stat-suffix">' + suffix + '</sup>' : suffix;
   const duration = 2000;
   const startTime = performance.now();
   function update(currentTime) {
@@ -4332,7 +4340,7 @@ function animateCountUp(el) {
     const progress = Math.min(elapsed / duration, 1);
     const eased = 1 - Math.pow(1 - progress, 3);
     const current = Math.round(eased * target);
-    el.textContent = current.toLocaleString() + suffix;
+    el.innerHTML = current.toLocaleString() + suffixHtml;
     if (progress < 1) requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
