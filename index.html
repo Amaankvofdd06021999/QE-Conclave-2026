@@ -150,6 +150,27 @@ a:hover { color: var(--ink-accent); }
 [data-theme="light"] .nav.scrolled .nav-logo .qe-logo-svg,
 [data-theme="light"] .footer-logo-block .qe-logo-svg { color: #0E1012; }
 .nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 42px; height: 42px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 9px;
+}
+.nav-burger span {
+  display: block;
+  width: 100%; height: 2px;
+  background: var(--text-primary);
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.2s;
+}
+.nav-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 .nav-links a {
   font-family: var(--font-ui);
   font-size: 15px;
@@ -2909,8 +2930,45 @@ a:hover { color: var(--ink-accent); }
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
   :root { --grid-margin: 20px; }
-  .nav-links { display: none; }
-  .nav-inner { justify-content: flex-end; }
+  .nav-inner { justify-content: space-between; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 12px var(--grid-margin) 20px;
+    background: rgba(3,3,3,0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 24px 50px rgba(0,0,0,0.5);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links > a { padding: 12px 4px; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-dropdown { width: 100%; align-items: stretch; flex-direction: column; }
+  .nav-dropdown-trigger { width: 100%; justify-content: space-between; padding: 12px 4px; font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .nav-dropdown-menu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    padding: 0 0 4px 14px;
+  }
+  .nav-dropdown-menu::before { display: none; }
+  .nav-dropdown-menu a { padding: 9px 4px; }
+  .theme-toggle { align-self: flex-start; margin-top: 8px; }
+  .btn-register { width: 100%; text-align: center; margin-top: 10px; padding: 13px 24px; }
   .hero-title { font-size: 48px; letter-spacing: 0.04em; }
   .hero-bottom { flex-direction: column; gap: 32px; align-items: flex-start; }
   .hero-bottom-text p { font-size: 16px; }
@@ -3147,7 +3205,7 @@ body.cursor3d-active * { cursor: none !important; }
 <nav class="nav" id="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo" aria-label="QE Conclave"><svg class="qe-logo-svg" viewBox="0 0 127 54" role="img"><use href="#qeLogo"/></svg></a>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
       <a href="#event-statement">About</a>
       <a href="#speakers">Speakers</a>
       <a href="#agenda">Schedule</a>
@@ -3169,6 +3227,9 @@ body.cursor3d-active * { cursor: none !important; }
       </button>
       <a href="#register-form" class="btn-register">Register Now</a>
     </div>
+    <button type="button" class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -4421,6 +4482,23 @@ function onNavScroll() {
 }
 window.addEventListener('scroll', onNavScroll, { passive: true });
 onNavScroll();
+
+// Mobile menu toggle
+(function () {
+  const burger = document.getElementById('navBurger');
+  const links = document.getElementById('navLinks');
+  if (!burger || !links) return;
+  const setOpen = (open) => {
+    links.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  burger.addEventListener('click', () => setOpen(!links.classList.contains('open')));
+  // Close after tapping a real navigation link (not the Past Editions toggle)
+  links.querySelectorAll('a[href^="#"], .nav-dropdown-menu a').forEach(a => {
+    a.addEventListener('click', () => setOpen(false));
+  });
+})();
 
 // Venue photo slideshow — cross-fade through HICC images every 4 seconds
 (function() {
