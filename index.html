@@ -148,28 +148,7 @@ a:hover { color: var(--ink-accent); }
 .nav-logo .qe-logo-svg { height: 32px; }
 /* On light backgrounds the white wordmark must become dark */
 [data-theme="light"] .nav.scrolled .nav-logo .qe-logo-svg,
-[data-theme="light"] .nav.scrolled ~ .fly-logo .qe-logo-svg,
 [data-theme="light"] .footer-logo-block .qe-logo-svg { color: #0E1012; }
-
-/* ── Flying logo: starts centered in the hero, docks into the nav on scroll ── */
-.fly-logo {
-  position: fixed;
-  top: 0; left: 0;
-  z-index: 110;
-  display: block;
-  transform-origin: top left;
-  will-change: transform;
-  pointer-events: auto;
-}
-.fly-logo .qe-logo-svg { height: 32px; color: #fff; filter: drop-shadow(0 4px 24px rgba(0,0,0,0.45)); }
-@media (min-width: 769px) {
-  /* The real nav logo just reserves layout space; the fly-logo overlays it */
-  .nav-logo { visibility: hidden; }
-}
-@media (max-width: 768px) {
-  .fly-logo { display: none; }
-  .nav-logo { visibility: visible; }
-}
 .nav-links { display: flex; gap: 32px; align-items: center; }
 .nav-links a {
   font-family: var(--font-ui);
@@ -325,10 +304,33 @@ a:hover { color: var(--ink-accent); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   text-align: center;
-  padding-top: calc(12vh + 150px);
+  padding-top: 80px;
   animation: fadeUp 0.6s ease both;
+}
+.hero-logo-lockup {
+  display: inline-flex;
+  align-items: stretch;
+  gap: clamp(8px, 1vw, 14px);
+  margin-bottom: clamp(22px, 3.5vw, 40px);
+}
+.hero-logo-lockup .qe-logo-svg {
+  height: clamp(58px, 8.5vw, 124px);
+  color: #fff;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.45));
+}
+.hero-logo-year {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.9vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.06em;
+  line-height: 0.92;
+  display: flex;
+  align-items: center;
 }
 .hero-title {
   font-family: var(--font-ui);
@@ -927,6 +929,24 @@ a:hover { color: var(--ink-accent); }
 .speaker-card:hover .speaker-img img {
   filter: grayscale(0);
 }
+.speaker-linkedin {
+  position: absolute;
+  bottom: 12px; right: 12px;
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s, transform 0.25s, background 0.2s, border-color 0.2s;
+  z-index: 2;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.speaker-card:hover .speaker-linkedin { opacity: 1; transform: translateY(0); }
+.speaker-linkedin:hover { background: #0A66C2; border-color: #0A66C2; }
+.speaker-linkedin svg { width: 18px; height: 18px; }
 .speaker-name {
   font-family: var(--font-ui);
   font-size: 18px;
@@ -1197,7 +1217,7 @@ a:hover { color: var(--ink-accent); }
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  min-width: 60px;
+  width: 124px;            /* fixed so every talk title lines up */
 }
 .session-avatars { display: flex; align-items: center; }
 .session-avatar {
@@ -1275,33 +1295,55 @@ a:hover { color: var(--ink-accent); }
 /* Break variant */
 .session-row.is-break {
   cursor: default;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.015);
+  padding: 16px;
+  background: rgba(242,235,83,0.05);
+  justify-content: center;
+  gap: 18px;
 }
-.session-row.is-break:hover { background: rgba(255,255,255,0.015); padding-left: 16px; }
+.session-row.is-break:hover { background: rgba(242,235,83,0.08); padding-left: 16px; }
+.session-row.is-break .session-lead { width: auto; }
+.session-row.is-break .session-content { flex: 0 1 auto; }
 .session-row.is-break .session-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-tertiary);
-  font-style: italic;
+  font-size: clamp(17px, 1.8vw, 21px);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-style: normal;
 }
-.session-row.is-break:hover .session-title { color: var(--text-tertiary); }
+.session-row.is-break:hover .session-title { color: #fff; }
+.session-row.is-break .session-meta {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+}
 .session-row.is-break .session-time .time-start,
 .session-row.is-break .session-time .time-end {
-  color: var(--text-tertiary);
-  font-weight: 600;
-  font-size: 16px;
+  color: var(--yellow);
+  font-weight: 700;
+  font-size: 17px;
 }
-.session-row.is-break:hover .session-time .time-start { color: var(--text-tertiary); }
+.session-row.is-break:hover .session-time .time-start { color: var(--yellow); }
 .session-row.is-break .session-break-tag {
   font-family: var(--font-ui);
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--text-tertiary);
-  opacity: 0.65;
+  color: var(--yellow);
+  border: 1px solid rgba(242,235,83,0.5);
+  padding: 4px 10px;
+  border-radius: 999px;
 }
+/* Panel discussion row — centered, stacked layout */
+.session-row[data-track="panel"] {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+.session-row[data-track="panel"] .session-lead { width: auto; justify-content: center; }
+.session-row[data-track="panel"] .session-content { flex: 0 1 auto; }
+.session-row[data-track="panel"] .session-meta { align-items: center; text-align: center; }
+.session-row[data-track="panel"]:hover { padding-left: 16px; }
 .session-track-tag {
   font-family: var(--font-ui);
   font-size: 12px;
@@ -1591,7 +1633,8 @@ a:hover { color: var(--ink-accent); }
   z-index: 0;
   pointer-events: none;
 }
-.venue-hero-video video {
+.venue-hero-video video,
+.venue-hero-video img {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -1986,14 +2029,14 @@ a:hover { color: var(--ink-accent); }
 }
 
 /* ═══ CTA BANNER ═══ */
-.cta-banner-section { padding: 40px 0 80px; }
+.cta-banner-section { padding: 30px 0 48px; }
 .cta-banner {
   position: relative;
   max-width: var(--grid-max);
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 30px;
-  padding: clamp(36px, 4.5vw, 70px);
+  border-radius: 26px;
+  padding: clamp(28px, 3.4vw, 50px);
   background:
     radial-gradient(60% 110% at 100% 0%, rgba(242,235,83,0.16), transparent 55%),
     linear-gradient(150deg, #0c0d10 0%, #14151b 55%, #0a0b0e 100%);
@@ -2036,16 +2079,16 @@ a:hover { color: var(--ink-accent); }
 .cta-col.right { align-items: flex-start; }
 /* Left panel */
 .cta-icon-circle {
-  width: 78px; height: 78px;
+  width: 62px; height: 62px;
   border-radius: 50%;
   border: 1px solid rgba(242,235,83,0.4);
   background: rgba(255,255,255,0.04);
   box-shadow: inset 0 0 30px rgba(255,255,255,0.05);
   display: inline-flex; align-items: center; justify-content: center;
   color: var(--yellow);
-  margin-bottom: 30px;
+  margin-bottom: 22px;
 }
-.cta-icon-circle svg { width: 34px; height: 34px; }
+.cta-icon-circle svg { width: 30px; height: 30px; }
 .cta-label {
   font-family: var(--font-ui);
   font-size: clamp(42px, 4vw, 62px);
@@ -2062,14 +2105,14 @@ a:hover { color: var(--ink-accent); }
   width: 84px; height: 5px;
   border-radius: 10px;
   background: var(--yellow);
-  margin-top: 22px;
+  margin-top: 16px;
 }
 .cta-price-row {
   display: flex;
   align-items: baseline;
-  gap: 18px;
+  gap: 16px;
   flex-wrap: wrap;
-  margin-top: 38px;
+  margin-top: 24px;
 }
 .cta-free {
   font-family: var(--font-display);
@@ -2081,9 +2124,9 @@ a:hover { color: var(--ink-accent); }
 }
 .cta-note {
   font-family: var(--font-ui);
-  font-size: clamp(22px, 2vw, 32px);
+  font-size: clamp(28px, 2.4vw, 40px);
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.1;
   color: rgba(255,255,255,0.72);
 }
 /* Right panel */
@@ -2098,20 +2141,20 @@ a:hover { color: var(--ink-accent); }
 }
 .cta-headline {
   font-family: var(--font-display);
-  font-size: clamp(42px, 4vw, 62px);
+  font-size: clamp(38px, 3.6vw, 56px);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.03em;
   color: #fff;
-  margin: 0 0 32px;
+  margin: 0 0 24px;
 }
 .cta-register-btn {
   display: inline-flex;
   align-items: center;
   gap: 18px;
   width: 100%;
-  max-width: 460px;
-  min-height: 78px;
+  max-width: 440px;
+  min-height: 66px;
   background: var(--yellow);
   color: #0E1012;
   font-family: var(--font-ui);
@@ -2140,7 +2183,7 @@ a:hover { color: var(--ink-accent); }
   font-family: var(--font-ui);
   font-weight: 500;
   color: rgba(255,255,255,0.74);
-  margin-top: 26px;
+  margin-top: 18px;
   font-size: clamp(17px, 1.6vw, 22px);
 }
 .cta-seats svg { width: 24px; height: 24px; color: var(--yellow); flex-shrink: 0; }
@@ -2149,7 +2192,7 @@ a:hover { color: var(--ink-accent); }
 .cta-datebar {
   position: relative;
   z-index: 1;
-  margin-top: clamp(40px, 5vw, 60px);
+  margin-top: clamp(26px, 3vw, 40px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   border-radius: 999px;
@@ -2162,30 +2205,24 @@ a:hover { color: var(--ink-accent); }
 .cta-datebar-item {
   display: flex;
   align-items: center;
-  gap: 22px;
-  padding: clamp(20px, 2.4vw, 30px) clamp(28px, 4vw, 54px);
+  justify-content: center;
+  gap: 18px;
+  padding: clamp(14px, 1.8vw, 22px) clamp(24px, 3.5vw, 44px);
 }
 .cta-datebar-item + .cta-datebar-item { border-left: 1px solid rgba(255,255,255,0.16); }
 .cta-datebar-icon {
-  width: 60px; height: 60px;
-  border-radius: 16px;
+  width: 50px; height: 50px;
+  border-radius: 14px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.12);
   color: var(--yellow);
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.cta-datebar-icon svg { width: 28px; height: 28px; }
-.cta-datebar-label {
-  font-family: var(--font-ui);
-  font-size: 14px; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(255,255,255,0.58);
-  margin-bottom: 6px;
-}
+.cta-datebar-icon svg { width: 24px; height: 24px; }
 .cta-datebar-value {
   font-family: var(--font-display);
-  font-size: clamp(20px, 2vw, 28px);
+  font-size: clamp(18px, 1.9vw, 26px);
   font-weight: 700;
   color: #fff;
 }
@@ -2544,6 +2581,7 @@ a:hover { color: var(--ink-accent); }
   letter-spacing: 0.04em;
   margin-bottom: 2px;
 }
+.label-optional { font-weight: 500; color: var(--text-tertiary); text-transform: none; }
 .form-group input,
 .form-group select {
   padding: 10px 14px;
@@ -3051,8 +3089,6 @@ body.cursor3d-active * { cursor: none !important; }
   </div>
 </nav>
 
-<a href="#" class="fly-logo" id="flyLogo" aria-label="QE Conclave"><svg class="qe-logo-svg" viewBox="0 0 127 54" role="img"><use href="#qeLogo"/></svg></a>
-
 <!-- 02 HERO -->
 <section class="hero qe-decor-host">
   <div class="hero-video-bg">
@@ -3062,6 +3098,10 @@ body.cursor3d-active * { cursor: none !important; }
   </div>
   <div class="container">
     <div class="hero-center">
+      <div class="hero-logo-lockup" aria-label="QE Conclave 2026">
+        <svg class="qe-logo-svg" viewBox="0 0 127 54" role="img"><use href="#qeLogo"/></svg>
+        <span class="hero-logo-year">2026</span>
+      </div>
       <h1 class="hero-headline">Beyond Assurance: Engineering<br class="hl-break">Trust in the Age of AI</h1>
       <div class="hero-actions">
         <a href="#register-form" class="btn-hero">Register Free</a>
@@ -3265,9 +3305,8 @@ body.cursor3d-active * { cursor: none !important; }
         <p class="cta-miss">Don't Miss Out</p>
         <h3 class="cta-headline">Your Seat is Waiting!</h3>
         <a href="#register-form" class="cta-register-btn">
-          <span class="cta-register-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
           <span class="cta-register-label">Register Now</span>
-          <svg class="cta-register-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span class="cta-register-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
         </a>
         <div class="cta-seats">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -3278,17 +3317,11 @@ body.cursor3d-active * { cursor: none !important; }
     <div class="cta-datebar">
       <div class="cta-datebar-item">
         <span class="cta-datebar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
-        <div>
-          <div class="cta-datebar-label">Date</div>
-          <div class="cta-datebar-value">11 December 2026</div>
-        </div>
+        <div class="cta-datebar-value">11 December 2026</div>
       </div>
       <div class="cta-datebar-item">
         <span class="cta-datebar-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
-        <div>
-          <div class="cta-datebar-label">Venue</div>
-          <div class="cta-datebar-value">Hyderabad, India</div>
-        </div>
+        <div class="cta-datebar-value">Hyderabad, India</div>
       </div>
     </div>
   </div>
@@ -3312,10 +3345,9 @@ body.cursor3d-active * { cursor: none !important; }
     </div>
     <div class="sponsor-tier platinum reveal">
       <div class="sponsor-tier-head">
-        <div class="sponsor-tier-label">Platinum Partners</div>
+        <div class="sponsor-tier-label">Platinum Sponsors</div>
       </div>
       <div class="sponsor-logos">
-        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
       </div>
@@ -3325,7 +3357,6 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="sponsor-tier-label">Gold Sponsors</div>
       </div>
       <div class="sponsor-logos">
-        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
@@ -3341,8 +3372,6 @@ body.cursor3d-active * { cursor: none !important; }
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
         <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
-        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
-        <div class="sponsor-logo placeholder"><span>Your Logo Here</span></div>
       </div>
     </div>
     <div class="sponsor-cta-row">
@@ -3354,6 +3383,7 @@ body.cursor3d-active * { cursor: none !important; }
     <div class="sponsors-past-toggle reveal" id="past-sponsors">
       <div class="sponsors-past-label">Past Sponsors &middot; Editions 2023–2025</div>
       <div class="sponsors-past-grid">
+        <div class="sponsor-logo"><img src="https://logo.clearbit.com/tricentis.com" alt="Tricentis"></div>
         <div class="sponsor-logo"><img src="logo-qualizeal.png" alt="QualiZeal"></div>
         <div class="sponsor-logo"><img src="browserstack-logo-600x315-1.webp" alt="BrowserStack"></div>
         <div class="sponsor-logo"><img src="Logo_horizontal-e1755069557817.png" alt="Context AI"></div>
@@ -3383,84 +3413,84 @@ body.cursor3d-active * { cursor: none !important; }
     </div>
     <div class="speakers-grid">
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakercurrent/Image.jpg" alt="Priya Narayanan"></div>
+        <div class="speaker-img"><img src="speakercurrent/Image.jpg" alt="Priya Narayanan"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Priya%20Narayanan" target="_blank" rel="noopener" aria-label="Priya Narayanan on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Priya Narayanan</div>
         <div class="speaker-title">VP of Engineering</div>
         <div class="speaker-company">Atlassian</div>
         <div class="speaker-talk">Building Quality Culture at Scale: Lessons from 10,000 Engineers</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakercurrent/Image-1.jpg" alt="Marcus Chen"></div>
+        <div class="speaker-img"><img src="speakercurrent/Image-1.jpg" alt="Marcus Chen"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Marcus%20Chen" target="_blank" rel="noopener" aria-label="Marcus Chen on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Marcus Chen</div>
         <div class="speaker-title">Head of Test Infrastructure</div>
         <div class="speaker-company">Stripe</div>
         <div class="speaker-talk">Zero-Flake CI: How We Achieved 99.97% Test Reliability</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakercurrent/Image-2.jpg" alt="Dr. Aisha Patel"></div>
+        <div class="speaker-img"><img src="speakercurrent/Image-2.jpg" alt="Dr. Aisha Patel"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Dr.%20Aisha%20Patel" target="_blank" rel="noopener" aria-label="Dr. Aisha Patel on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Dr. Aisha Patel</div>
         <div class="speaker-title">Director of AI Testing</div>
         <div class="speaker-company">Google DeepMind</div>
         <div class="speaker-talk">Testing AI Systems: When Your Software Writes Its Own Rules</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakercurrent/Image-3.jpg" alt="Jonas Eriksson"></div>
+        <div class="speaker-img"><img src="speakercurrent/Image-3.jpg" alt="Jonas Eriksson"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Jonas%20Eriksson" target="_blank" rel="noopener" aria-label="Jonas Eriksson on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Jonas Eriksson</div>
         <div class="speaker-title">Staff QE Architect</div>
         <div class="speaker-company">Spotify</div>
         <div class="speaker-talk">The Observable Test: Replacing Assertions with Signals</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-4.jpg" alt="Smita Mishra"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-4.jpg" alt="Smita Mishra"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Smita%20Mishra" target="_blank" rel="noopener" aria-label="Smita Mishra on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Smita Mishra</div>
         <div class="speaker-title">CEO &amp; Quality Coach</div>
         <div class="speaker-company">KiwiQA</div>
         <div class="speaker-talk">Panel: From QA Manager to QE Leader &mdash; What Actually Changes</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-3.jpg" alt="Tariq King"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-3.jpg" alt="Tariq King"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Tariq%20King" target="_blank" rel="noopener" aria-label="Tariq King on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Tariq King</div>
         <div class="speaker-title">Head of AI for Testing</div>
         <div class="speaker-company">test.ai</div>
         <div class="speaker-talk">Measuring Quality: Metrics That Actually Matter to Your CTO</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-8.jpg" alt="Nikolay Advolodkin"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-8.jpg" alt="Nikolay Advolodkin"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Nikolay%20Advolodkin" target="_blank" rel="noopener" aria-label="Nikolay Advolodkin on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Nikolay Advolodkin</div>
         <div class="speaker-title">Sr. Developer Advocate</div>
         <div class="speaker-company">Sauce Labs</div>
         <div class="speaker-talk">Self-Healing Test Suites: Agentic AI for QA Workflows</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-1.jpg" alt="Lisa Crispin"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-1.jpg" alt="Lisa Crispin"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Lisa%20Crispin" target="_blank" rel="noopener" aria-label="Lisa Crispin on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Lisa Crispin</div>
         <div class="speaker-title">Author &amp; QE Coach</div>
         <div class="speaker-company">Independent</div>
         <div class="speaker-talk">Building QE Teams That Ship: Hiring, Culture, and Retention</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-10.jpg" alt="Andrew Knight"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-10.jpg" alt="Andrew Knight"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Andrew%20Knight" target="_blank" rel="noopener" aria-label="Andrew Knight on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Andrew Knight</div>
         <div class="speaker-title">Sr. Developer Advocate</div>
         <div class="speaker-company">Applitools</div>
         <div class="speaker-talk">Component Testing in 2026: The Death of the Test Pyramid</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-2.jpg" alt="Rahul Verma"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-2.jpg" alt="Rahul Verma"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Rahul%20Verma" target="_blank" rel="noopener" aria-label="Rahul Verma on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Rahul Verma</div>
         <div class="speaker-title">Founder, Test Mile</div>
         <div class="speaker-company">Test Mile</div>
         <div class="speaker-talk">Contract Testing at Scale with Pact and PactFlow</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-6.jpg" alt="Maaret Pyhäjärvi"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-6.jpg" alt="Maaret Pyhäjärvi"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Maaret%20Pyh%C3%A4j%C3%A4rvi" target="_blank" rel="noopener" aria-label="Maaret Pyhäjärvi on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Maaret Pyhäjärvi</div>
         <div class="speaker-title">Principal Test Engineer</div>
         <div class="speaker-company">Vaisala</div>
         <div class="speaker-talk">The End of Record-and-Playback: What AI Testing Actually Looks Like</div>
       </div>
       <div class="speaker-card reveal">
-        <div class="speaker-img"><img src="speakerpast/Image-9.jpg" alt="Meeta Dash"></div>
+        <div class="speaker-img"><img src="speakerpast/Image-9.jpg" alt="Meeta Dash"><a class="speaker-linkedin" href="https://www.linkedin.com/search/results/people/?keywords=Meeta%20Dash" target="_blank" rel="noopener" aria-label="Meeta Dash on LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zM8.34 18.34V9.93H5.67v8.41h2.67zM7 8.5a1.55 1.55 0 1 0 0-3.1 1.55 1.55 0 0 0 0 3.1zm11.34 9.84v-4.62c0-2.47-1.32-3.62-3.08-3.62a2.66 2.66 0 0 0-2.41 1.33v-1.14H9.18c.04.75 0 8.41 0 8.41h2.67v-4.7c0-.24.02-.48.09-.65.19-.48.63-.98 1.36-.98.96 0 1.34.73 1.34 1.8v4.53h2.7z"/></svg></a></div>
         <div class="speaker-name">Meeta Dash</div>
         <div class="speaker-title">VP Product Management</div>
         <div class="speaker-company">Flipkart</div>
@@ -3494,7 +3524,6 @@ body.cursor3d-active * { cursor: none !important; }
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Madhu-Murty.webp" alt="Madhu Murty" loading="lazy"></div><div class="alumni-name">Madhu Murty</div><div class="alumni-co">QE Conclave 2024</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Meghana-Jagadeesh.webp" alt="Meghana Jagadeesh" loading="lazy"></div><div class="alumni-name">Meghana Jagadeesh</div><div class="alumni-co">QE Conclave 2024</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Anuradha-Amudalapalli.webp" alt="Anuradha Amudalapalli" loading="lazy"></div><div class="alumni-name">Anuradha Amudalapalli</div><div class="alumni-co">QE Conclave 2024</div></div>
-      <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Baijnath-Pandey.webp" alt="Baijnath Pandey" loading="lazy"></div><div class="alumni-name">Baijnath Pandey</div><div class="alumni-co">QE Conclave 2024</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Jeyachitra-Alagar.webp" alt="Jeyachitra Alagar" loading="lazy"></div><div class="alumni-name">Jeyachitra Alagar</div><div class="alumni-co">QE Conclave 2024</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Narain-Muralidharan.webp" alt="Narain Muralidharan" loading="lazy"></div><div class="alumni-name">Narain Muralidharan</div><div class="alumni-co">QE Conclave 2024</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Parth-Singh.webp" alt="Parth Singh" loading="lazy"></div><div class="alumni-name">Parth Singh</div><div class="alumni-co">QE Conclave 2024</div></div>
@@ -3504,7 +3533,6 @@ body.cursor3d-active * { cursor: none !important; }
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Kalilur-Rahman.webp" alt="Kalilur Rahman" loading="lazy"></div><div class="alumni-name">Kalilur Rahman</div><div class="alumni-co">QE Conclave 2023</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/LRV-Ramana.webp" alt="LRV Ramana" loading="lazy"></div><div class="alumni-name">LRV Ramana</div><div class="alumni-co">QE Conclave 2023</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Manisha-Saboo.webp" alt="Manisha Saboo" loading="lazy"></div><div class="alumni-name">Manisha Saboo</div><div class="alumni-co">QE Conclave 2023</div></div>
-      <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Parvathi-Palagummi.webp" alt="Parvathi Palagummi" loading="lazy"></div><div class="alumni-name">Parvathi Palagummi</div><div class="alumni-co">QE Conclave 2023</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Raj-Neravati.webp" alt="Raj Neravati" loading="lazy"></div><div class="alumni-name">Raj Neravati</div><div class="alumni-co">QE Conclave 2023</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Ravi-Lakkaraju.webp" alt="Ravi Lakkaraju" loading="lazy"></div><div class="alumni-name">Ravi Lakkaraju</div><div class="alumni-co">QE Conclave 2023</div></div>
       <div class="alumni-card reveal"><div class="alumni-img"><img src="pastspeakers/Santanu-Paul.webp" alt="Santanu Paul" loading="lazy"></div><div class="alumni-name">Santanu Paul</div><div class="alumni-co">QE Conclave 2023</div></div>
@@ -3994,7 +4022,7 @@ body.cursor3d-active * { cursor: none !important; }
 <section class="venue" id="venue">
   <div class="venue-hero reveal">
     <div class="venue-hero-video">
-      <video autoplay muted loop playsinline preload="none" poster="convention-center-image.jpg" data-src="venue-bg.mp4"></video>
+      <img src="convention-center-image.jpg" alt="Hyderabad International Convention Centre" loading="lazy">
     </div>
     <div class="venue-hero-inner">
       <div class="venue-card">
@@ -4072,6 +4100,12 @@ body.cursor3d-active * { cursor: none !important; }
           <div class="form-group">
             <label>Job Title</label>
             <input type="text" placeholder="Your role">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group full">
+            <label>Phone <span class="label-optional">(optional)</span></label>
+            <input type="tel" placeholder="+91 98765 43210">
           </div>
         </div>
         <button class="btn-form-submit">Get my free pass</button>
@@ -4184,51 +4218,19 @@ body.cursor3d-active * { cursor: none !important; }
   if (v.readyState >= 1) clamp();
 })();
 
-// Nav scroll behavior + flying-logo dock animation
+// Nav scroll behavior
 const nav = document.getElementById('nav');
-const flyLogo = document.getElementById('flyLogo');
-const navLogo = document.querySelector('.nav-logo');
-const LOGO_RATIO = 127 / 54;   // svg aspect ratio
-const BASE_H = 32;             // docked height (matches the nav logo)
-const HERO_SCALE = 4.0;        // logo size when centered in the hero
-const DOCK_DISTANCE = 360;     // scroll distance over which it travels to the nav
-
-const lerp = (a, b, t) => a + (b - a) * t;
-
-function updateFlyLogo() {
-  const scrolled = window.scrollY;
-  nav.classList.toggle('scrolled', scrolled > 80);
-
-  if (!flyLogo || window.innerWidth <= 768) return;
-
-  const p = Math.min(Math.max(scrolled / DOCK_DISTANCE, 0), 1);
-  const ease = p * p * (3 - 2 * p);   // smoothstep
-
-  // Docked target: where the (hidden) nav logo reserves its spot
-  const end = navLogo.getBoundingClientRect();
-
-  // Centered hero target
-  const heroH = BASE_H * HERO_SCALE;
-  const heroW = heroH * LOGO_RATIO;
-  const startX = (window.innerWidth - heroW) / 2;
-  const startY = Math.max(window.innerHeight * 0.12, 96);
-
-  const scale = lerp(HERO_SCALE, 1, ease);
-  const x = lerp(startX, end.left, ease);
-  const y = lerp(startY, end.top, ease);
-
-  flyLogo.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+let navTicking = false;
+function onNavScroll() {
+  if (navTicking) return;
+  navTicking = true;
+  requestAnimationFrame(() => {
+    nav.classList.toggle('scrolled', window.scrollY > 80);
+    navTicking = false;
+  });
 }
-
-let logoTicking = false;
-function onScrollOrResize() {
-  if (logoTicking) return;
-  logoTicking = true;
-  requestAnimationFrame(() => { updateFlyLogo(); logoTicking = false; });
-}
-window.addEventListener('scroll', onScrollOrResize, { passive: true });
-window.addEventListener('resize', onScrollOrResize);
-updateFlyLogo();
+window.addEventListener('scroll', onNavScroll, { passive: true });
+onNavScroll();
 
 // Lazy-load heavy below-the-fold video (venue hero)
 (function() {
@@ -4388,11 +4390,25 @@ document.querySelectorAll('.video-testimonial, .tcard-video').forEach(card => {
     prev.disabled = rail.scrollLeft <= 2;
     next.disabled = rail.scrollLeft >= max;
   };
-  prev.addEventListener('click', () => rail.scrollBy({ left: -stepSize() }));
-  next.addEventListener('click', () => rail.scrollBy({ left: stepSize() }));
+  // Auto-scroll: advance every few seconds, loop to start at the end
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let timer = null;
+  const advance = () => {
+    const max = rail.scrollWidth - rail.clientWidth - 2;
+    if (rail.scrollLeft >= max) rail.scrollTo({ left: 0, behavior: 'smooth' });
+    else rail.scrollBy({ left: stepSize(), behavior: 'smooth' });
+  };
+  const start = () => { if (reduce) return; stop(); timer = setInterval(advance, 4000); };
+  const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+
+  prev.addEventListener('click', () => { rail.scrollBy({ left: -stepSize() }); start(); });
+  next.addEventListener('click', () => { rail.scrollBy({ left: stepSize() }); start(); });
   rail.addEventListener('scroll', update, { passive: true });
+  rail.addEventListener('pointerenter', stop);
+  rail.addEventListener('pointerleave', start);
   window.addEventListener('resize', update);
   update();
+  start();
 })();
 
 // Hero "Watch Highlights" button opens the same overlay, playing the local hero reel
