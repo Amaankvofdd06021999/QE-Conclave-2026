@@ -3032,6 +3032,25 @@ a:hover { color: var(--ink-accent); }
 [data-theme="light"] .sponsor-tier.gold .sponsor-tier-label { color: #9A7B0F; }
 [data-theme="light"] .sponsor-tier.silver .sponsor-tier-label { color: #5E636B; }
 
+/* Light mode: yellow accent text is unreadable on white/light → use brand blue */
+[data-theme="light"] .session-row.is-break .session-time .time-start,
+[data-theme="light"] .session-row.is-break .session-time .time-end,
+[data-theme="light"] .session-row.is-break:hover .session-time .time-start,
+[data-theme="light"] .session-row.is-break .session-break-tag,
+[data-theme="light"] .session-break-icon,
+[data-theme="light"] .tcard-quote::before,
+[data-theme="light"] .sponsor-tier.title .sponsor-tier-label,
+[data-theme="light"] .sponsor-quote-mark,
+[data-theme="light"] .form-modal-eyebrow,
+[data-theme="light"] .stat-card[style*="var(--yellow)"] .stat-val {
+  color: var(--ink-accent);
+}
+[data-theme="light"] .session-row.is-break .session-break-tag { border-color: var(--ink-accent); }
+[data-theme="light"] .session-row.is-break { background: rgba(21,101,192,0.05); }
+[data-theme="light"] .session-break-icon { border-color: rgba(21,101,192,0.30); background: rgba(21,101,192,0.06); }
+/* Modal title is white by default → unreadable on the white card in light mode */
+[data-theme="light"] .form-modal h3 { color: var(--text-primary); }
+
 /* ═══ EVENT STATEMENT (scroll word-highlight) ═══ */
 .event-statement {
   background: var(--black);
