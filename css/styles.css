@@ -630,7 +630,9 @@ a:hover { color: var(--ink-accent); }
   position: relative;
   padding: 36px 28px 28px;
   border-left: 1px solid var(--border);
+  text-align: center;
 }
+.stat-card:first-child { border-left: none; }
 .stat-val {
   font-family: var(--font-display);
   font-size: clamp(56px, 6.2vw, 84px);
@@ -1330,9 +1332,41 @@ a:hover { color: var(--ink-accent); }
   text-transform: uppercase;
   color: var(--yellow);
 }
-/* Panel discussion row — normal row; 5 avatars stack tightly to fit the column */
-.session-row[data-track="panel"] .session-avatar { margin-left: -28px; }
+/* Panel discussion row — centered, like the past-edition panel slide:
+   avatars row on top, panelist names, then the title (same colours/style). */
+.session-row[data-track="panel"] {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+.session-row[data-track="panel"]:hover { padding-left: 16px; }
+.session-row[data-track="panel"] .session-lead { width: auto; }
+.session-row[data-track="panel"] .session-avatar { width: 54px; height: 54px; margin-left: -16px; }
 .session-row[data-track="panel"] .session-avatar:first-child { margin-left: 0; }
+.session-row[data-track="panel"] .session-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 1 auto;
+}
+.session-row[data-track="panel"] .session-by { order: -1; margin-top: 0; margin-bottom: 8px; }
+.session-row[data-track="panel"] .session-title { max-width: 60ch; }
+.session-row[data-track="panel"] .session-meta {
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 2px;
+}
+/* Time sits in the top-right corner; the PANEL tag stays centered */
+.session-row[data-track="panel"] .session-time {
+  position: absolute;
+  top: 22px;
+  right: 16px;
+}
 .session-track-tag {
   font-family: var(--font-ui);
   font-size: 12px;
@@ -2061,16 +2095,16 @@ a:hover { color: var(--ink-accent); }
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: clamp(36px, 4.5vw, 64px);
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
   align-items: stretch;
 }
 .cta-col { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
 .cta-col.left {
   border-right: 1px solid rgba(255,255,255,0.16);
-  padding-right: clamp(30px, 4vw, 64px);
+  padding-right: clamp(28px, 4vw, 56px);
 }
-.cta-col.right { align-items: flex-start; }
+.cta-col.right { align-items: flex-start; padding-left: clamp(28px, 4vw, 56px); }
 /* Left panel */
 .cta-icon-circle {
   width: 52px; height: 52px;
@@ -2227,6 +2261,7 @@ a:hover { color: var(--ink-accent); }
   .cta-banner::after { inset: 56% 0 0 0; -webkit-mask-image: linear-gradient(0deg, transparent, #000 72%); mask-image: linear-gradient(0deg, transparent, #000 72%); }
   .cta-banner-grid { grid-template-columns: 1fr; gap: 38px; }
   .cta-col.left { border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.16); padding-right: 0; padding-bottom: 36px; }
+  .cta-col.right { padding-left: 0; }
   .cta-register-btn { max-width: none; }
   .cta-datebar { grid-template-columns: 1fr; border-radius: 26px; }
   .cta-datebar-item + .cta-datebar-item { border-left: 0; border-top: 1px solid rgba(255,255,255,0.16); }
